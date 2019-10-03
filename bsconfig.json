@@ -1,13 +1,19 @@
 
 {
   "name": "react-hooks-template",
+  "bcs-flags": ["-bs-super-errors"],
   "reason": {
     "react-jsx": 3
   },
-  "sources": {
+  "sources": [
+  {
     "dir" : "src",
     "subdirs" : true
   },
+  {
+    "dir": "__tests__",
+    "type": "dev"
+  }],
   "package-specs": [{
     "module": "commonjs",
     "in-source": true
@@ -16,6 +22,9 @@
   "namespace": true,
   "bs-dependencies": [
     "reason-react"
+  ],
+  "bs-dev-dependencies": [
+    "@glennsl/bs-jest"
   ],
   "refmt": 3
 }
