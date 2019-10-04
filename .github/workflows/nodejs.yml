@@ -18,6 +18,7 @@ jobs:
         yarn install
         yarn build
         yarn test
+        yarn webpack:production
       env:
         CI: true
     - name: Deploy
@@ -27,5 +28,3 @@ jobs:
         BASE_BRANCH: master
         BRANCH: gh-pages
         FOLDER: build
-        BUILD_SCRIPT: |
-          yarn webpack:production
