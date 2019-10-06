@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component renders 1`] = `
+<div>
+  <div>
+    Hello World
+    You clicked 0 times
+    <button
+      class="button"
+    >
+      Increment
+    </button>
+    <button
+      class="button"
+    >
+      Decrement
+    </button>
+  </div>
+</div>
+`;
