@@ -21,6 +21,7 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
+    "bs-d3",
     "reason-react"
   ],
   "bs-dev-dependencies": [
