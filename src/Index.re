@@ -1,4 +1,4 @@
 // Webpack picks this up in the next stage of building.
 [%bs.raw {|require('./app.scss')|}];
 
-ReactDOMRe.renderToElementWithId(<TestComponent />, "app");
+ReactDOMRe.renderToElementWithId(<Layout />, "app");
