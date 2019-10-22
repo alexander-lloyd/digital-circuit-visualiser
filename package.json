@@ -1,42 +1,48 @@
 {
-  "name": "fyp",
-  "version": "0.1.0",
-  "scripts": {
-    "build": "bsb -make-world",
-    "start": "bsb -make-world -w",
-    "clean": "bsb -clean-world",
-    "test": "jest --coverage",
-    "webpack": "webpack -w",
-    "webpack:production": "NODE_ENV=production webpack",
-    "server": "webpack-dev-server"
-  },
-  "keywords": [
-    "BuckleScript"
-  ],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "reason-react": ">=0.7.0"
-  },
-  "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.9",
-    "bs-d3": "^0.1.0",
-    "bs-enzyme": "^0.6.1",
-    "bs-platform": "^5.0.6",
-    "bs-react-testing-library": "^0.6.0",
-    "bulma": "^0.8.0",
-    "css-loader": "^3.2.0",
-    "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.14.0",
-    "file-loader": "^4.2.0",
-    "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.1.8"
-  }
+ "name": "fyp",
+ "version": "1.0.0",
+ "description": "",
+ "repository": {
+  "type": "git",
+  "url": "git://github.com/alexander-lloyd/fyp.git"
+ },
+ "author": "Alexander Lloyd",
+ "license": "UNLICENSED",
+ "scripts": {
+  "start": "webpack-dev-server",
+  "build": "webpack",
+  "build:production": "NODE_ENV=production webpack",
+  "test": "jest",
+  "clean": "rimraf build"
+ },
+ "dependencies": {
+  "react": "^16.10.2",
+  "react-dom": "^16.10.2"
+ },
+ "devDependencies": {
+  "@babel/core": "^7.0.0-0",
+  "@babel/preset-env": "^7.6.3",
+  "@babel/preset-react": "^7.6.3",
+  "@types/jest": "^24.0.19",
+  "@types/react": "^16.9.9",
+  "@types/react-dom": "^16.9.2",
+  "babel-jest": "^24.9.0",
+  "enzyme": "^3.10.0",
+  "enzyme-adapter-react-16": "^1.15.1",
+  "html-webpack-plugin": "^3.2.0",
+  "jest": "^24.9.0",
+  "mini-css-extract-plugin": "^0.8.0",
+  "react-test-renderer": "^16.10.2",
+  "rimraf": "^3.0.0",
+  "ts-loader": "^6.2.0",
+  "typescript": "^3.6.4",
+  "webpack": "^4.41.2",
+  "webpack-cli": "^3.3.9",
+  "webpack-dev-server": "^3.8.2"
+ },
+ "jest": {
+  "setupFilesAfterEnv": [
+   "<rootDir>/setupTests.js"
+  ]
+ }
 }
