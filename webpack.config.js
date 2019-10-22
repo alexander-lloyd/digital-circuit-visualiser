@@ -3,32 +3,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const outputDir = path.join(__dirname, 'build/');
-
 const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  entry: './src/Index.bs.js',
-  mode: isProd ? 'production' : 'development',
+  entry: './src/index.tsx',
+  mode: isProd ? 'production': 'development',
   output: {
     path: outputDir,
-    filename: 'Index.js'
+    filename: 'index.js'
   },
   module: {
     rules: [
       {
-        test: /\.scss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
@@ -36,17 +25,20 @@ module.exports = {
           'file-loader'
         ]
       }
-  ]
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: false
     }),
-    new MiniCssExtractPlugin({
-      filename: '[name].bundle.css'
-    })
+		new MiniCssExtractPlugin({
+			filename: '[name].bundle.css'
+		})
   ],
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
   devServer: {
     compress: true,
     contentBase: outputDir,
