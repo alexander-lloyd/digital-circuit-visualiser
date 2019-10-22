@@ -1,10 +1,12 @@
-name: Build
+name: Deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +18,14 @@ jobs:
     - name: Install, Build & Test.
       run: |
         yarn install
-        yarn test
         yarn build:production
       env:
         CI: true
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@master
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: master
+        BRANCH: gh-pages
+        FOLDER: build
+
