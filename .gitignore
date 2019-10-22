@@ -5,5 +5,7 @@ npm-debug.log
 /lib/bs/
 /node_modules/
 *.js
+!babel.config.js
+!setupTests.js
 build/
 coverage/
