@@ -17,6 +17,7 @@ jobs:
       run: |
         yarn install
         yarn test
+        yarn lint
         yarn build:production
       env:
         CI: true
