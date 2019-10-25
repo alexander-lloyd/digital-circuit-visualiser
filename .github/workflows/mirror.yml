@@ -1,0 +1,15 @@
+name: Push to Mirror
+
+on: [push]
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Push to Mirror
+      run: git push -u gitlab --all
+      env:
+        CI: true
+        GIT_CONFIG_PARAMETERS: remote.gitlab.url=${{ secrets.GITLAB_REMOTE }}
