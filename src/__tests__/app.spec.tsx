@@ -9,8 +9,4 @@ describe('App Component',	() => {
 
     expect(wrapper).toMatchSnapshot();
   });
-
-  it('should contain a p element', () => {
-    expect(shallow(<App />).find('p').length).toBe(1);
-  });
 });
