@@ -24,7 +24,22 @@ module.exports = {
         use: [
           'file-loader'
         ]
-      }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ],
+      },
     ]
   },
   plugins: [
@@ -33,11 +48,11 @@ module.exports = {
       inject: false
     }),
 		new MiniCssExtractPlugin({
-			filename: '[name].bundle.css'
+      filename: '[name].bundle.css',
 		})
   ],
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: ['.tsx', '.ts', '.js']
   },
   devServer: {
     compress: true,
