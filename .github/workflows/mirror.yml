@@ -9,13 +9,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Push to Mirror
-      run: |
-      git config credential.https://git-teaching.cs.bham.ac.uk.username $GITLAB_USERNAME
-      echo -e 'echo $GITLAB_TOKEN' > git-credentials.sh
-      chmod +x git-credentials.sh
-      git config core.askpass './git-credentials.sh'
-      git remote add gitlab $GITLAB_REPO
-      git push -u gitlab --all
+      run:
+      - git config credential.https://git-teaching.cs.bham.ac.uk.username $GITLAB_USERNAME
+      - echo -e 'echo $GITLAB_TOKEN' > git-credentials.sh
+      - chmod +x git-credentials.sh
+      - git config core.askpass './git-credentials.sh'
+      - git remote add gitlab $GITLAB_REPO
+      - git push -u gitlab --all
       env:
         CI: true
         GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
