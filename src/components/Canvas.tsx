@@ -23,8 +23,8 @@ export default function Canvas(): JSX.Element {
     const wire: WireEntity = {
       x1: 20,
       y1: 20,
-      x2: 30,
-      y2: 20
+      x2: 300,
+      y2: 200
     }
 
     const renderer = new WireEntityRenderer();

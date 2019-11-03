@@ -20,10 +20,16 @@ export interface EntityRenderer<T extends Entity> {
 
 
 export class WireEntityRenderer implements EntityRenderer<WireEntity> {
+    private static BEZIER_CONTROL_CONSTANT = 80;
+
     render(ctx: CanvasRenderingContext2D, {x1, y1, x2, y2}: WireEntity): void {
         ctx.beginPath();
         ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
+        ctx.bezierCurveTo(
+            x1 + WireEntityRenderer.BEZIER_CONTROL_CONSTANT, y1,
+            x2 - WireEntityRenderer.BEZIER_CONTROL_CONSTANT, y2,
+            x2, y2
+        );
         ctx.stroke();
     }
 }
