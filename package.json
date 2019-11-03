@@ -13,6 +13,7 @@
   "build": "webpack",
   "build:production": "NODE_ENV=production webpack",
   "test": "jest",
+  "lint": "eslint src/**/*.ts src/**/*.tsx",
   "clean": "rimraf build"
  },
  "dependencies": {
@@ -21,20 +22,34 @@
  },
  "devDependencies": {
   "@babel/core": "^7.0.0-0",
+  "@babel/plugin-proposal-class-properties": "^7.5.5",
   "@babel/preset-env": "^7.6.3",
   "@babel/preset-react": "^7.6.3",
+  "@babel/preset-typescript": "^7.6.0",
+  "@types/enzyme": "^3.10.3",
   "@types/jest": "^24.0.19",
   "@types/react": "^16.9.9",
   "@types/react-dom": "^16.9.2",
+  "@typescript-eslint/eslint-plugin": "^2.5.0",
+  "@typescript-eslint/parser": "^2.5.0",
   "babel-jest": "^24.9.0",
+  "bulma": "^0.8.0",
+  "css-loader": "^3.2.0",
   "enzyme": "^3.10.0",
   "enzyme-adapter-react-16": "^1.15.1",
+  "eslint": "^6.5.1",
+  "eslint-plugin-react": "^7.16.0",
+  "eslint-plugin-react-hooks": "^2.2.0",
   "html-webpack-plugin": "^3.2.0",
   "jest": "^24.9.0",
+  "jest-canvas-mock": "^2.1.2",
   "mini-css-extract-plugin": "^0.8.0",
+  "node-sass": "^4.13.0",
   "react-test-renderer": "^16.10.2",
   "rimraf": "^3.0.0",
+  "sass-loader": "^8.0.0",
   "ts-loader": "^6.2.0",
+  "tsconfig-paths-webpack-plugin": "^3.2.0",
   "typescript": "^3.6.4",
   "webpack": "^4.41.2",
   "webpack-cli": "^3.3.9",
@@ -42,7 +57,8 @@
  },
  "jest": {
   "setupFilesAfterEnv": [
-   "<rootDir>/setupTests.js"
+   "<rootDir>/setupTests.js",
+   "jest-canvas-mock"
   ]
  }
 }

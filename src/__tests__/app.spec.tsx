@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow, mount, render } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import { App } from '../components/App';
 
@@ -8,9 +8,5 @@ describe('App Component',	() => {
     const wrapper = shallow(<App />);
 
     expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should contain a p element', () => {
-    expect(shallow(<App />).find('p').length).toBe(1);
   });
 });

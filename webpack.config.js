@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const outputDir = path.join(__dirname, 'build/');
 const isProd = process.env.NODE_ENV === 'production';
@@ -17,14 +18,29 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: /(node_modules|__tests__)/,
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
           'file-loader'
         ]
-      }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ],
+      },
     ]
   },
   plugins: [
@@ -33,11 +49,16 @@ module.exports = {
       inject: false
     }),
 		new MiniCssExtractPlugin({
-			filename: '[name].bundle.css'
+      filename: '[name].bundle.css',
 		})
   ],
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: ['.tsx', '.ts', '.js'],
+    plugins: [
+      new TsconfigPathsPlugin({
+        configFile: './tsconfig.json'
+      })
+    ]
   },
   devServer: {
     compress: true,

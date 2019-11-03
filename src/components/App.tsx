@@ -1,4 +1,6 @@
 import * as React from 'react';
 
-export const App = () => <p>Hello World</p>;
+import Canvas from './Canvas';
+
+export const App = (): JSX.Element => <Canvas></Canvas>;
 
