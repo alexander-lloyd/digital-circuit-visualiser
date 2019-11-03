@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import { WireEntity, WireEntityRenderer } from '../lib/render';
+import { FunctionEntity, FunctionEntityRenderer } from '../lib/render';
 
 function onMouseWheel(evt: React.WheelEvent): void {
   console.log(evt.deltaX, evt.deltaY, evt.deltaZ);
@@ -20,15 +20,16 @@ export default function Canvas(): JSX.Element {
       return;
     }
 
-    const wire: WireEntity = {
+    const entity: FunctionEntity = {
       x1: 20,
       y1: 20,
-      x2: 300,
-      y2: 200
+      width: 100,
+      height: 100,
+      label: 'f'
     }
 
-    const renderer = new WireEntityRenderer();
-    renderer.render(ctx, wire);
+    const renderer = new FunctionEntityRenderer();
+    renderer.render(ctx, entity);
   });
 
   return (
