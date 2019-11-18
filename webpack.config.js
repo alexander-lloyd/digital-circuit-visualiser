@@ -8,11 +8,11 @@ const outputDir = path.join(__dirname, 'build/');
 const isProd = process.env.NODE_ENV === 'production';
 
 const contentSecurityPolicy = {
-  'default-src': '"none"',
-  'img-src': ['"self"', "https://alexander-lloyd.github.io"],
-  'script-src': ['"self"', "https://alexander-lloyd.github.io"],
-  'style-src': ['"self"', "https://alexander-lloyd.github.io"],
-  'font-src': ['data:', "https://alexander-lloyd.github.io"],
+  'default-src': "'none'",
+  'img-src': ["'self'"],
+  'script-src': ["'self'"],
+  'style-src': ["'self'"],
+  'font-src': ['data:']
 }
 
 const cspPluginOptions = {
