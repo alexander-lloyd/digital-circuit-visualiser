@@ -2,16 +2,35 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 
 const outputDir = path.join(__dirname, 'build/');
 const isProd = process.env.NODE_ENV === 'production';
+
+const contentSecurityPolicy = {
+  'default-src': "'none'",
+  'img-src': ["'self'"],
+  'script-src': ["'self'"],
+  'style-src': ["'self'"],
+  'font-src': ['data:']
+}
+
+const cspPluginOptions = {
+  enabled: isProd,
+  nonceEnabled: {
+    'script-src': true
+  }
+}
 
 module.exports = {
   entry: './src/index.tsx',
   mode: isProd ? 'production': 'development',
   output: {
     path: outputDir,
-    filename: 'index.js'
+    filename: 'index.js',
+  },
+  node: {
+    global: false,
   },
   module: {
     rules: [
@@ -50,7 +69,8 @@ module.exports = {
     }),
 		new MiniCssExtractPlugin({
       filename: '[name].bundle.css',
-		})
+    }),
+    new CspHtmlWebpackPlugin(contentSecurityPolicy, cspPluginOptions)
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
