@@ -45,7 +45,9 @@ describe('FunctionEntityRender', () => {
     });
 
     it('should throw warning if label is larger than function box', () => {
-        console.warn = jest.fn();
+        const consoleSpy = jest
+          .spyOn(console, 'warn')
+          .mockImplementation(() => {})
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -60,6 +62,6 @@ describe('FunctionEntityRender', () => {
         const renderer = new FunctionEntityRenderer();
         renderer.render(ctx, entity);
 
-        expect(console.warn).toHaveBeenCalled();
+        expect(consoleSpy).toHaveBeenCalled();
     });
 });
