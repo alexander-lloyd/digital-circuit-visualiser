@@ -4,25 +4,47 @@
  */
 type Char = string;
 
+export const EOL: Char = '\n';
+export const EOF: Char = '\0';
+
 /**
  * Source.
  *
  * Represents a source program.
  */
-class Source {
+export class Source {
+    private readonly source: string[];
+    private lineNumber = -1;
+    private linePosition = -2;
+    private line: string | null = null;
 
     /**
      * Constructor.
      * @param source The program source. 
      */
-    public constructor(private source: string) {}
+    public constructor(source: string) {
+        this.source = source.split(EOL)
+    }
 
     /**
      * Get the current char.
      * @returns The current char.
      */
     public currentChar(): Char {
-        return '';
+        if (this.linePosition == -2) {
+            // First time?
+            this.readLine();
+            return this.nextChar();
+        } else if (this.line == null) {
+            // At end of file?
+            return EOF;
+        } else if ((this.linePosition == -1) || (this.linePosition == this.line.length)) {
+            // At end of line?
+            this.readLine();
+            return this.nextChar();
+        } else {
+            return this.line.charAt(this.linePosition);
+        }
     }
 
     /**
@@ -30,7 +52,17 @@ class Source {
      * @returns The next character.
      */
     public peekChar(): Char {
-        return '';
+        this.currentChar();
+
+        const nextPos = this.linePosition + 1;
+
+        if (this.line == null) {
+            return EOF;
+        }
+
+        return nextPos < this.line.length
+          ? this.line.charAt(nextPos)
+          : EOL;
     }
 
     /**
@@ -39,7 +71,17 @@ class Source {
      * @returns The next character.
      */
     public nextChar(): Char {
-        return '';
+        this.linePosition++;
+        return this.currentChar();
+    }
+
+    /**
+     * Read next line in source.
+     */
+    private readLine(): void {
+        this.lineNumber++;
+        this.line = this.source[this.lineNumber];
+        this.linePosition = -1;
     }
 }
 
