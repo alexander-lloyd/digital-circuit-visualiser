@@ -2199,6 +2199,11 @@ commander@~2.19.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
   integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
 
+comment-parser@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/comment-parser/-/comment-parser-0.7.2.tgz#baf6d99b42038678b81096f15b630d18142f4b8a"
+  integrity sha512-4Rjb1FnxtOcv9qsfuaNuVsmmVn4ooVoBHzYfyKteiXwIU84PClyGA5jASoFMwPV93+FPh9spwueXauxFJZkGAg==
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
@@ -2982,6 +2987,20 @@ eslint-plugin-eslint-plugin@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-eslint-plugin/-/eslint-plugin-eslint-plugin-2.1.0.tgz#a7a00f15a886957d855feacaafee264f039e62d5"
   integrity sha512-kT3A/ZJftt28gbl/Cv04qezb/NQ1dwYIbi8lyf806XMxkus7DvOVCLIfTXMrorp322Pnoez7+zabXH29tADIDg==
+
+eslint-plugin-jsdoc@^18.6.2:
+  version "18.6.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-18.6.2.tgz#a7c1fdf67b3ea374b769bb5f249f5763f0b86cb6"
+  integrity sha512-EGS6v0qLdaXyPeH2uCZ3i9U6AIanSpB7YOykefCApRRKKX+PsyfN41/uBXRrILPVU1PsC75LdanlNDi1KTP1eQ==
+  dependencies:
+    comment-parser "^0.7.2"
+    debug "^4.1.1"
+    jsdoctypeparser "^6.1.0"
+    lodash "^4.17.15"
+    object.entries-ponyfill "^1.0.1"
+    regextras "^0.7.0"
+    semver "^6.3.0"
+    spdx-expression-parse "^3.0.0"
 
 eslint-plugin-react-hooks@^2.2.0:
   version "2.3.0"
@@ -4877,6 +4896,11 @@ jsbn@~0.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
+jsdoctypeparser@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/jsdoctypeparser/-/jsdoctypeparser-6.1.0.tgz#acfb936c26300d98f1405cb03e20b06748e512a8"
+  integrity sha512-UCQBZ3xCUBv/PLfwKAJhp6jmGOSLFNKzrotXGNgbKhWvz27wPsCsVeP7gIcHPElQw2agBmynAitXqhxR58XAmA==
+
 jsdom@^11.5.1:
   version "11.12.0"
   resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-11.12.0.tgz#1a80d40ddd378a1de59656e9e6dc5a3ba8657bc8"
@@ -5822,6 +5846,11 @@ object.assign@^4.1.0:
     has-symbols "^1.0.0"
     object-keys "^1.0.11"
 
+object.entries-ponyfill@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/object.entries-ponyfill/-/object.entries-ponyfill-1.0.1.tgz#29abdf77cbfbd26566dd1aa24e9d88f65433d256"
+  integrity sha1-Kavfd8v70mVm3RqiTp2I9lQz0lY=
+
 object.entries@^1.0.4, object.entries@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/object.entries/-/object.entries-1.1.0.tgz#2024fc6d6ba246aee38bdb0ffd5cfbcf371b7519"
@@ -6739,6 +6768,11 @@ regexpu-core@^4.6.0:
     regjsparser "^0.6.0"
     unicode-match-property-ecmascript "^1.0.4"
     unicode-match-property-value-ecmascript "^1.1.0"
+
+regextras@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/regextras/-/regextras-0.7.0.tgz#2298bef8cfb92b1b7e3b9b12aa8f69547b7d71e4"
+  integrity sha512-ds+fL+Vhl918gbAUb0k2gVKbTZLsg84Re3DI6p85Et0U0tYME3hyW4nMK8Px4dtDaBA2qNjvG5uWyW7eK5gfmw==
 
 regjsgen@^0.5.0:
   version "0.5.1"
