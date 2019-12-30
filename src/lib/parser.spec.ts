@@ -1,6 +1,39 @@
-import { Source, EOF, EOL } from './parser';
+import { Source, EOF, EOL, isLetter, isNumeric, LanguageScanner, Token, TokenType, isWhitespace } from './parser';
 
 const stringSource = 'A + B';
+
+test.each([
+    ['A', true],
+    ['B', true],
+    ['c', true],
+    ['/', false],
+    [':', false],
+    ['', false]
+])('should isLetter(%c)? %b', (char, isChar) => {
+    expect(isLetter(char as string)).toBe(isChar);
+});
+
+test.each([
+    ['1', true],
+    ['2', true],
+    ['9', true],
+    ['a', false],
+    ['Z', false],
+    ['', false]
+])('should isNumeric(%c)? %b', (char, isChar) => {
+    expect(isNumeric(char as string)).toBe(isChar);
+});
+
+test.each([
+    [' ', true],
+    ['\t', true],
+    ['\n', true],
+    ['a', false],
+    ['4', false],
+    ['', false]
+])('should isWhitespace(%c)? %b', (char, isChar) => {
+    expect(isWhitespace(char as string)).toBe(isChar);
+});
 
 describe('Source', () => {
     let source: Source;
@@ -57,5 +90,53 @@ describe('Source', () => {
         expect(source.nextChar()).toBe('B');
         expect(source.peekChar()).toBe(EOL);
         expect(source.nextChar()).toBe(EOF);
+    });
+});
+
+describe('LanguageScanner', () => {
+
+    it('should scan a string', () => {
+        const program = 'A * B';
+        const source = new Source(program);
+        const scanner = new LanguageScanner(source);
+
+        let token: Token;
+
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.WordToken);
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.SymbolToken);
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.WordToken);
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.EoFToken);
+    });
+
+    it('should scan identifiers', () => {
+        const program = 'let x = x';
+        const source = new Source(program);
+        const scanner = new LanguageScanner(source);
+
+        let token: Token;
+
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.IdentifierToken);
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.WordToken);
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.SymbolToken);
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.WordToken)
+        token = scanner.extractToken();
+        expect(token.getTokenType()).toBe(TokenType.EoFToken);
+    });
+
+    it('should return error token with a syntax error', () => {
+        const program = '<';
+        const source = new Source(program);
+        const scanner = new LanguageScanner(source);
+
+        expect(scanner.extractToken().getTokenType()).toBe(TokenType.ErrorToken);
+        expect(scanner.extractToken().getTokenType()).toBe(TokenType.EoFToken);
     });
 });
