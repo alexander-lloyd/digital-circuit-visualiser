@@ -210,13 +210,13 @@ abstract class Scanner {
  * 
  * Abstract parser class will be implemented by language-specific classes.
  */
-abstract class Parser {
+abstract class Parser<T> {
     public constructor(private scanner: Scanner) {}
 
     /**
      * Parse the program.
      */
-    public abstract parse(): void;
+    public abstract parse(): T;
 }
 
 const SYMBOLS = new Map<string, string>()
