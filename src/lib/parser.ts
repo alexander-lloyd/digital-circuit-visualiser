@@ -54,7 +54,7 @@ export class Source {
      * @param source The program source. 
      */
     public constructor(source: string) {
-        this.source = source.split(EOL)
+        this.source = source.split(EOL);
     }
 
     /**
@@ -151,7 +151,7 @@ class WordToken extends Token {
     private readonly literal: string;
 
     public constructor(literal: string) {
-        super(TokenType.WordToken)
+        super(TokenType.WordToken);
         this.literal = literal;
     }
 }
