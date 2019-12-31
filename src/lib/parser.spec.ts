@@ -126,7 +126,7 @@ describe('LanguageScanner', () => {
         token = scanner.extractToken();
         expect(token.getTokenType()).toBe(TokenType.SymbolToken);
         token = scanner.extractToken();
-        expect(token.getTokenType()).toBe(TokenType.WordToken)
+        expect(token.getTokenType()).toBe(TokenType.WordToken);
         token = scanner.extractToken();
         expect(token.getTokenType()).toBe(TokenType.EoFToken);
     });
