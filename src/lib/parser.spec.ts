@@ -10,7 +10,7 @@ test.each([
     [':', false],
     ['', false]
 ])('should isLetter(%c)? %b', (char, isChar) => {
-    expect(isLetter(char as string)).toBe(isChar);
+    expect(isLetter(char)).toBe(isChar);
 });
 
 test.each([
