@@ -21,7 +21,7 @@ test.each([
     ['Z', false],
     ['', false]
 ])('should isNumeric(%c)? %b', (char, isChar) => {
-    expect(isNumeric(char as string)).toBe(isChar);
+    expect(isNumeric(char)).toBe(isChar);
 });
 
 test.each([
@@ -32,7 +32,7 @@ test.each([
     ['4', false],
     ['', false]
 ])('should isWhitespace(%c)? %b', (char, isChar) => {
-    expect(isWhitespace(char as string)).toBe(isChar);
+    expect(isWhitespace(char)).toBe(isChar);
 });
 
 describe('Source', () => {
