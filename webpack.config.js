@@ -1,3 +1,5 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -36,8 +38,11 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        loader: 'ts-loader',
         exclude: /(node_modules|__tests__)/,
+        options: {
+          configFile: 'tsconfig.app.json'
+        }
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
@@ -76,7 +81,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [
       new TsconfigPathsPlugin({
-        configFile: './tsconfig.json'
+        configFile: './tsconfig.app.json'
       })
     ]
   },
