@@ -4,6 +4,14 @@ import { FunctionEntity, FunctionEntityRenderer } from '../lib/render';
 
 const SCALING_FACTOR = 1.05;
 
+/**
+ * Draw the diagram on the canvas.
+ *
+ * @param ctx Canvas Context.
+ * @param canvasWidth Canvas width.
+ * @param canvasHeight Canvas height.
+ * @param scale The scaling factor.
+ */
 function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
   canvasHeight: number, scale: number): void {
 
@@ -19,7 +27,7 @@ function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
     width: 100,
     height: 100,
     label: 'f'
-  }
+  };
 
   const renderer = new FunctionEntityRenderer();
   renderer.render(ctx, entity);
@@ -31,14 +39,20 @@ interface CanvasState {
 
 const initialState = {
   scale: 1.0,
-}
+};
 
 type CanvasActions =
   | { type: 'scale_up' }
   | { type: 'scale_down' }
   | { type: 'reset_scale' };
 
-
+/**
+ * Component reducer.
+ *
+ * @param state Component internal state.
+ * @param action Component action.
+ * @returns The new state.
+ */
 function reducer(state: CanvasState, action: CanvasActions): CanvasState {
   const { scale } = state;
 
@@ -47,14 +61,14 @@ function reducer(state: CanvasState, action: CanvasActions): CanvasState {
   switch (action.type) {
     case 'scale_up': {
       const newScale = Math.min(scale * SCALING_FACTOR, 5);
-      return { ...state, scale: newScale }
+      return { ...state, scale: newScale };
     }
     case 'scale_down': {
       const newScale = Math.max(scale / SCALING_FACTOR, 0.5);
-      return { ...state, scale: newScale }
+      return { ...state, scale: newScale };
     }
     case 'reset_scale': {
-      return { ...state, scale: 1.0 }
+      return { ...state, scale: 1.0 };
     }
     default:
       return state;
@@ -91,7 +105,7 @@ export default function Canvas(): JSX.Element {
         <button
           className="button"
           onClick={(): void => {
-            dispatch({ 'type': 'reset_scale' })
+            dispatch({ 'type': 'reset_scale' });
           }}>Reset Scale</button>
       </div>
       <canvas
