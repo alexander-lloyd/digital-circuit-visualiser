@@ -2987,10 +2987,10 @@ eslint-plugin-eslint-plugin@^2.1.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-eslint-plugin/-/eslint-plugin-eslint-plugin-2.1.0.tgz#a7a00f15a886957d855feacaafee264f039e62d5"
   integrity sha512-kT3A/ZJftt28gbl/Cv04qezb/NQ1dwYIbi8lyf806XMxkus7DvOVCLIfTXMrorp322Pnoez7+zabXH29tADIDg==
 
-eslint-plugin-jsdoc@^18.6.2:
-  version "18.11.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-18.11.0.tgz#724e6aa35f01c7f80629b2e313b007422cc159af"
-  integrity sha512-24J2+eK2ZHZ1KvpKcoOEir2k4xJKfPzZ1JC9PToi8y8Tn59T8TVVSNRTTRzsDdiaQeIbehApB3KxqIfJG8o7hg==
+eslint-plugin-jsdoc@^20.0.2:
+  version "20.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsdoc/-/eslint-plugin-jsdoc-20.0.2.tgz#e573818a15077116b418f2828cb254bef60e3fac"
+  integrity sha512-Acj6D4tUnmw4tfX0BhJlxRbjZbF8hPDY6RGSCIjPRUmayOi40NEHyGN6rSlGYkblBwD0Yd817mPdNKFhkdchiw==
   dependencies:
     comment-parser "^0.7.2"
     debug "^4.1.1"
