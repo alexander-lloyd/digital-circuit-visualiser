@@ -27,7 +27,8 @@ module.exports =  {
     rules:  {
       // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
       "@typescript-eslint/no-empty-interface": "warn",
-      "@typescript-eslint/semi": ["error"],
+      "@typescript-eslint/semi": "error",
+      "jsdoc/no-bad-blocks" : "error",
       "jsdoc/no-types": 0,
       "jsdoc/require-param-type": 0,
       "jsdoc/require-returns-type": 0,
