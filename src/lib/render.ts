@@ -1,6 +1,12 @@
+/**
+ * All Entities implement this interface.
+ */
 export interface Entity {
 }
 
+/**
+ * A Wire Entity.
+ */
 export interface WireEntity extends Entity {
     x1: number;
     y1: number;
@@ -8,6 +14,9 @@ export interface WireEntity extends Entity {
     y2: number;
 }
 
+/**
+ * A function block entity.
+ */
 export interface FunctionEntity extends Entity {
     x1: number;
     y1: number;
@@ -16,21 +25,34 @@ export interface FunctionEntity extends Entity {
     label: string;
 }
 
+/**
+ * All entity renderers extend this interface.
+ */
 export interface EntityRenderer<T extends Entity> {
     /**
-     * Render an entity to the canvas
-     * 
-     * @param ctx: Canvas Render Context.
-     * @param entity: The entity to render.
+     * Render an entity to the canvas.
+     *
+     * @param ctx Canvas Render Context.
+     * @param entity The entity to render.
      */
     render(ctx: CanvasRenderingContext2D, entity: T): void;
 }
 
 
+/**
+ * Render a wire entity on a Canvas.
+ */
 export class WireEntityRenderer implements EntityRenderer<WireEntity> {
     private static BEZIER_CONTROL_CONSTANT = 80;
 
-    render(ctx: CanvasRenderingContext2D, {x1, y1, x2, y2}: WireEntity): void {
+    /**
+     * Render a wire to the canvas.
+     *
+     * @param ctx Canvas Render Context.
+     * @param entity The entity to render.
+     */
+    render(ctx: CanvasRenderingContext2D, entity: WireEntity): void {
+        const {x1, y1, x2, y2} = entity;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.bezierCurveTo(
@@ -42,7 +64,16 @@ export class WireEntityRenderer implements EntityRenderer<WireEntity> {
     }
 }
 
+/**
+ * Render a function entity to the canvas.
+ */
 export class FunctionEntityRenderer implements EntityRenderer<FunctionEntity> {
+    /**
+     * Render a function entity to the canvas.
+     *
+     * @param ctx Canvas Render Context.
+     * @param entity The entity to render.
+     */
     render(ctx: CanvasRenderingContext2D, entity: FunctionEntity): void {
         const { x1, y1, height, width, label } = entity;
 
