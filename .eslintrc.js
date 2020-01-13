@@ -37,7 +37,10 @@ module.exports =  {
           "FunctionDeclaration": true,
           "FunctionExpression": true,
           "MethodDefinition": true
-        }
+        },
+        "contexts": [
+          "TSInterfaceDeclaration"
+        ]
       }],
       "jsdoc/require-param-type": "off",
       "jsdoc/require-returns-type": "off",
