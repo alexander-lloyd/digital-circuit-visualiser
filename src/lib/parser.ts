@@ -9,7 +9,7 @@ export const EOF: Char = '\0';
 
 /**
  * Is value an alphabetic character.
- * 
+ *
  * @param value The value.
  * @returns true if the character is an alphabetic character.
  */
@@ -19,7 +19,7 @@ export function isLetter(value: string): boolean {
 
 /**
  * Is value a numeric character?
- * 
+ *
  * @param value The value.
  * @returns true if the character is a numeric character.
  */
@@ -51,7 +51,7 @@ export class Source {
     /**
      * Constructor.
      *
-     * @param source The program source. 
+     * @param source The program source.
      */
     public constructor(source: string) {
         this.source = source.split(EOL);
@@ -132,49 +132,119 @@ export enum TokenType {
 export class Token {
     private readonly tokenType: TokenType;
 
+    /**
+     * Constructor.
+     *
+     * @param tokenType The type of token this object is.
+     */
     public constructor(tokenType: TokenType) {
         this.tokenType = tokenType;
     }
 
+    /**
+     * Get the token type.
+     *
+     * @returns The token type.
+     */
     public getTokenType(): TokenType {
         return this.tokenType;
     }
 }
 
+/**
+ * An end of file token.
+ */
 class EoFToken extends Token {
+    /**
+     * Constructor.
+     */
     public constructor() {
         super(TokenType.EoFToken);
     }
 }
 
+/**
+ * A word token.
+ *
+ * Represents a literal. E.g. A variable.
+ */
 class WordToken extends Token {
     private readonly literal: string;
 
+    /**
+     * Constructor.
+     *
+     * @param literal A literal.
+     */
     public constructor(literal: string) {
         super(TokenType.WordToken);
         this.literal = literal;
     }
+
+    /**
+     * Get the literal.
+     *
+     * @returns The literal.
+     */
+    public getLiteral(): string {
+        return this.literal;
+    }
 }
 
+/**
+ * A Symbol token.
+ *
+ * E.g. '+'
+ */
 class SymbolToken extends Token {
     private readonly symbol: string;
 
+    /**
+     * Constructor.
+     *
+     * @param symbol The symbol.
+     */
     public constructor(symbol: string) {
         super(TokenType.SymbolToken);
         this.symbol = symbol;
     }
+
+    /**
+     * Get the symbol.
+     *
+     * @returns The symbol.
+     */
+    public getSymbol(): string {
+        return this.symbol;
+    }
 }
 
+/**
+ * An Identifier.
+ *
+ * E.g. 'in'
+ */
 class IdentifierToken extends Token {
     private readonly identifier: string;
 
+    /**
+     * Constructor.
+     *
+     * @param identifier An identifier.
+     */
     public constructor(identifier: string) {
         super(TokenType.IdentifierToken);
         this.identifier = identifier;
     }
 }
 
+/**
+ * Token used when we get an unexpected character.
+ */
 class ErrorToken extends Token {
+    /**
+     * Constructor.
+     */
     public constructor() {
         super(TokenType.ErrorToken);
     }
@@ -182,7 +252,7 @@ class ErrorToken extends Token {
 
 /**
  * Scanner.
- * 
+ *
  * Abstract scanner class will be implemented by language-specific classes.
  */
 abstract class Scanner {
@@ -191,7 +261,7 @@ abstract class Scanner {
     /**
      * Constructor
      *
-     * @param source The program source. 
+     * @param source The program source.
      */
     public constructor(source: Source) {
         this.source = source;
@@ -207,11 +277,20 @@ abstract class Scanner {
 
 /**
  * Parser.
- * 
+ *
  * Abstract parser class will be implemented by language-specific classes.
  */
 abstract class Parser<T> {
-    public constructor(private scanner: Scanner) {}
+    protected scanner: Scanner;
+
+    /**
+     * Constructor.
+     *
+     * @param scanner Scanner object.
+     */
+    public constructor(scanner: Scanner) {
+        this.scanner = scanner;
+    }
 
     /**
      * Parse the program.
@@ -225,11 +304,24 @@ const SYMBOLS = new Map<string, string>()
 
 const RESERVED_WORDS = ['let'];
 
+/**
+ * The scanner for this language.
+ */
 export class LanguageScanner extends Scanner {
+    /**
+     * Constructor.
+     *
+     * @param source Source object.
+     */
     public constructor(source: Source) {
         super(source);
     }
 
+    /**
+     * Extract a token based on the current character.
+     *
+     * @returns The next token.
+     */
     public extractToken(): Token {
         let token: Token;
         this.skipWhitespace();
@@ -263,7 +355,7 @@ export class LanguageScanner extends Scanner {
 
     /**
      * Extract a word out of the source.
-     * 
+     *
      * @returns A token.
      */
     private extractWord(): Token {
