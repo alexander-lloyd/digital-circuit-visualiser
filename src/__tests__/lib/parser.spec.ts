@@ -1,4 +1,4 @@
-import { Source, EOF, EOL, isLetter, isNumeric, LanguageScanner, Token, TokenType, isWhitespace } from './parser';
+import { Source, EOF, EOL, isLetter, isNumeric, LanguageScanner, Token, TokenType, isWhitespace } from '../../lib/parser';
 
 const stringSource = 'A + B';
 
