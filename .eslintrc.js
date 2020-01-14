@@ -47,6 +47,7 @@ module.exports = {
     }],
     "jsdoc/require-param-type": "off",
     "jsdoc/require-returns-type": "off",
+    "no-trailing-spaces": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn"
   },
