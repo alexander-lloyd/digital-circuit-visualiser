@@ -33,6 +33,9 @@ function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
   renderer.render(ctx, entity);
 }
 
+/**
+ * Canvas Component State.
+ */
 interface CanvasState {
   scale: number;
 }
