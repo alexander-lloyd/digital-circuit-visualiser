@@ -1,7 +1,7 @@
 import { AssertionError } from 'assert';
 
 import {
-  id, swap, compose, Hyper
+  id, swap, compose
 } from "../../lib/hypernet";
 
 describe("hypernets Module", () => {
@@ -28,7 +28,7 @@ describe("hypernets Module", () => {
 
       expect(input.targets).toStrictEqual([]);
       expect(output.sources).toStrictEqual([]);
-  
+
       expect(input.sources).toStrictEqual([[output, 1], [output, 0]]);
       expect(output.targets).toStrictEqual([[input, 1], [input, 0]]);
     });
@@ -37,6 +37,7 @@ describe("hypernets Module", () => {
   describe('compose', () => {
     it('should throw error trying to compose invalid input', () => {
       expect.assertions(1);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(() => compose(null as any, null as any)).toThrow(Error);
     });
 

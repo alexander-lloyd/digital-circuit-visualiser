@@ -600,7 +600,7 @@ export class LanguageParser extends Parser<AST> {
      * Constructor.
      *
      * @param scanner Scanner object.
-     * @param errorHandler Error Handler. Called when an error is raised 
+     * @param errorHandler Error Handler. Called when an error is raised
      */
     constructor(scanner: Scanner, errorHandler: ErrorHandler) {
         super(scanner, errorHandler);

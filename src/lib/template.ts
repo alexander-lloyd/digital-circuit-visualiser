@@ -16,7 +16,7 @@ export type Template = (dict?: Dictionary<string>) => string;
  * @param strings A string template literal.
  * @param keys String literal key.
  * @returns A closure which if given a dictionary returns a formatted string.
- * 
+ *
  * @example
  *
  *     template`Hello ${'world'}`({world: 'World'})
