@@ -1,29 +1,29 @@
 import {
-  WireEntity,
-  WireEntityRenderer,
-  FunctionEntity,
-  FunctionEntityRenderer
-} from "../../lib/render";
+    WireEntity,
+    WireEntityRenderer,
+    FunctionEntity,
+    FunctionEntityRenderer
+} from '../../lib/render';
 
-describe("wireEntityRenderer", () => {
-  it("should match snapshot", () => {
-    expect.assertions(2);
+describe('wireEntityRenderer', () => {
+    it('should match snapshot', () => {
+        expect.assertions(2);
 
-    const canvas: HTMLCanvasElement = document.createElement("canvas");
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    const entity: WireEntity = {
-      x1: 20,
-      y1: 20,
-      x2: 30,
-      y2: 20
-    };
+        const entity: WireEntity = {
+            x1: 20,
+            x2: 30,
+            y1: 20,
+            y2: 20
+        };
 
-    const renderer = new WireEntityRenderer();
-    renderer.render(ctx, entity);
+        const renderer = new WireEntityRenderer();
+        renderer.render(ctx, entity);
 
-    const events = ctx.__getEvents();
-    expect(events).toMatchInlineSnapshot(`
+        const events = ctx.__getEvents();
+        expect(events).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {},
@@ -134,8 +134,8 @@ describe("wireEntityRenderer", () => {
         },
       ]
     `);
-    const calls = ctx.__getDrawCalls();
-    expect(calls).toMatchInlineSnapshot(`
+        const calls = ctx.__getDrawCalls();
+        expect(calls).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {
@@ -200,29 +200,29 @@ describe("wireEntityRenderer", () => {
         },
       ]
     `);
-  });
+    });
 });
 
-describe("functionEntityRender", () => {
-  it("should match snapshot", () => {
-    expect.assertions(2);
+describe('functionEntityRender', () => {
+    it('should match snapshot', () => {
+        expect.assertions(2);
 
-    const canvas: HTMLCanvasElement = document.createElement("canvas");
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    const entity: FunctionEntity = {
-      x1: 20,
-      y1: 20,
-      width: 100,
-      height: 100,
-      label: "f"
-    };
+        const entity: FunctionEntity = {
+            x1: 20,
+            y1: 20,
+            width: 100,
+            height: 100,
+            label: 'f'
+        };
 
-    const renderer = new FunctionEntityRenderer();
-    renderer.render(ctx, entity);
+        const renderer = new FunctionEntityRenderer();
+        renderer.render(ctx, entity);
 
-    const events = ctx.__getEvents();
-    expect(events).toMatchInlineSnapshot(`
+        const events = ctx.__getEvents();
+        expect(events).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {},
@@ -344,8 +344,8 @@ describe("functionEntityRender", () => {
         },
       ]
     `);
-    const calls = ctx.__getDrawCalls();
-    expect(calls).toMatchInlineSnapshot(`
+        const calls = ctx.__getDrawCalls();
+        expect(calls).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {
@@ -410,26 +410,26 @@ describe("functionEntityRender", () => {
         },
       ]
     `);
-  });
+    });
 
-  it("should throw warning if label is larger than function box", () => {
-    expect.assertions(1);
+    it('should throw warning if label is larger than function box', () => {
+        expect.assertions(1);
 
-    const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
-    const canvas: HTMLCanvasElement = document.createElement("canvas");
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+        const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    const entity: FunctionEntity = {
-      x1: 20,
-      y1: 20,
-      width: 10,
-      height: 10,
-      label: "super long string that larger than width of box"
-    };
+        const entity: FunctionEntity = {
+            x1: 20,
+            y1: 20,
+            width: 10,
+            height: 10,
+            label: 'super long string that larger than width of box'
+        };
 
-    const renderer = new FunctionEntityRenderer();
-    renderer.render(ctx, entity);
+        const renderer = new FunctionEntityRenderer();
+        renderer.render(ctx, entity);
 
-    expect(consoleSpy).toHaveBeenCalledWith(expect.anything());
-  });
+        expect(consoleSpy).toHaveBeenCalledWith(expect.anything());
+    });
 });

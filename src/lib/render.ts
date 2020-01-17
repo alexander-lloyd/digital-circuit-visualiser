@@ -75,7 +75,7 @@ export class FunctionEntityRenderer implements EntityRenderer<FunctionEntity> {
      * @param entity The entity to render.
      */
     render(ctx: CanvasRenderingContext2D, entity: FunctionEntity): void {
-        const { x1, y1, height, width, label } = entity;
+        const {x1, y1, height, width, label} = entity;
 
         // Box
         ctx.beginPath();
@@ -84,12 +84,12 @@ export class FunctionEntityRenderer implements EntityRenderer<FunctionEntity> {
 
         // Label
         ctx.textAlign = 'center';
-        const xCenter = width / 2 + x1;
-        const yCenter = height / 2 + y1;
+        const xCenter = (width / 2) + x1;
+        const yCenter = (height / 2) + y1;
         ctx.fillText(label, xCenter, yCenter);
 
         // Check the text fits in the box.
-        const { width: textWidth } = ctx.measureText(label);
+        const {width: textWidth} = ctx.measureText(label);
         // TODO: Check height
         if (textWidth > width) {
             console.warn(`Label ${label} is bigger than function box`);

@@ -23,7 +23,7 @@ export type Template = (dict?: Dictionary<string>) => string;
  *     'Hello World'
  */
 export function template(strings: TemplateStringsArray, ...keys: string[]): Template {
-    return ((dict: Dictionary<string> = {}): string => {
+    return (dict: Dictionary<string> = {}): string => {
         const result = [strings[0]];
 
         keys.forEach((key: string, i: number) => {
@@ -32,5 +32,5 @@ export function template(strings: TemplateStringsArray, ...keys: string[]): Temp
         });
 
         return result.join('');
-    });
+    };
 }

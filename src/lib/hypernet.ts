@@ -1,4 +1,4 @@
-import Assert from "assert";
+import Assert from 'assert';
 
 
 export type Flat = string;
@@ -114,7 +114,7 @@ export function compose<T>(f: Hyper<T>, g: Hyper<T>): Hyper<T> {
     }
 
     // Check output length is equal to input length.
-    Assert.equal(f.output.targets.length, g.input.sources.length, 'Input length must be equal to output length');
+    Assert.equal(f.output.targets.length, g.input.sources.length, 'Input array must be equal to output array');
     for (let i = 0; i < f.output.targets.length; ++i) {
         const [e, k] = f.output.targets[i];
         const [e2, k2] = g.input.sources[i];

@@ -1,4 +1,4 @@
-import { template } from '../../lib/template';
+import {template} from '../../lib/template';
 
 describe('template function', () => {
     it('should allow empty string', () => {

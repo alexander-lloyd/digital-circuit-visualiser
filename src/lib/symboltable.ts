@@ -82,7 +82,6 @@ export class SymbolTableEntryImpl implements SymbolTableEntry {
     public getName(): string {
         return this.name;
     }
-
 }
 
 /**

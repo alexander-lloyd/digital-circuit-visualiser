@@ -1,4 +1,4 @@
-import { createSymbolTableStack, SymbolTableEntryImpl, SymbolTableImpl } from '../../lib/symboltable';
+import {createSymbolTableStack, SymbolTableEntryImpl, SymbolTableImpl} from '../../lib/symboltable';
 
 describe('symbol table', () => {
     it('should create a symbol table entry', () => {
@@ -7,7 +7,7 @@ describe('symbol table', () => {
         const name = 'table entry';
         const entry = new SymbolTableEntryImpl(name);
 
-        expect (entry.getName()).toBe(name);
+        expect(entry.getName()).toBe(name);
     });
 
     it('should create a table', () => {
@@ -45,6 +45,5 @@ describe('symbol table', () => {
         const entry = stack.enter(name);
         expect(stack.lookup(name)).toBe(entry);
         expect(stack.getSymbolTable().lookup(name)).toBe(entry);
-
     });
 });

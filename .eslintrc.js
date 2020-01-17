@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser',  // Specifies the ESLint parser
   extends: [
-    'eslint:recommended',
+    'eslint:all',
     'plugin:jsdoc/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -30,6 +30,17 @@ module.exports = {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/semi": ["error"],
+    "array-element-newline": ["error", "consistent"],
+    "complexity": ["error", 10],
+    "consistent-return": "error",
+    "class-methods-use-this": "off",
+    "curly": "error",
+    "default-case": "error",
+    "default-param-last": "error",
+    "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
+    "function-call-argument-newline": "off",
+    "id-length": "off",
+    "init-declarations": "off",
     "jsdoc/no-bad-blocks" : "error",
     "jsdoc/no-types": 0,
     "jsdoc/require-jsdoc": ["error", {
@@ -47,9 +58,39 @@ module.exports = {
     }],
     "jsdoc/require-param-type": "off",
     "jsdoc/require-returns-type": "off",
+    "lines-around-comment": "off",
+    "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
+    "max-classes-per-file": ["warn", 20],
+    "max-len": ["warn", 120],
+    "max-lines": ["warn", 1000],
+    "max-lines-per-function": ["error", 300],
+    "max-params": ["error", 8],
+    "max-statements": ["warn", 25],
+    "multiline-ternary": ["error", "always-multiline"],
+    "no-console": "warn",
+    "no-continue": "off",
+    "no-extra-parens": ["error", "all", {
+      nestedBinaryExpressions: false
+    }],
+    "no-magic-numbers": "off",
+    "no-plusplus": "off",
+    "no-ternary": "off",
+    "no-undefined": "off",
+    "no-underscore-dangle": "off",
+    "no-warning-comments": "warn",
     "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "never", {
+
+    }],
+    "one-var": ["error", "never"],
+    "padded-blocks": ["error", "never"],
+    "quotes": ["error", "single"],
+    "quote-props": ["error", "as-needed"],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "space-before-function-paren": "off",
+    "sort-imports": "off",
+    "sort-keys": "off",
   },
   settings: {
     react: {
