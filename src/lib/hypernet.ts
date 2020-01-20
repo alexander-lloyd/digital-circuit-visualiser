@@ -20,6 +20,7 @@ export interface Hyper<T> {
     input: Edge<T>;
     edges: Edge<T>[];
     output: Edge<T>;
+    data: T;
 }
 
 /**
