@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useReducer} from 'react';
-
-import {FunctionEntity, FunctionEntityRenderer} from '../lib/render';
+import {id} from '../lib/hypernet';
+import {HypernetRenderer} from '../lib/render';
+import {HyperPositional, populateHyperPositional} from 'lib/hypernet-render';
 
 const SCALING_FACTOR = 1.05;
 
@@ -23,16 +24,11 @@ function drawDiagram(
     ctx.save();
     ctx.scale(scale, scale);
 
-    const entity: FunctionEntity = {
-        x1: 20,
-        y1: 20,
-        width: 100,
-        height: 100,
-        label: 'f'
-    };
+    const hypernet: HyperPositional = id();
+    populateHyperPositional(hypernet);
 
-    const renderer = new FunctionEntityRenderer();
-    renderer.render(ctx, entity);
+    const renderer = new HypernetRenderer();
+    renderer.render(ctx, hypernet);
 }
 
 /**

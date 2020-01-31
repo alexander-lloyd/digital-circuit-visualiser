@@ -1,3 +1,5 @@
+import {HyperPositional} from './hypernet-render';
+
 /**
  * All Entities implement this interface.
  */
@@ -94,5 +96,37 @@ export class FunctionEntityRenderer implements EntityRenderer<FunctionEntity> {
         if (textWidth > width) {
             console.warn(`Label ${label} is bigger than function box`);
         }
+    }
+}
+
+/**
+ * Renderer a Hypernet.
+ */
+export class HypernetRenderer implements EntityRenderer<HyperPositional> {
+    /**
+     * Renderer a Hypernet.
+     *
+     * @param ctx Canvas Context.
+     * @param entity Hypernet.
+     */
+    public render(ctx: CanvasRenderingContext2D, entity: HyperPositional): void {
+        if (!entity.data) {
+            throw Error('Entity does not have any positional data!');
+        }
+
+        // The variables x and y are in the unit square
+        const {x, y} = entity.data;
+
+        // TODO: Positions these properly.
+        const x1 = x + 100;
+        const y1 = y + 100;
+        const height = 100;
+        const width = 100;
+
+
+        // Box
+        ctx.beginPath();
+        ctx.rect(x1, y1, width, height);
+        ctx.stroke();
     }
 }
