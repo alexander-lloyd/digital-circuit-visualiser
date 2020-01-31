@@ -2,6 +2,7 @@ import Assert from 'assert';
 
 
 export type Flat = string;
+type Nullable<T> = T | null;
 
 /**
  * A label on a Hypernet. Either a string e.g. 'f'
@@ -17,10 +18,10 @@ export type Label<T> = Flat | Hyper<T>;
  * A Hypernet can be made of a set of inputs and outputs.
  */
 export interface Hyper<T> {
-    input: Edge<T>;
-    edges: Edge<T>[];
-    output: Edge<T>;
-    data: T;
+    input: Edge<Nullable<T>>;
+    edges: Edge<Nullable<T>>[];
+    output: Edge<Nullable<T>>;
+    data: Nullable<T>;
 }
 
 /**
@@ -55,7 +56,8 @@ export function id<T>(): Hyper<T> {
     return {
         input: ie,
         edges: [],
-        output: oe
+        output: oe,
+        data: null
     };
 }
 
@@ -85,7 +87,8 @@ export function swap<T>(): Hyper<T> {
     return {
         input: ie,
         edges: [],
-        output: oe
+        output: oe,
+        data: null
     };
 }
 
@@ -126,6 +129,7 @@ export function compose<T>(f: Hyper<T>, g: Hyper<T>): Hyper<T> {
     return {
         input: f.input,
         edges: [...f.edges, ...g.edges],
-        output: g.output
+        output: g.output,
+        data: null
     };
 }
