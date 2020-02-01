@@ -1,15 +1,9 @@
 import {HyperPositional} from './hypernet-render';
 
 /**
- * All Entities implement this interface.
- */
-export interface Entity {
-}
-
-/**
  * A Wire Entity.
  */
-export interface WireEntity extends Entity {
+export interface WireEntity {
     x1: number;
     y1: number;
     x2: number;
@@ -19,7 +13,7 @@ export interface WireEntity extends Entity {
 /**
  * A function block entity.
  */
-export interface FunctionEntity extends Entity {
+export interface FunctionEntity {
     x1: number;
     y1: number;
     width: number;
@@ -30,7 +24,7 @@ export interface FunctionEntity extends Entity {
 /**
  * All entity renderers extend this interface.
  */
-export interface EntityRenderer<T extends Entity> {
+export interface EntityRenderer<T> {
     /**
      * Render an entity to the canvas.
      *
