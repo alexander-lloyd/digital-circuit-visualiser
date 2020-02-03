@@ -126,8 +126,8 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
         // TODO: Positions these properly.
         const height = 100;
         const width = 100;
-        const x1 = x;
-        const x2 = x + width;
+        const x1 = x + 50;
+        const x2 = x1 + width;
         const y1 = y;
 
         // Box
