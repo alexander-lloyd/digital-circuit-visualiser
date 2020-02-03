@@ -121,13 +121,14 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
         }
 
         // The variables x and y are in the unit square
-        const {x, y, inputPositions} = entity.data;
+        const {x, y, inputPositions, outputPositions} = entity.data;
 
         // TODO: Positions these properly.
-        const x1 = x + 100;
-        const y1 = y + 100;
         const height = 100;
         const width = 100;
+        const x1 = x;
+        const x2 = x + width;
+        const y1 = y;
 
         // Box
         renderCtx.beginPath();
@@ -137,8 +138,14 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
         // Box connections.
         inputPositions.forEach((position: number) => {
             renderCtx.beginPath();
-            renderCtx.moveTo(x1 - 10, position);
-            renderCtx.lineTo(x1 + 10, position);
+            renderCtx.moveTo(x1 - 10, position * height);
+            renderCtx.lineTo(x1, position * height);
+            renderCtx.stroke();
+        });
+        outputPositions.forEach((position: number) => {
+            renderCtx.beginPath();
+            renderCtx.moveTo(x2, position * height);
+            renderCtx.lineTo(x2 + 10, position * height);
             renderCtx.stroke();
         });
     }

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useReducer} from 'react';
-import {id} from '../lib/hypernet';
+import {swap} from '../lib/hypernet';
 import {HypernetRenderer} from '../lib/render';
 import {HyperPositional, populateHyperPositional} from 'lib/hypernet-render';
 
@@ -24,7 +24,7 @@ function drawDiagram(
     ctx.save();
     ctx.scale(scale, scale);
 
-    const hypernet: HyperPositional = id();
+    const hypernet: HyperPositional = swap();
     populateHyperPositional(hypernet);
 
     const canvasContext = {
