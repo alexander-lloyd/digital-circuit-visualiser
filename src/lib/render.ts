@@ -1,6 +1,14 @@
 import {HyperPositional} from './hypernet-render';
 
 /**
+ * Context required by the render functions about the canvas they are rendering on.
+ */
+export interface CanvasContext {
+    height: number;
+    width: number;
+}
+
+/**
  * A Wire Entity.
  */
 export interface WireEntity {
@@ -28,10 +36,11 @@ export interface EntityRenderer<T> {
     /**
      * Render an entity to the canvas.
      *
-     * @param ctx Canvas Render Context.
+     * @param canvasCtx The Canvas Context.
+     * @param renderCtx The Canvas Render Context.
      * @param entity The entity to render.
      */
-    render(ctx: CanvasRenderingContext2D, entity: T): void;
+    render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: T): void;
 }
 
 
@@ -44,19 +53,20 @@ export class WireEntityRenderer implements EntityRenderer<WireEntity> {
     /**
      * Render a wire to the canvas.
      *
-     * @param ctx Canvas Render Context.
+     * @param canvasCtx Canvas context.
+     * @param renderCtx Canvas Render Context.
      * @param entity The entity to render.
      */
-    render(ctx: CanvasRenderingContext2D, entity: WireEntity): void {
+    render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: WireEntity): void {
         const {x1, y1, x2, y2} = entity;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.bezierCurveTo(
+        renderCtx.beginPath();
+        renderCtx.moveTo(x1, y1);
+        renderCtx.bezierCurveTo(
             x1 + WireEntityRenderer.BEZIER_CONTROL_CONSTANT, y1,
             x2 - WireEntityRenderer.BEZIER_CONTROL_CONSTANT, y2,
             x2, y2
         );
-        ctx.stroke();
+        renderCtx.stroke();
     }
 }
 
@@ -67,25 +77,26 @@ export class FunctionEntityRenderer implements EntityRenderer<FunctionEntity> {
     /**
      * Render a function entity to the canvas.
      *
-     * @param ctx Canvas Render Context.
+     * @param canvasCtx Canvas context.
+     * @param renderCtx Canvas Render Context.
      * @param entity The entity to render.
      */
-    render(ctx: CanvasRenderingContext2D, entity: FunctionEntity): void {
+    render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: FunctionEntity): void {
         const {x1, y1, height, width, label} = entity;
 
         // Box
-        ctx.beginPath();
-        ctx.rect(x1, y1, width, height);
-        ctx.stroke();
+        renderCtx.beginPath();
+        renderCtx.rect(x1, y1, width, height);
+        renderCtx.stroke();
 
         // Label
-        ctx.textAlign = 'center';
+        renderCtx.textAlign = 'center';
         const xCenter = (width / 2) + x1;
         const yCenter = (height / 2) + y1;
-        ctx.fillText(label, xCenter, yCenter);
+        renderCtx.fillText(label, xCenter, yCenter);
 
         // Check the text fits in the box.
-        const {width: textWidth} = ctx.measureText(label);
+        const {width: textWidth} = renderCtx.measureText(label);
         // TODO: Check height
         if (textWidth > width) {
             console.warn(`Label ${label} is bigger than function box`);
@@ -100,16 +111,17 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
     /**
      * Renderer a Hypernet.
      *
-     * @param ctx Canvas Context.
-     * @param entity Hypernet.
+     * @param canvasCtx Canvas context.
+     * @param renderCtx Canvas Render Context.
+     * @param entity The entity to render.
      */
-    public render(ctx: CanvasRenderingContext2D, entity: HyperPositional): void {
+    public render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: HyperPositional): void {
         if (!entity.data) {
             throw Error('Entity does not have any positional data!');
         }
 
         // The variables x and y are in the unit square
-        const {x, y} = entity.data;
+        const {x, y, inputPositions} = entity.data;
 
         // TODO: Positions these properly.
         const x1 = x + 100;
@@ -117,10 +129,17 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
         const height = 100;
         const width = 100;
 
-
         // Box
-        ctx.beginPath();
-        ctx.rect(x1, y1, width, height);
-        ctx.stroke();
+        renderCtx.beginPath();
+        renderCtx.rect(x1, y1, width, height);
+        renderCtx.stroke();
+
+        // Box connections.
+        inputPositions.forEach((position: number) => {
+            renderCtx.beginPath();
+            renderCtx.moveTo(x1 - 10, position);
+            renderCtx.lineTo(x1 + 10, position);
+            renderCtx.stroke();
+        });
     }
 }

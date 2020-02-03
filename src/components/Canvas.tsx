@@ -27,8 +27,13 @@ function drawDiagram(
     const hypernet: HyperPositional = id();
     populateHyperPositional(hypernet);
 
+    const canvasContext = {
+        height: canvasHeight,
+        width: canvasWidth
+    };
+
     const renderer = new HypernetRenderer();
-    renderer.render(ctx, hypernet);
+    renderer.render(canvasContext, ctx, hypernet);
 }
 
 /**
