@@ -103,26 +103,25 @@ export default function Canvas(): JSX.Element {
   });
 
   return (
-    <div>
-      <div className="buttons">
-        <button
-          className="button"
-          onClick={(): void => {
-            dispatch({ 'type': 'reset_scale' });
-          }}>Reset Scale</button>
-      </div>
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        onWheel={({ deltaY }: React.WheelEvent): void => {
+      <div>
+          <div className="buttons">
+              <button
+                  className="button"
+                  onClick={(): void => { dispatch({ 'type': 'reset_scale' }); }}>Reset Scale
+              </button>
+          </div>
+          <canvas
+              height={600}
+              onWheel={({ deltaY }: React.WheelEvent): void => {
           const delta = Math.sign(deltaY);
           if (delta > 0) {
             dispatch({ type: 'scale_up' });
           } else {
             dispatch({ type: 'scale_down' });
           }
-        }} />
-    </div>
+        }}
+              ref={canvasRef}
+              width={800} />
+      </div>
   );
 }
