@@ -12,8 +12,8 @@ import Sidebar from './Sidebar';
 export const App = (): JSX.Element => (
     <div>
         <Header />
-        <div className="columns is-gapless">
-            <div className="column is-one-quarter">
+        <div className="columns">
+            <div className="column is-4">
                 <Sidebar />
             </div>
             <div className="column">
