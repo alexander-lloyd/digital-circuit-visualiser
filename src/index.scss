@@ -1,2 +1,15 @@
 @charset 'utf-8';
 @import '~bulma/bulma';
+
+%fullscreen {
+    height: 100%;
+    width: 100%;
+}
+
+html, body {
+    @extend %fullscreen;
+}
+
+#app {
+    @extend %fullscreen;
+}

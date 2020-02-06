@@ -4,16 +4,18 @@ import Canvas from './Canvas';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
+import './App.scss';
+
 /**
  * App Component.
  *
  * @returns App
  */
 export const App = (): JSX.Element => (
-    <div>
+    <div className="fullscreen">
         <Header />
-        <div className="columns">
-            <div className="column is-4">
+        <div className="columns fullheight">
+            <div className="column is-4 fullheight">
                 <Sidebar />
             </div>
             <div className="column">
