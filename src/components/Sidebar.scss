@@ -1,4 +1,9 @@
 .sidebar {
     background-color: #eeeeee;
     height: 100%;
+    max-width: 300px;
+
+    .code-input {
+        padding: 0 2px;
+    }
 }

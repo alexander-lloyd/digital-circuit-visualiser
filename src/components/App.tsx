@@ -14,7 +14,7 @@ import './App.scss';
 export const App = (): JSX.Element => (
     <div className="fullscreen">
         <Header />
-        <div className="columns fullheight">
+        <div className="columns fullheight is-gapless">
             <div className="column is-4 fullheight">
                 <Sidebar />
             </div>
