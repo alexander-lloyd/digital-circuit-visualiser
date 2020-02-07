@@ -6,29 +6,44 @@ const featureFlags: [string, string][] = [
     ['feat3', 'Feature 3']
 ];
 
+/**
+ * Feature Flags Component.
+ *
+ * @returns Feature Flags Component.
+ */
 export default function FeatureFlags(): JSX.Element {
     return (
         <div className="columns">
             <div className="column">
-                { featureFlags.
-                    filter((_, i) => i % 2 == 0)
-                    .map(([featid, feature]) =>
-                        <div className="field" key={featid}>
-                            <label className="checkbox"><input type="checkbox" />{ feature }</label>
+                {
+                featureFlags.
+                    filter((_, i) => i % 2 == 0).
+                    map(([featureId, feature]) => (
+                        <div className="field"
+                             key={featureId}>
+                            <label className="checkbox">
+                                <input type="checkbox" />
+                                {feature}
+                            </label>
                         </div>
-                    )
+                    ))
                 }
             </div>
             <div className="column">
-            { featureFlags.
+                {
+                featureFlags.
                     filter((_, i) => i % 2 == 1)
-                    .map(([featid, feature]) =>
-                        <div className="field" key={featid}>
-                            <label className="checkbox"><input type="checkbox" />{ feature }</label>
+                    .map(([featureId, feature]) => (
+                        <div className="field"
+                             key={featureId}>
+                            <label className="checkbox">
+                                <input type="checkbox" />
+                                { feature }
+                            </label>
                         </div>
-                    )
+                    ))
                 }
             </div>
         </div>
-    )
+    );
 }

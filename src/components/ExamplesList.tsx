@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * Examples List Component.
+ *
+ * @returns Example List Component.
+ */
 export default function ExamplesList(): JSX.Element {
     return (
         <div className="field has-addons">
@@ -12,7 +17,10 @@ export default function ExamplesList(): JSX.Element {
                 </div>
             </div>
             <div className="control">
-                <button type="submit" className="button is-primary">Choose</button>
+                <button className="button is-primary"
+                        type="submit">
+                        Choose
+                </button>
             </div>
         </div>
     );

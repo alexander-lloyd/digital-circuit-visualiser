@@ -16,7 +16,9 @@ export default function Sidebar(): JSX.Element {
     return (
         <aside className="menu sidebar is-mobile is-fullheight">
             <p className="menu-label is-size-5">Code</p>
-            <textarea className="textarea code-input" rows={10} placeholder={ exampleCode }></textarea>
+            <textarea className="textarea code-input"
+                      placeholder={exampleCode}
+                      rows={10} />
             <p className="menu-label is-size-5">Flags</p>
             <FeatureFlags />
             <p className="menu-label is-size-5">Examples</p>
