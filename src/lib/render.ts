@@ -2,10 +2,13 @@ import {HyperPositional} from './hypernet-render';
 
 /**
  * Context required by the render functions about the canvas they are rendering on.
+ * Also contains flags for rendering extra debug information.
  */
-export interface CanvasContext {
+export interface CanvasConfigutation {
     height: number;
     width: number;
+
+    RENDER_UNITSQUARE_BOX: boolean;
 }
 
 /**
@@ -36,11 +39,11 @@ export interface EntityRenderer<T> {
     /**
      * Render an entity to the canvas.
      *
-     * @param canvasCtx The Canvas Context.
+     * @param canvasConfig The Canvas Context.
      * @param renderCtx The Canvas Render Context.
      * @param entity The entity to render.
      */
-    render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: T): void;
+    render(canvasConfig: CanvasConfigutation, renderCtx: CanvasRenderingContext2D, entity: T): void;
 }
 
 
@@ -53,11 +56,11 @@ export class WireEntityRenderer implements EntityRenderer<WireEntity> {
     /**
      * Render a wire to the canvas.
      *
-     * @param canvasCtx Canvas context.
+     * @param canvasConfig Canvas context.
      * @param renderCtx Canvas Render Context.
      * @param entity The entity to render.
      */
-    render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: WireEntity): void {
+    render(canvasConfig: CanvasConfigutation, renderCtx: CanvasRenderingContext2D, entity: WireEntity): void {
         const {x1, y1, x2, y2} = entity;
         renderCtx.beginPath();
         renderCtx.moveTo(x1, y1);
@@ -77,11 +80,11 @@ export class FunctionEntityRenderer implements EntityRenderer<FunctionEntity> {
     /**
      * Render a function entity to the canvas.
      *
-     * @param canvasCtx Canvas context.
+     * @param canvasConfig Canvas context.
      * @param renderCtx Canvas Render Context.
      * @param entity The entity to render.
      */
-    render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: FunctionEntity): void {
+    render(canvasConfig: CanvasConfigutation, renderCtx: CanvasRenderingContext2D, entity: FunctionEntity): void {
         const {x1, y1, height, width, label} = entity;
 
         // Box
@@ -111,11 +114,11 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
     /**
      * Renderer a Hypernet.
      *
-     * @param canvasCtx Canvas context.
+     * @param canvasConfig Canvas context.
      * @param renderCtx Canvas Render Context.
      * @param entity The entity to render.
      */
-    public render(canvasCtx: CanvasContext, renderCtx: CanvasRenderingContext2D, entity: HyperPositional): void {
+    public render(canvasConfig: CanvasConfigutation, renderCtx: CanvasRenderingContext2D, entity: HyperPositional): void {
         if (!entity.data) {
             throw Error('Entity does not have any positional data!');
         }
