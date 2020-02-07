@@ -134,9 +134,11 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
         const y1 = y;
 
         // Box
-        // renderCtx.beginPath();
-        // renderCtx.rect(x1, y1, width, height);
-        // renderCtx.stroke();
+        if (canvasConfig.RENDER_UNITSQUARE_BOX) {
+            renderCtx.beginPath();
+            renderCtx.rect(x1, y1, width, height);
+            renderCtx.stroke();
+        }
 
         // Box connections.
         inputPositions.forEach((position: number) => {
@@ -153,6 +155,5 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
         });
 
         // Draw wires.
-
     }
 }
