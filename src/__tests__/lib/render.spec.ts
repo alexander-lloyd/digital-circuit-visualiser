@@ -2,7 +2,8 @@ import {
     WireEntity,
     WireEntityRenderer,
     FunctionEntity,
-    FunctionEntityRenderer
+    FunctionEntityRenderer,
+    CanvasConfigutation
 } from '../../lib/render';
 
 describe('wireEntityRenderer', () => {
@@ -10,6 +11,11 @@ describe('wireEntityRenderer', () => {
         expect.assertions(2);
 
         const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const config: CanvasConfigutation = {
+            height: canvas.height,
+            width: canvas.width,
+            RENDER_UNITSQUARE_BOX: false
+        };
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
         const entity: WireEntity = {
@@ -20,7 +26,7 @@ describe('wireEntityRenderer', () => {
         };
 
         const renderer = new WireEntityRenderer();
-        renderer.render(ctx, entity);
+        renderer.render(config, ctx, entity);
 
         const events = ctx.__getEvents();
         expect(events).toMatchInlineSnapshot(`
@@ -208,6 +214,11 @@ describe('functionEntityRender', () => {
         expect.assertions(2);
 
         const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const config: CanvasConfigutation = {
+            height: canvas.height,
+            width: canvas.width,
+            RENDER_UNITSQUARE_BOX: false
+        };
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
         const entity: FunctionEntity = {
@@ -219,7 +230,7 @@ describe('functionEntityRender', () => {
         };
 
         const renderer = new FunctionEntityRenderer();
-        renderer.render(ctx, entity);
+        renderer.render(config, ctx, entity);
 
         const events = ctx.__getEvents();
         expect(events).toMatchInlineSnapshot(`
@@ -417,6 +428,11 @@ describe('functionEntityRender', () => {
 
         const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
         const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const config: CanvasConfigutation = {
+            height: canvas.height,
+            width: canvas.width,
+            RENDER_UNITSQUARE_BOX: false
+        };
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
         const entity: FunctionEntity = {
@@ -428,7 +444,7 @@ describe('functionEntityRender', () => {
         };
 
         const renderer = new FunctionEntityRenderer();
-        renderer.render(ctx, entity);
+        renderer.render(config, ctx, entity);
 
         expect(consoleSpy).toHaveBeenCalledWith(expect.anything());
     });
