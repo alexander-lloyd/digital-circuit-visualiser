@@ -7,7 +7,6 @@ export type Direction = 'left' | 'right';
  */
 interface FeatureFlagProps {
     feature: string;
-    side: Direction;
 }
 
 /**
@@ -16,14 +15,9 @@ interface FeatureFlagProps {
  * @param props FeatureFlag props.
  * @returns FeatureFlag Component.
  */
-export default function FeatureFlag({feature, side}: FeatureFlagProps): JSX.Element {
-    console.log(feature, side, side === 'right');
-    const classes = side === 'right' ?
-      'field has-addons' :
-      'field has-addons has-addons-centered';
-
+export default function FeatureFlag({feature}: FeatureFlagProps): JSX.Element {
     return (
-        <div className={classes}>
+        <div className="field">
             <label className="checkbox label">
                 <input type="checkbox" />
                 {feature}

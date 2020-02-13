@@ -22,8 +22,7 @@ export default function FeatureFlags(): JSX.Element {
                     filter((_, i) => i % 2 == 0).
                     map(([featureId, feature]) => (
                         <FeatureFlag feature={feature}
-                                     key={featureId}
-                                     side='left' />
+                                     key={featureId} />
                     ))
                 }
             </div>
@@ -33,8 +32,7 @@ export default function FeatureFlags(): JSX.Element {
                     filter((_, i) => i % 2 == 1)
                     .map(([featureId, feature]) => (
                         <FeatureFlag feature={feature}
-                                     key={featureId}
-                                     side='right' />
+                                     key={featureId} />
                     ))
                 }
             </div>
