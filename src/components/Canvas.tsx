@@ -111,8 +111,7 @@ export default function Canvas(): JSX.Element {
                   Reset Scale
               </button>
           </div>
-          <canvas height={600}
-                  onWheel={
+          <canvas onWheel={
                     ({ deltaY }: React.WheelEvent): void => {
           const delta = Math.sign(deltaY);
           if (delta > 0) {
@@ -122,8 +121,7 @@ export default function Canvas(): JSX.Element {
           }
         }
       }
-                  ref={canvasRef}
-                  width={800} />
+                  ref={canvasRef} />
       </div>
   );
 }

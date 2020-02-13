@@ -1,4 +1,6 @@
+@import '../partials';
+
 .sidebar {
-    height: 100%;
+    @extend %fullheight;
     width: 400px;
 }
