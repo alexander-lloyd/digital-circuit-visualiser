@@ -103,7 +103,7 @@ export default function Canvas(): JSX.Element {
   });
 
   return (
-      <div>
+      <div className="fullheight">
           <div className="buttons">
               <button className="button"
                       onClick={(): void => { dispatch({ 'type': 'reset_scale' }); }}

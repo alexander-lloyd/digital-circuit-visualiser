@@ -19,7 +19,7 @@ export default function ExamplesList(): JSX.Element {
             <div className="control">
                 <button className="button is-primary"
                         type="submit">
-                        Choose
+                    Choose
                 </button>
             </div>
         </div>

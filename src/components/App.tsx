@@ -11,16 +11,18 @@ import './App.scss';
  *
  * @returns App
  */
-export const App = (): JSX.Element => (
-    <div className="fullscreen">
-        <Header />
-        <div className="columns fullheight is-gapless">
-            <div className="column is-4 fullheight">
-                <Sidebar />
-            </div>
-            <div className="column">
-                <Canvas />
+export default function App (): JSX.Element  {
+    return (
+        <div className="fullscreen">
+            <Header />
+            <div className="columns fullheight is-gapless">
+                <div className="column fullheight is-narrow">
+                    <Sidebar />
+                </div>
+                <div className="column">
+                    <Canvas />
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+}
