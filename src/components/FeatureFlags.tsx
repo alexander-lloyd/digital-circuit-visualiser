@@ -1,5 +1,7 @@
 import React from 'react';
 
+import FeatureFlag from './FeatureFlag';
+
 const featureFlags: [string, string][] = [
     ['feat1', 'Feature 1'],
     ['feat2', 'Feature 2'],
@@ -19,13 +21,9 @@ export default function FeatureFlags(): JSX.Element {
                 featureFlags.
                     filter((_, i) => i % 2 == 0).
                     map(([featureId, feature]) => (
-                        <div className="field"
-                             key={featureId}>
-                            <label className="checkbox">
-                                <input type="checkbox" />
-                                {feature}
-                            </label>
-                        </div>
+                        <FeatureFlag feature={feature}
+                                     key={featureId}
+                                     side='left' />
                     ))
                 }
             </div>
@@ -34,13 +32,9 @@ export default function FeatureFlags(): JSX.Element {
                 featureFlags.
                     filter((_, i) => i % 2 == 1)
                     .map(([featureId, feature]) => (
-                        <div className="field"
-                             key={featureId}>
-                            <label className="checkbox">
-                                <input type="checkbox" />
-                                { feature }
-                            </label>
-                        </div>
+                        <FeatureFlag feature={feature}
+                                     key={featureId}
+                                     side='right' />
                     ))
                 }
             </div>
