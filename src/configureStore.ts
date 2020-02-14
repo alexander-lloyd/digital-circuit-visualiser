@@ -3,7 +3,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import createReducers from './reducers';
 
-export default function configureStore(initialState = {}) {
+/**
+ * Create the store.
+ *
+ * @returns The Application Store.
+ */
+export default function configureStore() { // eslint-disable-line
     const reducers = createReducers();
     const store = createStore(
         reducers,
