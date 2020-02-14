@@ -1,15 +1,14 @@
 import { combineReducers } from 'redux';
 
-const initialState = {};
-
+import { canvasReducer } from './containers/Canvas/reducer';
 /**
  * Combine reducer into a single reducer for the store.
  *
  * @returns Combined Reducer
  */
-export default function createReducers() {
+export default function createReducers() { // eslint-disable-line
     const rootReducer = combineReducers({
-        test: (state: any = initialState, action: any) => state
+        canvas: canvasReducer
     });
 
     return rootReducer;
