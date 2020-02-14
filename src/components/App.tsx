@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Canvas from './Canvas';
+import Canvas from '../containers/Canvas/index';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
