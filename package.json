@@ -18,7 +18,8 @@
  },
  "dependencies": {
   "react": "^16.10.2",
-  "react-dom": "^16.10.2"
+  "react-dom": "^16.10.2",
+  "react-resize-aware": "^3.0.0"
  },
  "devDependencies": {
   "@babel/core": "^7.0.0-0",
@@ -49,6 +50,7 @@
   "mini-css-extract-plugin": "^0.9.0",
   "node-sass": "^4.13.0",
   "prettier": "^1.19.1",
+  "purgecss-webpack-plugin": "^2.0.6",
   "react-test-renderer": "^16.10.2",
   "rimraf": "^3.0.0",
   "sass-loader": "^8.0.0",
@@ -58,11 +60,5 @@
   "webpack": "^4.41.2",
   "webpack-cli": "^3.3.9",
   "webpack-dev-server": "^3.8.2"
- },
- "jest": {
-  "setupFilesAfterEnv": [
-   "<rootDir>/setupTests.js",
-   "jest-canvas-mock"
-  ]
  }
 }

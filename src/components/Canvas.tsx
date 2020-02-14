@@ -1,8 +1,29 @@
-import React, { useEffect, useRef, useReducer, } from 'react';
+import React, { useEffect, useRef, useReducer } from 'react';
+import useResizeAware from 'react-resize-aware';
 
 import { FunctionEntity, FunctionEntityRenderer } from '../lib/render';
 
 const SCALING_FACTOR = 1.05;
+
+/**
+ * As a workaround for not being able to set height and width to 100%.
+ *
+ * Sets height and width to 100%, gets the computed value and then sets
+ * them statically. Needs to be called everytime the screen size changes.
+ *
+ * Base on https://stackoverflow.com/questions/10214873/make-canvas-as-wide-and-as-high-as-parent.
+ *
+ * @param canvas Html Canvas Element.
+ */
+function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
+  // Make it fit the parent.
+  canvas.style.height = '100%';
+  canvas.style.width = '100%';
+
+  // Set the height and width to computed values.
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
 
 /**
  * Draw the diagram on the canvas.
@@ -102,27 +123,41 @@ export default function Canvas(): JSX.Element {
     drawDiagram(ctx, canvas.width, canvas.height, state.scale);
   });
 
+  const [resizeListener, sizes] = useResizeAware();
+
+  React.useEffect(() => {
+    console.log('canvas resize');
+    const canvas: HTMLCanvasElement | null = canvasRef.current;
+    if (canvas == null) {
+      return;
+    }
+    fitCanvasToContainer(canvas);
+    // Dispatch a reset scale event
+    dispatch({ type: 'reset_scale', });
+  }, [sizes.width, sizes.height, canvasRef]);
+
   return (
-    <div>
-      <div className="buttons">
-        <button
-          className="button"
-          onClick={(): void => {
-            dispatch({ 'type': 'reset_scale' });
-          }}>Reset Scale</button>
-      </div>
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        onWheel={({ deltaY }: React.WheelEvent): void => {
+      <div className="fullheight">
+          {resizeListener}
+          <div className="buttons box">
+              <button className="button"
+                      onClick={(): void => { dispatch({ 'type': 'reset_scale' }); }}
+                      type="button">
+                  Reset Scale
+              </button>
+          </div>
+          <canvas onWheel={
+                    ({ deltaY }: React.WheelEvent): void => {
           const delta = Math.sign(deltaY);
           if (delta > 0) {
             dispatch({ type: 'scale_up' });
           } else {
             dispatch({ type: 'scale_down' });
           }
-        }} />
-    </div>
+        }
+      }
+                  ref={canvasRef}
+                  style={{ position: 'relative'}} />
+      </div>
   );
 }

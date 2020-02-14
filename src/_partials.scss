@@ -1,0 +1,16 @@
+%fullheight {
+    height: 100%;
+}
+
+%fullscreen {
+    height: 100%;
+    width: 100%;
+}
+
+.fullscreen {
+    @extend %fullscreen
+}
+
+.fullheight {
+    @extend %fullheight
+}

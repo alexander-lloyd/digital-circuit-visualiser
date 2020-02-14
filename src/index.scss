@@ -1,2 +1,12 @@
 @charset 'utf-8';
 @import '~bulma/bulma';
+
+@import 'partials';
+
+html, body {
+    @extend %fullscreen;
+}
+
+#app {
+    @extend %fullscreen;
+}
