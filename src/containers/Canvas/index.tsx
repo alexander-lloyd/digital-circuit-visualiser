@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useReducer } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import useResizeAware from 'react-resize-aware';
 
 import { FunctionEntity, FunctionEntityRenderer } from '../../lib/render';
 
-const SCALING_FACTOR = 1.05;
+import { resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
+import { CanvasState } from './types';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -34,80 +36,65 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param scale The scaling factor.
  */
 function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
-  canvasHeight: number, scale: number): void {
+    canvasHeight: number, scale: number): void {
 
-  // Clear canvas
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  ctx.setTransform(); // Reset the position and scaling.
-  ctx.save();
-  ctx.scale(scale, scale);
+    // Clear canvas
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.setTransform(); // Reset the position and scaling.
+    ctx.save();
+    ctx.scale(scale, scale);
 
-  const entity: FunctionEntity = {
-    x1: 20,
-    y1: 20,
-    width: 100,
-    height: 100,
-    label: 'f'
-  };
+    const entity: FunctionEntity = {
+        x1: 20,
+        y1: 20,
+        width: 100,
+        height: 100,
+        label: 'f'
+    };
 
-  const renderer = new FunctionEntityRenderer();
-  renderer.render(ctx, entity);
+    const renderer = new FunctionEntityRenderer();
+    renderer.render(ctx, entity);
 }
 
 /**
- * Canvas Component State.
+ * Canvas Properties.
  */
-interface CanvasState {
-  scale: number;
+interface CanvasProperties {
+    scale: number;
 }
-
-const initialState = {
-  scale: 1.0,
-};
-
-type CanvasActions =
-  | { type: 'scale_up' }
-  | { type: 'scale_down' }
-  | { type: 'reset_scale' };
 
 /**
- * Component reducer.
- *
- * @param state Component internal state.
- * @param action Component action.
- * @returns The new state.
+ * Canvas Props.
  */
-function reducer(state: CanvasState, action: CanvasActions): CanvasState {
-  const { scale } = state;
-
-  console.log(`[Canvas Component]: ${action.type}`);
-
-  switch (action.type) {
-    case 'scale_up': {
-      const newScale = Math.min(scale * SCALING_FACTOR, 5);
-      return { ...state, scale: newScale };
-    }
-    case 'scale_down': {
-      const newScale = Math.max(scale / SCALING_FACTOR, 0.5);
-      return { ...state, scale: newScale };
-    }
-    case 'reset_scale': {
-      return { ...state, scale: 1.0 };
-    }
-    default:
-      return state;
-  }
-}
+interface CanvasProps extends CanvasActionCreaters, CanvasProperties {}
 
 /**
  * Canvas Component.
  *
+ * @param props Component Propeties.
  * @returns React Component.
  */
-export default function Canvas(): JSX.Element {
+function Canvas(props: CanvasProps): JSX.Element {
+  const {
+      scale,
+      resetZoom,
+      zoomIn,
+      zoomOut
+  } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+    const [resizeListener, sizes] = useResizeAware();
+
+  React.useEffect(() => {
+    console.log('canvas resize');
+    const canvas: HTMLCanvasElement | null = canvasRef.current;
+    if (canvas == null) {
+      return;
+    }
+    fitCanvasToContainer(canvas);
+    // Dispatch a reset scale event
+    resetZoom();
+  }, [sizes.width, sizes.height, canvasRef, resetZoom]);
 
   useEffect((): void => {
     const canvas: HTMLCanvasElement | null = canvasRef.current;
@@ -120,28 +107,15 @@ export default function Canvas(): JSX.Element {
       return;
     }
 
-    drawDiagram(ctx, canvas.width, canvas.height, state.scale);
-  });
-
-  const [resizeListener, sizes] = useResizeAware();
-
-  React.useEffect(() => {
-    console.log('canvas resize');
-    const canvas: HTMLCanvasElement | null = canvasRef.current;
-    if (canvas == null) {
-      return;
-    }
-    fitCanvasToContainer(canvas);
-    // Dispatch a reset scale event
-    dispatch({ type: 'reset_scale', });
-  }, [sizes.width, sizes.height, canvasRef]);
+    drawDiagram(ctx, canvas.width, canvas.height, scale);
+  }, [canvasRef, scale]);
 
   return (
       <div className="fullheight">
           {resizeListener}
           <div className="buttons box">
               <button className="button"
-                      onClick={(): void => { dispatch({ 'type': 'reset_scale' }); }}
+                      onClick={(): void => { props.resetZoom(); }}
                       type="button">
                   Reset Scale
               </button>
@@ -150,9 +124,9 @@ export default function Canvas(): JSX.Element {
                     ({ deltaY }: React.WheelEvent): void => {
           const delta = Math.sign(deltaY);
           if (delta > 0) {
-            dispatch({ type: 'scale_up' });
+            zoomIn();
           } else {
-            dispatch({ type: 'scale_down' });
+            zoomOut();
           }
         }
       }
@@ -161,3 +135,28 @@ export default function Canvas(): JSX.Element {
       </div>
   );
 }
+
+
+/**
+ * Map State to React Props.
+ *
+ * @param state Canvas State.
+ * @returns Component Props.
+ */
+function mapStateToProps(state: CanvasState): CanvasProperties {
+  const { scale } = state;
+  return {
+    scale
+  };
+}
+
+const mapDispatchToProps = {
+  resetZoom,
+  zoomIn,
+  zoomOut
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Canvas);

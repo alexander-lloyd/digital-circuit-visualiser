@@ -1,6 +1,5 @@
-import { CanvasActions } from './actions';
 import { RESET_SCALE, SCALING_FACTOR, ZOOM_IN, ZOOM_OUT } from './constants';
-import { CanvasState } from './types';
+import { CanvasActions, CanvasState } from './types';
 
 const initialScale = 1.0;
 

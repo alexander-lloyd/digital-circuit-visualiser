@@ -3,29 +3,50 @@ import {
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
+import {
+    ResetScaleAction,
+    ZoomInAction,
+    ZoomOutAction
+} from './types';
 
 /**
- * Reset Scale Action.
+ * Reset Zoom Action Creater.
+ *
+ * @returns Reset Scale Action.
  */
-interface ResetScaleAction {
-    type: typeof RESET_SCALE;
+export function resetZoom(): ResetScaleAction {
+    return {
+        type: RESET_SCALE
+    };
 }
 
 /**
- * Zoom In Action.
+ * Zoom In Action Creater.
+ *
+ * @returns Zoom In Action.
  */
-interface ZoomInAction {
-    type: typeof ZOOM_IN;
+export function zoomIn(): ZoomInAction {
+    return {
+        type: ZOOM_IN
+    };
 }
 
 /**
- * Zoom Out Action.
+ * Zoom Out Action Creater.
+ *
+ * @returns Zoom Out Action.
  */
-interface ZoomOutAction {
-    type: typeof ZOOM_OUT;
+export function zoomOut(): ZoomOutAction {
+    return {
+        type: ZOOM_OUT
+    };
 }
 
-export type CanvasActions =
-    | ResetScaleAction
-    | ZoomInAction
-    | ZoomOutAction;
+/**
+ * Canvas Action Creaters.
+ */
+export interface CanvasActionCreaters {
+    resetZoom: typeof resetZoom;
+    zoomIn: typeof zoomIn;
+    zoomOut: typeof zoomOut;
+}
