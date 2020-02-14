@@ -1,3 +1,6 @@
+/**
+ * Events returned by the extended jest-cavas-mock.
+ */
 export interface CanvasRenderingContext2DEvent {
     /**
      * This is the type of canvas event that occured.
@@ -12,11 +15,14 @@ export interface CanvasRenderingContext2DEvent {
      * These are the relevant properties related to this canvas event.
      */
     props: {
-      [key: string]: any;
+      [key: string]: any; // eslint-disable-line
     };
   }
   
   declare global {
+    /**
+     * jest-canvas-mock extended Canvas 2D Context.
+     */
     interface CanvasRenderingContext2D {
       /**
        * Get all the events associated with this CanvasRenderingContext2D object.
