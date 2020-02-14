@@ -18,13 +18,13 @@ import { CanvasState } from './types';
  * @param canvas Html Canvas Element.
  */
 function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
-  // Make it fit the parent.
-  canvas.style.height = '100%';
-  canvas.style.width = '100%';
+    // Make it fit the parent.
+    canvas.style.height = '100%';
+    canvas.style.width = '100%';
 
-  // Set the height and width to computed values.
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
+    // Set the height and width to computed values.
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
 }
 
 /**
@@ -38,22 +38,25 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
 function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
     canvasHeight: number, scale: number): void {
 
-    // Clear canvas
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    ctx.setTransform(); // Reset the position and scaling.
-    ctx.save();
-    ctx.scale(scale, scale);
+    requestAnimationFrame(() => {
 
-    const entity: FunctionEntity = {
-        x1: 20,
-        y1: 20,
-        width: 100,
-        height: 100,
-        label: 'f'
-    };
+        // Clear canvas
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.setTransform(); // Reset the position and scaling.
+        ctx.save();
+        ctx.scale(scale, scale);
 
-    const renderer = new FunctionEntityRenderer();
-    renderer.render(ctx, entity);
+        const entity: FunctionEntity = {
+            x1: 100,
+            y1: 100,
+            width: 100,
+            height: 100,
+            label: 'f'
+        };
+
+        const renderer = new FunctionEntityRenderer();
+        renderer.render(ctx, entity);
+    });
 }
 
 /**
@@ -75,44 +78,47 @@ interface CanvasProps extends CanvasActionCreaters, CanvasProperties {}
  * @returns React Component.
  */
 function Canvas(props: CanvasProps): JSX.Element {
-  const {
-      scale,
-      resetZoom,
-      zoomIn,
-      zoomOut
-  } = props;
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+    const {
+        scale,
+        resetZoom,
+        zoomIn,
+        zoomOut
+    } = props;
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const [resizeListener, sizes] = useResizeAware();
+    
+    React.useEffect(() => {
+        console.log('canvas resize');
+        const canvas: HTMLCanvasElement | null = canvasRef.current;
+        if (canvas == null) {
+            return;
+        }
+        fitCanvasToContainer(canvas);
+        // Dispatch a reset scale event
+        const ctx = canvas.getContext('2d');
+        if (ctx == null) {
+            return;
+        }
+        drawDiagram(ctx, canvas.width, canvas.height, scale);
+    }, [sizes.width, sizes.height, canvasRef, resetZoom, scale]);
 
-  React.useEffect(() => {
-    console.log('canvas resize');
-    const canvas: HTMLCanvasElement | null = canvasRef.current;
-    if (canvas == null) {
-      return;
-    }
-    fitCanvasToContainer(canvas);
-    // Dispatch a reset scale event
-    resetZoom();
-  }, [sizes.width, sizes.height, canvasRef, resetZoom]);
+    useEffect((): void => {
+        const canvas: HTMLCanvasElement | null = canvasRef.current;
+        if (canvas == null) {
+            return;
+        }
 
-  useEffect((): void => {
-    const canvas: HTMLCanvasElement | null = canvasRef.current;
-    if (canvas == null) {
-      return;
-    }
-
-    const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
-    if (ctx == null) {
-      return;
-    }
-
-    drawDiagram(ctx, canvas.width, canvas.height, scale);
-  }, [canvasRef, scale]);
+        const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
+        if (ctx == null) {
+            return;
+        }
+        
+        drawDiagram(ctx, canvas.width, canvas.height, scale);
+    }, [canvasRef, scale]);
 
   return (
       <div className="fullheight">
-          {resizeListener}
           <div className="buttons box">
               <button className="button"
                       onClick={(): void => { props.resetZoom(); }}
@@ -120,18 +126,21 @@ function Canvas(props: CanvasProps): JSX.Element {
                   Reset Scale
               </button>
           </div>
-          <canvas onWheel={
-                    ({ deltaY }: React.WheelEvent): void => {
-          const delta = Math.sign(deltaY);
-          if (delta > 0) {
-            zoomIn();
-          } else {
-            zoomOut();
+          <div className="fullheight"
+               style={{ position: 'relative'}}> 
+              {resizeListener}
+              <canvas onWheel={
+                        ({ deltaY }: React.WheelEvent): void => {
+              const delta = Math.sign(deltaY);
+              if (delta > 0) {
+                  zoomIn();
+              } else {
+                 zoomOut();
+              }
+            }
           }
-        }
-      }
-                  ref={canvasRef}
-                  style={{ position: 'relative'}} />
+                      ref={canvasRef}  />
+          </div>
       </div>
   );
 }
@@ -144,19 +153,19 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @returns Component Props.
  */
 function mapStateToProps(state: CanvasState): CanvasProperties {
-  const { scale } = state;
-  return {
-    scale
-  };
+    const { scale } = state;
+    return {
+        scale
+    };
 }
 
 const mapDispatchToProps = {
-  resetZoom,
-  zoomIn,
-  zoomOut
+    resetZoom,
+    zoomIn,
+    zoomOut
 };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+    mapStateToProps,
+    mapDispatchToProps,
 )(Canvas);
