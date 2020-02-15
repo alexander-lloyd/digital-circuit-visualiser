@@ -38,7 +38,7 @@ const cspPluginOptions = {
 const plugins = [
   new HtmlWebpackPlugin({
     template: PATHS.template,
-    inject: false
+    inject: true
   }),
   new MiniCssExtractPlugin({
     filename: '[name].bundle.css',
