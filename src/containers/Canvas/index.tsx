@@ -6,6 +6,7 @@ import { FunctionEntity, FunctionEntityRenderer } from '../../lib/render';
 
 import { resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
 import { CanvasState } from './types';
+import CanvasButtonGroup from './CanvasButtonGroup';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -119,15 +120,9 @@ function Canvas(props: CanvasProps): JSX.Element {
 
   return (
       <div className="fullheight">
-          <div className="buttons box">
-              <button className="button"
-                      onClick={(): void => { props.resetZoom(); }}
-                      type="button">
-                  Reset Scale
-              </button>
-          </div>
-          <div className="fullheight"
-               style={{ position: 'relative'}}> 
+          <CanvasButtonGroup onResetScale={resetZoom} />
+          <div className=""
+               style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
               {resizeListener}
               <canvas onWheel={
                         ({ deltaY }: React.WheelEvent): void => {
