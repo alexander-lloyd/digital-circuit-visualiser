@@ -4,7 +4,7 @@ import useResizeAware from 'react-resize-aware';
 
 import { FunctionEntity, FunctionEntityRenderer } from '../../lib/render';
 
-import { requestDownload, resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
+import { resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
 import { GlobalState } from 'reducers';
 
@@ -100,7 +100,6 @@ function Canvas(props: CanvasProps): JSX.Element {
     const {
         scale,
         downloadLoading,
-        requestDownload,
         resetZoom,
         zoomIn,
         zoomOut
@@ -180,7 +179,6 @@ function mapStateToProps(state: GlobalState): CanvasProperties {
 }
 
 const mapDispatchToProps = {
-    requestDownload,
     resetZoom,
     zoomIn,
     zoomOut

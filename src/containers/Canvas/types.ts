@@ -1,16 +1,8 @@
 import {
-    REQUEST_DOWNLOAD,
     RESET_SCALE,
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
-
-/**
- * Request Download Action.
- */
-export interface RequestDownloadAction {
-    type: typeof REQUEST_DOWNLOAD;
-}
 
 /**
  * Reset Scale Action.
@@ -37,7 +29,6 @@ export interface ZoomOutAction {
  * Canvas Actions.
  */
 export type CanvasActions =
-    | RequestDownloadAction
     | ResetScaleAction
     | ZoomInAction
     | ZoomOutAction;
