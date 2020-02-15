@@ -4,6 +4,9 @@ import { CanvasActions, CanvasState } from './types';
 const initialScale = 1.0;
 
 const initialCanvasState: CanvasState = {
+    download: {
+        loading: false,
+    },
     scale: initialScale,
 };
 

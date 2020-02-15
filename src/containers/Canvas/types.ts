@@ -37,5 +37,8 @@ export type CanvasActions =
  * Canvas Container State.
  */
 export interface CanvasState {
+    download: {
+        loading: boolean;
+    };
     scale: number;
 }

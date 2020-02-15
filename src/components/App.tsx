@@ -15,7 +15,8 @@ export default function App (): JSX.Element  {
     return (
         <div className="fullscreen">
             <Header />
-            <div className="columns fullheight is-gapless">
+            <div className="columns is-fullheight-with-navbar is-gapless"
+                 style={{ height: 'calc(100% - 1rem)' }}>
                 <div className="column fullheight is-narrow">
                     <Sidebar />
                 </div>

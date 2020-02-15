@@ -1,10 +1,20 @@
 @charset 'utf-8';
+
+/*** Bulma ***/
+$navbar-height: 2.6rem;
+
 @import '~bulma/bulma';
 
 @import 'partials';
 
 html, body {
     @extend %fullscreen;
+}
+
+// Disable Scroll
+html, body {
+    margin: 0;
+    height: 100%; overflow: hidden
 }
 
 #app {

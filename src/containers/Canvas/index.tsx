@@ -5,7 +5,8 @@ import useResizeAware from 'react-resize-aware';
 import { FunctionEntity, FunctionEntityRenderer } from '../../lib/render';
 
 import { resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
-import { CanvasState } from './types';
+import CanvasButtonGroup from './CanvasButtonGroup';
+import { GlobalState } from 'reducers';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -60,10 +61,25 @@ function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
 }
 
 /**
+ * Download an image of the Canvas.
+ *
+ * @param canvas Canvas Element.
+ * @param downloadLink Anchor Tag used to download canvas.
+ */
+function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchorElement): void {
+    const image = canvas.toDataURL('image/png').
+        replace('image/png', 'image/octet-stream');
+    downloadLink.setAttribute('download', 'canvas.png');
+    downloadLink.setAttribute('href', image);
+    downloadLink.click();
+}
+
+/**
  * Canvas Properties.
  */
 interface CanvasProperties {
     scale: number;
+    downloadLoading: boolean;
 }
 
 /**
@@ -80,11 +96,13 @@ interface CanvasProps extends CanvasActionCreaters, CanvasProperties {}
 function Canvas(props: CanvasProps): JSX.Element {
     const {
         scale,
+        downloadLoading,
         resetZoom,
         zoomIn,
         zoomOut
     } = props;
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const downloadRef = useRef<HTMLAnchorElement>(null);
 
     const [resizeListener, sizes] = useResizeAware();
     
@@ -117,31 +135,38 @@ function Canvas(props: CanvasProps): JSX.Element {
         drawDiagram(ctx, canvas.width, canvas.height, scale);
     }, [canvasRef, scale]);
 
-  return (
-      <div className="fullheight">
-          <div className="buttons box">
-              <button className="button"
-                      onClick={(): void => { props.resetZoom(); }}
-                      type="button">
-                  Reset Scale
-              </button>
-          </div>
-          <div className="fullheight"
-               style={{ position: 'relative'}}> 
-              {resizeListener}
-              <canvas onWheel={
-                        ({ deltaY }: React.WheelEvent): void => {
-              const delta = Math.sign(deltaY);
-              if (delta > 0) {
-                  zoomIn();
-              } else {
-                 zoomOut();
-              }
-            }
+    /** Wrapper around download canvas function */
+    const downloadCanvas = (): void => {
+        if (canvasRef.current === null || downloadRef.current === null) {
+            return;
+        }
+    
+        downloadCanvasImage(canvasRef.current, downloadRef.current);
+    };
+
+    return (
+        <div className="fullheight">
+            <CanvasButtonGroup isDownloadLoading={downloadLoading}
+                               onDownload={downloadCanvas}
+                               onResetScale={resetZoom} />
+            <div className=""
+                 style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
+                {resizeListener}
+                <canvas onWheel={
+                    ({ deltaY }: React.WheelEvent): void => {
+                        const delta = Math.sign(deltaY);
+                        if (delta > 0) {
+                            zoomIn();
+                        } else {
+                            zoomOut();
+                        }
+                    }
           }
-                      ref={canvasRef}  />
-          </div>
-      </div>
+                        ref={canvasRef}  />
+            </div>
+            <a hidden
+               ref={downloadRef} />
+        </div>
   );
 }
 
@@ -152,10 +177,10 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @param state Canvas State.
  * @returns Component Props.
  */
-function mapStateToProps(state: CanvasState): CanvasProperties {
-    const { scale } = state;
+function mapStateToProps(state: GlobalState): CanvasProperties {
     return {
-        scale
+        scale: state.canvas.scale,
+        downloadLoading: state.canvas.download.loading
     };
 }
 

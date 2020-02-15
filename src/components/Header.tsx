@@ -7,10 +7,10 @@ import React from 'react';
  */
 export default function Header(): JSX.Element {
     return (
-        <div className="navbar is-link">
+        <div className="navbar is-link is-fixed-top">
             <div className="navbar-brand">
                 <a className="navbar-item"
-                   href="https://bulma.io">
+                   href="#">
                     <h1 className="title has-text-white">Hypernet Visualisation</h1>
                 </a>
             </div>
