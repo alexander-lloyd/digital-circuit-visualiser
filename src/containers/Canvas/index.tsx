@@ -120,7 +120,8 @@ function Canvas(props: CanvasProps): JSX.Element {
 
   return (
       <div className="fullheight">
-          <CanvasButtonGroup onResetScale={resetZoom} />
+          <CanvasButtonGroup onResetScale={resetZoom}
+                             onDownload={(): void => {}}/>
           <div className=""
                style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
               {resizeListener}
