@@ -11,6 +11,12 @@ html, body {
     @extend %fullscreen;
 }
 
+// Disable Scroll
+html, body {
+    margin: 0;
+    height: 100%; overflow: hidden
+}
+
 #app {
     @extend %fullscreen;
 }
