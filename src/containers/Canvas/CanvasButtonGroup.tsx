@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faCompressArrowsAlt, faDownload } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * CanvasButtonGroup Properties 
@@ -27,7 +27,10 @@ export default function CanvasButtonGroup(props: CanvasButtonGroupProps): JSX.El
             <button className="button is-outlined is-primary"
                     onClick={(): void => props.onResetScale()}
                     type="button">
-                Reset Scale
+                <span className="icon">
+                    <FontAwesomeIcon icon={faCompressArrowsAlt} />
+                </span>
+                <span>Reset Scale</span>
             </button>
             <button className={"button is-outlined is-primary " + (isDownloadLoading ? "is-loading": "")}
                     onClick={(): void => props.onDownload()}
