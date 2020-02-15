@@ -1,6 +1,15 @@
 import { combineReducers } from 'redux';
 
 import { canvasReducer } from './containers/Canvas/reducer';
+import { CanvasState } from './containers/Canvas/types';
+
+/**
+ * Global State Tree.
+ */
+export interface GlobalState {
+    canvas: CanvasState;
+}
+
 /**
  * Combine reducer into a single reducer for the store.
  *

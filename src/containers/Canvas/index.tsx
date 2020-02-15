@@ -4,9 +4,9 @@ import useResizeAware from 'react-resize-aware';
 
 import { FunctionEntity, FunctionEntityRenderer } from '../../lib/render';
 
-import { resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
-import { CanvasState } from './types';
+import { requestDownload, resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
+import { GlobalState } from 'reducers';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -65,6 +65,7 @@ function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
  */
 interface CanvasProperties {
     scale: number;
+    downloadLoading: boolean;
 }
 
 /**
@@ -81,6 +82,8 @@ interface CanvasProps extends CanvasActionCreaters, CanvasProperties {}
 function Canvas(props: CanvasProps): JSX.Element {
     const {
         scale,
+        downloadLoading,
+        requestDownload,
         resetZoom,
         zoomIn,
         zoomOut
@@ -120,8 +123,9 @@ function Canvas(props: CanvasProps): JSX.Element {
 
   return (
       <div className="fullheight">
-          <CanvasButtonGroup onResetScale={resetZoom}
-                             onDownload={(): void => {}}/>
+          <CanvasButtonGroup isDownloadLoading={downloadLoading}
+                             onDownload={requestDownload}
+                             onResetScale={resetZoom} />
           <div className=""
                style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
               {resizeListener}
@@ -148,14 +152,15 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @param state Canvas State.
  * @returns Component Props.
  */
-function mapStateToProps(state: CanvasState): CanvasProperties {
-    const { scale } = state;
+function mapStateToProps(state: GlobalState): CanvasProperties {
     return {
-        scale
+        scale: state.canvas.scale,
+        downloadLoading: state.canvas.download.loading
     };
 }
 
 const mapDispatchToProps = {
+    requestDownload,
     resetZoom,
     zoomIn,
     zoomOut

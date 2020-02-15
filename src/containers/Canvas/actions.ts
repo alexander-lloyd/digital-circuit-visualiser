@@ -1,13 +1,26 @@
 import {
+    REQUEST_DOWNLOAD,
     RESET_SCALE,
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
 import {
+    RequestDownloadAction,
     ResetScaleAction,
     ZoomInAction,
     ZoomOutAction
 } from './types';
+
+/**
+ * Request Download Action Creater.
+ *
+ * @returns Request Download Action.
+ */
+export function requestDownload(): RequestDownloadAction {
+    return {
+        type: REQUEST_DOWNLOAD
+    };
+}
 
 /**
  * Reset Zoom Action Creater.
@@ -46,6 +59,7 @@ export function zoomOut(): ZoomOutAction {
  * Canvas Action Creaters.
  */
 export interface CanvasActionCreaters {
+    requestDownload: typeof requestDownload;
     resetZoom: typeof resetZoom;
     zoomIn: typeof zoomIn;
     zoomOut: typeof zoomOut;

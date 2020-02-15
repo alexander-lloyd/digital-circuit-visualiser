@@ -1,9 +1,12 @@
-import { RESET_SCALE, SCALING_FACTOR, ZOOM_IN, ZOOM_OUT } from './constants';
+import { REQUEST_DOWNLOAD, RESET_SCALE, SCALING_FACTOR, ZOOM_IN, ZOOM_OUT } from './constants';
 import { CanvasActions, CanvasState } from './types';
 
 const initialScale = 1.0;
 
 const initialCanvasState: CanvasState = {
+    download: {
+        loading: false,
+    },
     scale: initialScale,
 };
 
@@ -18,6 +21,15 @@ export function canvasReducer(state = initialCanvasState, action: CanvasActions)
     const { scale: oldScale } = state;
 
     switch (action.type) {
+        case REQUEST_DOWNLOAD: {
+            return {
+                ...state,
+                download: {
+                    ...state.download,
+                    loading: true,
+                }
+            };
+        }
         case RESET_SCALE: {
             return {
                 ...state,

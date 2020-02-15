@@ -6,6 +6,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
  * CanvasButtonGroup Properties 
  */
 interface CanvasButtonGroupProps {
+    isDownloadLoading: boolean;
     onResetScale: () => void;
     onDownload: () => void;
 }
@@ -17,6 +18,10 @@ interface CanvasButtonGroupProps {
  * @returns CanvasButtonGroup Component.
  */
 export default function CanvasButtonGroup(props: CanvasButtonGroupProps): JSX.Element {
+    const {
+        isDownloadLoading
+    } = props;
+
     return (
         <div className="buttons box">
             <button className="button is-outlined is-primary"
@@ -24,7 +29,7 @@ export default function CanvasButtonGroup(props: CanvasButtonGroupProps): JSX.El
                     type="button">
                 Reset Scale
             </button>
-            <button className="button is-outlined is-primary"
+            <button className={"button is-outlined is-primary " + (isDownloadLoading ? "is-loading": "")}
                     onClick={(): void => props.onDownload()}
                     type="button">
                 <span className="icon">
