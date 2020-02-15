@@ -64,12 +64,9 @@ function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
  * Download an image of the Canvas.
  *
  * @param canvas Canvas Element.
+ * @param downloadLink Anchor Tag used to download canvas.
  */
-function downloadCanvasImage(canvas: HTMLCanvasElement | null, downloadLink: HTMLAnchorElement | null): void {
-    if (canvas === null || downloadLink === null) {
-        return;
-    }
-
+function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchorElement): void {
     const image = canvas.toDataURL('image/png').
         replace('image/png', 'image/octet-stream');
     downloadLink.setAttribute('download', 'canvas.png');
@@ -138,29 +135,38 @@ function Canvas(props: CanvasProps): JSX.Element {
         drawDiagram(ctx, canvas.width, canvas.height, scale);
     }, [canvasRef, scale]);
 
-  return (
-      <div className="fullheight">
-          <CanvasButtonGroup isDownloadLoading={downloadLoading}
-                             onDownload={() => { downloadCanvasImage(canvasRef.current, downloadRef.current); }}
-                             onResetScale={resetZoom} />
-          <div className=""
-               style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
-              {resizeListener}
-              <canvas onWheel={
-                        ({ deltaY }: React.WheelEvent): void => {
-              const delta = Math.sign(deltaY);
-              if (delta > 0) {
-                  zoomIn();
-              } else {
-                 zoomOut();
-              }
-            }
+    /** Wrapper around download canvas function */
+    const downloadCanvas = (): void => {
+        if (canvasRef.current === null || downloadRef.current === null) {
+            return;
+        }
+    
+        downloadCanvasImage(canvasRef.current, downloadRef.current);
+    };
+
+    return (
+        <div className="fullheight">
+            <CanvasButtonGroup isDownloadLoading={downloadLoading}
+                               onDownload={downloadCanvas}
+                               onResetScale={resetZoom} />
+            <div className=""
+                 style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
+                {resizeListener}
+                <canvas onWheel={
+                    ({ deltaY }: React.WheelEvent): void => {
+                        const delta = Math.sign(deltaY);
+                        if (delta > 0) {
+                            zoomIn();
+                        } else {
+                            zoomOut();
+                        }
+                    }
           }
-                      ref={canvasRef}  />
-          </div>
-          <a hidden
-             ref={downloadRef} />
-      </div>
+                        ref={canvasRef}  />
+            </div>
+            <a hidden
+               ref={downloadRef} />
+        </div>
   );
 }
 
