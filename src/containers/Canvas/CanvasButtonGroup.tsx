@@ -38,7 +38,7 @@ export default function CanvasButtonGroup(props: CanvasButtonGroupProps): JSX.El
                 <span className="icon">
                     <FontAwesomeIcon icon={faDownload} />
                 </span>
-                <span>Export to SVG</span>
+                <span>Export to PNG</span>
             </button>
         </div>
     );

@@ -61,6 +61,23 @@ function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
 }
 
 /**
+ * Download an image of the Canvas.
+ *
+ * @param canvas Canvas Element.
+ */
+function downloadCanvasImage(canvas: HTMLCanvasElement | null, downloadLink: HTMLAnchorElement | null): void {
+    if (canvas === null || downloadLink === null) {
+        return;
+    }
+
+    const image = canvas.toDataURL('image/png').
+        replace('image/png', 'image/octet-stream');
+    downloadLink.setAttribute('download', 'canvas.png');
+    downloadLink.setAttribute('href', image);
+    downloadLink.click();
+}
+
+/**
  * Canvas Properties.
  */
 interface CanvasProperties {
@@ -89,6 +106,7 @@ function Canvas(props: CanvasProps): JSX.Element {
         zoomOut
     } = props;
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const downloadRef = useRef<HTMLAnchorElement>(null);
 
     const [resizeListener, sizes] = useResizeAware();
     
@@ -124,7 +142,7 @@ function Canvas(props: CanvasProps): JSX.Element {
   return (
       <div className="fullheight">
           <CanvasButtonGroup isDownloadLoading={downloadLoading}
-                             onDownload={requestDownload}
+                             onDownload={() => { downloadCanvasImage(canvasRef.current, downloadRef.current); }}
                              onResetScale={resetZoom} />
           <div className=""
                style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
@@ -141,6 +159,8 @@ function Canvas(props: CanvasProps): JSX.Element {
           }
                       ref={canvasRef}  />
           </div>
+          <a hidden
+             ref={downloadRef} />
       </div>
   );
 }
