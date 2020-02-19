@@ -14,7 +14,9 @@
   "build:production": "NODE_ENV=production webpack",
   "test": "jest",
   "lint": "eslint src/**/*.ts src/**/*.tsx __mocks__/**/*.js types/**/*.ts *.js",
-  "clean": "rimraf build"
+  "clean": "rimraf build",
+  "development": "=================",
+  "build-parser": "node src/lib/parser/build-parser.js"
  },
  "dependencies": {
   "@fortawesome/fontawesome-svg-core": "^1.2.27",
