@@ -1,34 +1,56 @@
-statement = l:letdeclaration _ semicolon {
-  return l;
-}
+statement
+  = l:letdeclaration _ semicolon _
 
-expr = i:integer {
-  return {
-    type: 'integer',
-    variable: i
-  };
-}
+letdeclaration
+  = let _ name:identifier _ equals _ e:expression _ in _ body:expression {
+    return {
+      type: 'let',
+      name: name,
+      expression: e,
+      body: body
+    };
+  }
 
-letdeclaration = let _ v:variable _ equals _ e:expr _ in _ body:expr {
-  return {
-    type: 'let',
-    variable: v,
-    expr: e,
-    body: body
-  };
-}
+expression
+  = application / 
+    constant /
+    identifier
 
-variable = head:[a-z] tail:[A-Za-z0-9]* {
-  return [head, ...tail].join('');
-}
+application
+  = i:identifier _ leftparam _ rightparam {
+    return {
+      type: 'application',
+      identifier: i,
+      parameters: []
+    };
+  }
 
+constant
+  = head:[A-Z] tail:[A-Z]* {
+    return {
+      type: 'constant',
+      name: [head, ...tail].join('')
+    };
+  }
+
+identifier
+  = head:[a-z] tail:[A-Za-z0-9]* {
+    return {
+      type: 'identifier',
+      name: [head, ...tail].join('')
+    };
+  }
+
+/*** Tokens ***/
+
+equals = "="
+semicolon = ";"
+leftparam = "("
+rightparam = ")"
+
+/* Symbols */
 let = "let"
 in = "in"
 
-// Symbols
-equals = "="
-semicolon = ";"
-
-integer = [0-9]
-
-_ "whitespace" = [ \t\n\r]*
+_ "whitespace"
+  = [ \t\n\r]*
