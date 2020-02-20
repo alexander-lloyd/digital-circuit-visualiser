@@ -179,38 +179,31 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$startRuleFunctions: {[id: string]: any} = { statement: peg$parsestatement };
   let peg$startRuleFunction: () => any = peg$parsestatement;
 
-  const peg$c0 = function(name: any, e: any, body: any): any {
-      return {
-        type: 'let',
-        name: name,
-        expression: e,
-        body: body
-      };
+  const peg$c0 = function(name: any, expression: any, body: any): any {
+
+      return new AST.LetAST(name, expression, body);
+
     };
-  const peg$c1 = function(i: any): any {
-      return {
-        type: 'application',
-        identifier: i,
-        parameters: []
-      };
+  const peg$c1 = function(identifier: any): any {
+      // TODO: Parameter list.
+      return new AST.ApplicationAST(identifier, []);
     };
   const peg$c2 = /^[A-Z]/;
   const peg$c3 = peg$classExpectation([["A", "Z"]], false, false);
   const peg$c4 = function(head: any, tail: any): any {
-      return {
-        type: 'constant',
-        name: [head, ...tail].join('')
-      };
+
+      const name = [head, ...tail].join('');
+      return new AST.ConstantAST(name);
+
     };
   const peg$c5 = /^[a-z]/;
   const peg$c6 = peg$classExpectation([["a", "z"]], false, false);
   const peg$c7 = /^[A-Za-z0-9]/;
   const peg$c8 = peg$classExpectation([["A", "Z"], ["a", "z"], ["0", "9"]], false, false);
   const peg$c9 = function(head: any, tail: any): any {
-      return {
-        type: 'identifier',
-        name: [head, ...tail].join('')
-      };
+
+      const name = [head, ...tail].join('');
+      return new AST.IdentifierAST(name);
     };
   const peg$c10 = "=";
   const peg$c11 = peg$literalExpectation("=", false);

@@ -2,13 +2,10 @@ statement
   = l:letdeclaration _ semicolon _
 
 letdeclaration
-  = let _ name:identifier _ equals _ e:expression _ in _ body:expression {
-    return {
-      type: 'let',
-      name: name,
-      expression: e,
-      body: body
-    };
+  = let _ name:identifier _ equals _ expression:expression _ in _ body:expression {
+
+    return new AST.LetAST(name, expression, body);
+
   }
 
 expression
@@ -17,28 +14,24 @@ expression
     identifier
 
 application
-  = i:identifier _ leftparam _ rightparam {
-    return {
-      type: 'application',
-      identifier: i,
-      parameters: []
-    };
+  = identifier:identifier _ leftparam _ rightparam {
+    // TODO: Parameter list.
+    return new AST.ApplicationAST(identifier, []);
   }
 
 constant
   = head:[A-Z] tail:[A-Z]* {
-    return {
-      type: 'constant',
-      name: [head, ...tail].join('')
-    };
+
+    const name = [head, ...tail].join('');
+    return new AST.ConstantAST(name);
+
   }
 
 identifier
   = head:[a-z] tail:[A-Za-z0-9]* {
-    return {
-      type: 'identifier',
-      name: [head, ...tail].join('')
-    };
+
+    const name = [head, ...tail].join('');
+    return new AST.IdentifierAST(name);
   }
 
 /*** Tokens ***/
