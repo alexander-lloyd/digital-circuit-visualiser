@@ -50,7 +50,7 @@ export class IdentifierAST implements AST {
 
 /**
  * Constant AST Node.
- * 
+ *
  * E.g. AND, OR
  */
 export class ConstantAST implements AST {
@@ -65,7 +65,7 @@ export class ConstantAST implements AST {
     public constructor(name: string) {
         this._name = name;
     }
-    
+
     /**
      * Get the name of the identifier.
      *
@@ -116,6 +116,68 @@ export class ApplicationAST implements AST {
     }
 }
 
+/**
+ * Binary Operator AST Node.
+ *
+ * E.g. A tensor B.
+ */
+export class BinaryOpAST implements AST {
+    public readonly type = 'binary';
+    private readonly _operator: string;
+    private readonly _left: ExpressionAST;
+    private readonly _right: ExpressionAST;
+
+    /**
+     * Constructor.
+     *
+     * @param operator The operator.
+     * @param left Left side of binary operator.
+     * @param right Right side of binary operator.
+     */
+    public constructor(operator: string, left: ExpressionAST, right: ExpressionAST) {
+        this._operator = operator;
+        this._left = left;
+        this._right = right;
+    }
+
+    /**
+     * Get the operator.
+     *
+     * @returns The operator.
+     */
+    public get operator(): string {
+        return this._operator;
+    }
+
+    /**
+     * Get the left side.
+     *
+     * @returns The left side.
+     */
+    public get left(): ExpressionAST {
+        return this._left;
+    }
+
+    /**
+     * Get the right side.
+     *
+     * @returns The right side.
+     */
+    public get right(): ExpressionAST {
+        return this._right;
+    }
+
+    /**
+     * Visit the binaryOperator visitor method.
+     *
+     * @param visitor ASTVisitor.
+     * @returns Return value of ASTVisitor.visitBinaryOperator
+     */
+    public visit<R>(visitor: ASTVisitor<R>): R {
+        return visitor.visitBinaryOperator(this);
+    }
+}
+
 export type ExpressionAST = ApplicationAST | ConstantAST | IdentifierAST;
 
 /**
@@ -143,7 +205,7 @@ export class LetAST implements AST {
 
     /**
      * Get the name.
-     * 
+     *
      * @returns The variable name.
      */
     public get name(): IdentifierAST {
@@ -152,7 +214,7 @@ export class LetAST implements AST {
 
     /**
      * Get the Expression.
-     * 
+     *
      * @returns The expression node.
      */
     public get expression(): ExpressionAST {
@@ -161,7 +223,7 @@ export class LetAST implements AST {
 
     /**
      * Get the body.
-     * 
+     *
      * @returns The body expression.
      */
     public get body(): ExpressionAST {
@@ -196,5 +258,6 @@ abstract class ASTVisitor<R> {
     abstract visitIdentifier(ast: IdentifierAST): R;
     abstract visitConstant(ast: ConstantAST): R;
     abstract visitApplication(ast: ApplicationAST): R;
+    abstract visitBinaryOperator(ast: BinaryOpAST): R;
     abstract visitLet(ast: LetAST): R;
 }
