@@ -13,12 +13,20 @@
   "build": "webpack",
   "build:production": "cross-env NODE_ENV=production webpack",
   "test": "jest",
-  "lint": "eslint src/**/*.ts src/**/*.tsx",
-  "clean": "rimraf build"
+  "lint": "eslint src/**/*.ts src/**/*.tsx __mocks__/**/*.js types/**/*.ts *.js",
+  "clean": "rimraf build",
+  "development": "=================",
+  "build-parser": "node src/lib/parser/build-parser.js"
  },
  "dependencies": {
+  "@fortawesome/fontawesome-svg-core": "^1.2.27",
+  "@fortawesome/free-solid-svg-icons": "^5.12.1",
+  "@fortawesome/react-fontawesome": "^0.1.8",
   "react": "^16.10.2",
-  "react-dom": "^16.10.2"
+  "react-dom": "^16.10.2",
+  "react-redux": "^7.1.3",
+  "react-resize-aware": "^3.0.0",
+  "redux": "^4.0.5"
  },
  "devDependencies": {
   "@babel/core": "^7.0.0-0",
@@ -27,12 +35,12 @@
   "@babel/preset-react": "^7.6.3",
   "@babel/preset-typescript": "^7.6.0",
   "@types/enzyme": "^3.10.3",
-  "@types/jest": "^24.0.19",
+  "@types/jest": "^25.1.2",
   "@types/react": "^16.9.9",
   "@types/react-dom": "^16.9.2",
   "@typescript-eslint/eslint-plugin": "^2.5.0",
   "@typescript-eslint/parser": "^2.5.0",
-  "babel-jest": "^24.9.0",
+  "babel-jest": "^25.1.0",
   "bulma": "^0.8.0",
   "cross-env": "^7.0.0",
   "csp-html-webpack-plugin": "^3.0.4",
@@ -41,29 +49,27 @@
   "enzyme-adapter-react-16": "^1.15.1",
   "eslint": "^6.5.1",
   "eslint-plugin-jest": "^23.3.0",
-  "eslint-plugin-jsdoc": "^20.0.2",
+  "eslint-plugin-jsdoc": "^21.0.0",
   "eslint-plugin-react": "^7.16.0",
   "eslint-plugin-react-hooks": "^2.2.0",
   "html-webpack-plugin": "^3.2.0",
-  "jest": "^24.9.0",
+  "jest": "^25.1.0",
   "jest-canvas-mock": "^2.1.2",
   "mini-css-extract-plugin": "^0.9.0",
   "node-sass": "^4.13.0",
+  "pegjs": "^0.10.0",
   "prettier": "^1.19.1",
+  "purgecss-webpack-plugin": "^2.0.6",
   "react-test-renderer": "^16.10.2",
+  "redux-devtools-extension": "^2.13.8",
   "rimraf": "^3.0.0",
   "sass-loader": "^8.0.0",
   "ts-loader": "^6.2.0",
+  "ts-pegjs": "^0.2.6",
   "tsconfig-paths-webpack-plugin": "^3.2.0",
   "typescript": "^3.6.4",
   "webpack": "^4.41.2",
   "webpack-cli": "^3.3.9",
   "webpack-dev-server": "^3.8.2"
- },
- "jest": {
-  "setupFilesAfterEnv": [
-   "<rootDir>/setupTests.js",
-   "jest-canvas-mock"
-  ]
  }
 }

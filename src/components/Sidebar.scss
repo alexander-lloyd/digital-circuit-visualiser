@@ -1,0 +1,6 @@
+@import '../partials';
+
+.sidebar {
+    @extend %fullheight;
+    width: 400px;
+}

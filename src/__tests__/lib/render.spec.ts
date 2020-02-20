@@ -428,12 +428,13 @@ describe('functionEntityRender', () => {
 
         const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
         const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
         const config: CanvasConfigutation = {
             height: canvas.height,
             width: canvas.width,
             RENDER_UNITSQUARE_BOX: false
         };
-        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
         const entity: FunctionEntity = {
             x1: 20,
