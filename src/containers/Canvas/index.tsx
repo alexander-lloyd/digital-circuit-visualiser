@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import useResizeAware from 'react-resize-aware';
 
+import { swap } from '../../lib/hypernet';
 import { FunctionEntity, FunctionEntityRenderer, HypernetRenderer } from '../../lib/render';
+import { populateHyperPositional, HyperPositional } from '../../lib/hypernet-render';
 
 import { resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
 import { GlobalState } from 'reducers';
-import { populateHyperPositional, HyperPositional } from 'lib/hypernet-render';
-import { swap } from 'lib/hypernet';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
