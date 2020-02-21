@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import React, {useEffect, useRef} from 'react';
+import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
 
-import { swap } from '../../lib/hypernet';
-import { FunctionEntity, FunctionEntityRenderer, HypernetRenderer } from '../../lib/render';
-import { populateHyperPositional, HyperPositional } from '../../lib/hypernet-render';
+import {swap} from '../../lib/hypernet';
+import {HypernetRenderer} from '../../lib/render';
+import {populateHyperPositional, HyperPositional} from '../../lib/hypernet-render';
 
-import { resetZoom, zoomIn, zoomOut, CanvasActionCreaters } from './actions';
+import {resetZoom, zoomIn, zoomOut, CanvasActionCreaters} from './actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
-import { GlobalState } from 'reducers';
+import {GlobalState} from 'reducers';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -38,14 +38,15 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param canvasHeight Canvas height.
  * @param scale The scaling factor.
  */
-function drawDiagram(ctx: CanvasRenderingContext2D, canvasWidth: number,
-    canvasHeight: number, scale: number): void {
-
+function drawDiagram(
+    ctx: CanvasRenderingContext2D, canvasWidth: number,
+    canvasHeight: number, scale: number
+): void {
     requestAnimationFrame(() => {
-
         // Clear canvas
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        ctx.setTransform(); // Reset the position and scaling.
+        // Reset the position and scaling.
+        ctx.setTransform();
         ctx.save();
         ctx.scale(scale, scale);
 
@@ -108,17 +109,17 @@ function Canvas(props: CanvasProps): JSX.Element {
     const downloadRef = useRef<HTMLAnchorElement>(null);
 
     const [resizeListener, sizes] = useResizeAware();
-    
+
     React.useEffect(() => {
         console.log('canvas resize');
         const canvas: HTMLCanvasElement | null = canvasRef.current;
-        if (canvas == null) {
+        if (canvas === null) {
             return;
         }
         fitCanvasToContainer(canvas);
         // Dispatch a reset scale event
         const ctx = canvas.getContext('2d');
-        if (ctx == null) {
+        if (ctx === null) {
             return;
         }
         drawDiagram(ctx, canvas.width, canvas.height, scale);
@@ -126,15 +127,15 @@ function Canvas(props: CanvasProps): JSX.Element {
 
     useEffect((): void => {
         const canvas: HTMLCanvasElement | null = canvasRef.current;
-        if (canvas == null) {
+        if (canvas === null) {
             return;
         }
 
         const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
-        if (ctx == null) {
+        if (ctx === null) {
             return;
         }
-        
+
         drawDiagram(ctx, canvas.width, canvas.height, scale);
     }, [canvasRef, scale]);
 
@@ -143,7 +144,7 @@ function Canvas(props: CanvasProps): JSX.Element {
         if (canvasRef.current === null || downloadRef.current === null) {
             return;
         }
-    
+
         downloadCanvasImage(canvasRef.current, downloadRef.current);
     };
 
@@ -153,10 +154,13 @@ function Canvas(props: CanvasProps): JSX.Element {
                                onDownload={downloadCanvas}
                                onResetScale={resetZoom} />
             <div className=""
-                 style={{ position: 'relative', height: 'calc(100% - (1rem + 1.25rem))'}}>
+                 style={
+                    {position: 'relative',
+                        height: 'calc(100% - (1rem + 1.25rem))'}
+                }>
                 {resizeListener}
                 <canvas onWheel={
-                    ({ deltaY }: React.WheelEvent): void => {
+                    ({deltaY}: React.WheelEvent): void => {
                         const delta = Math.sign(deltaY);
                         if (delta > 0) {
                             zoomIn();
@@ -164,13 +168,13 @@ function Canvas(props: CanvasProps): JSX.Element {
                             zoomOut();
                         }
                     }
-          }
-                        ref={canvasRef}  />
+                }
+                        ref={canvasRef} />
             </div>
             <a hidden
                ref={downloadRef} />
         </div>
-  );
+    );
 }
 
 
@@ -195,5 +199,5 @@ const mapDispatchToProps = {
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(Canvas);

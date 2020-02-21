@@ -18,10 +18,10 @@ export interface CanvasRenderingContext2DEvent {
       [key: string]: any; // eslint-disable-line
     };
   }
-  
+
   declare global {
     /**
-     * jest-canvas-mock extended Canvas 2D Context.
+     * Jest-canvas-mock extended Canvas 2D Context.
      */
     interface CanvasRenderingContext2D {
       /**
@@ -34,7 +34,7 @@ export interface CanvasRenderingContext2DEvent {
        * expect(ctx.__getEvents()).toMatchSnapshot();
        */
       __getEvents(): CanvasRenderingContext2DEvent[];
-  
+
       /**
        * Clear all the events associated with this CanvasRenderingContext2D object.
        *
@@ -46,7 +46,7 @@ export interface CanvasRenderingContext2DEvent {
        * expect(ctx.__getEvents()).toBe([]);
        */
       __clearEvents(): void;
-  
+
       /**
        * Get all the successful draw calls associated with this CanvasRenderingContext2D object.
        *
@@ -57,7 +57,7 @@ export interface CanvasRenderingContext2DEvent {
        * expect(ctx.__getDrawCalls()).toMatchSnapshot();
        */
       __getDrawCalls(): CanvasRenderingContext2DEvent[];
-  
+
       /**
        * Clear all the successful draw calls associated with this CanvasRenderingContext2D object.
        *
@@ -69,7 +69,7 @@ export interface CanvasRenderingContext2DEvent {
        * expect(ctx.__getDrawCalls()).toBe([]);
        */
       __clearDrawCalls(): void;
-  
+
       /**
        * Get the current path associated with this CanvasRenderingContext2D object.
        *
@@ -80,7 +80,7 @@ export interface CanvasRenderingContext2DEvent {
        * expect(ctx.__getPath()).toMatchSnapshot();
        */
       __getPath(): CanvasRenderingContext2DEvent[];
-  
+
       /**
        * Clears the current path associated with this CanvasRenderingContext2D object.
        *
@@ -88,7 +88,7 @@ export interface CanvasRenderingContext2DEvent {
        * `jest-canvas-mock` and should be only used for testing.
        */
       __clearPath(): void;
-  
+
       /**
        * Obtains the current clipping path.
        *
