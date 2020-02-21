@@ -1,23 +1,23 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',  // Specifies the ESLint parser
+  parser: "@typescript-eslint/parser",  // Specifies the ESLint parser
   extends: [
-    'eslint:all',
-    'plugin:jsdoc/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:react/all',
-    'plugin:jest/all'
+    "eslint:all",
+    "plugin:jsdoc/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:react/all",
+    "plugin:jest/all"
   ],
   parserOptions: {
     ecmaVersion: 2018,  // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module',  // Allows for the use of imports
+    sourceType: "module",  // Allows for the use of imports
     ecmaFeatures: {
       jsx: true
     },
     project: [
-      './tsconfig.app.json',
-      './tsconfig.spec.json'
+      "./tsconfig.app.json",
+      "./tsconfig.spec.json"
     ]
   },
   plugins: [
@@ -74,6 +74,7 @@ module.exports = {
     }],
     "no-magic-numbers": "off",
     "no-plusplus": "off",
+    "no-sync": "off",
     "no-ternary": "off",
     "no-undefined": "off",
     "no-underscore-dangle": "off",
@@ -116,7 +117,17 @@ module.exports = {
   },
   settings: {
     react: {
-      version: 'detect'
+      version: "detect"
     }
-  }
+  },
+  overrides: [
+    {
+      "files": ["src/lib/parser/parser.ts"],
+      "rules": {
+        "multiline-comment-style": "off",
+        "quotes": "off",
+        "strict": "off",
+      }
+    }
+  ]
 };
