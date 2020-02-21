@@ -1,5 +1,4 @@
 import {HyperPositional} from './hypernet-render';
-import {AST, ASTVisitor, IdentifierAST, ConstantAST, LetAST, BinaryOpAST, ApplicationAST} from './parser/index';
 
 /**
  * Context required by the render functions about the canvas they are rendering on.
@@ -156,75 +155,5 @@ export class HypernetRenderer implements EntityRenderer<HyperPositional> {
         });
 
         // Draw wires.
-    }
-}
-
-export type ASTOptimisingTransformerContext = {
-    identifiers: Map<string, AST>;
-};
-
-/**
- * Explore an AST and substitute variables from let bindings with the expression.
- *
- * E.g. let x = 5 in x + x
- * ===> 5 + 5
- */
-export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransformerContext, AST> {
-    /**
-     * Visit identifier. Make no change to node.
-     *
-     * @param ast AST Node.
-     * @returns Identifier AST.
-     */
-    public visitIdentifier(ast: IdentifierAST): AST {
-        return ast;
-    }
-
-    /**
-     * Visit constant. Make no change to node.
-     *
-     * @param ast AST Node.
-     * @returns AST Node.
-     */
-    public visitConstant(ast: ConstantAST): AST {
-        return ast;
-    }
-
-    /**
-     * Visit application. Make no change to node.
-     *
-     * @param ast AST Node.
-     * @returns AST Node.
-     */
-    public visitApplication(ast: ApplicationAST): AST {
-        return ast;
-    }
-
-    /**
-     * Visit binary operator. Make no change to node.
-     *
-     * @param ast AST Node.
-     * @returns AST Node.
-     */
-    public visitBinaryOperator(ast: BinaryOpAST): AST {
-        return ast;
-    }
-
-    /**
-     * Visit let.
-     *
-     * Going to replace any reference to identifier name in the body
-     * with the expression.
-     *
-     * @param ast AST Node.
-     * @param context AST Visitor Context.
-     * @returns Optimised AST for rendering.
-     */
-    public visitLet(ast: LetAST, context: ASTOptimisingTransformerContext): AST {
-        const {name} = ast.name;
-        const expression = ast.expression.visit(this, context);
-        context.identifiers.set(name, expression);
-
-        return ast.expression.visit(this, context);
     }
 }
