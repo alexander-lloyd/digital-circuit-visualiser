@@ -5,11 +5,11 @@ import FeatureFlags from './FeatureFlags';
 
 import './Sidebar.scss';
 
-const exampleCode = `let x = f ⊗ g;`;
+const exampleCode = 'let x = f ⊗ g;';
 
 /**
  * The Menu Component.
- * 
+ *
  * @returns Menu Component.
  */
 export default function Sidebar(): JSX.Element {

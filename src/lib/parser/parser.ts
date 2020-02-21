@@ -5,16 +5,7 @@
 
 "use strict";
 
-/* eslint-disable no-case-declarations */
-/* eslint-disable no-control-regex */
-/* eslint-disable prefer-const */
-/* eslint-disable jsdoc/require-jsdoc */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-empty-interface */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable */
 
 import * as AST from './ast';
 

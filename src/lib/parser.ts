@@ -1,3 +1,6 @@
+import {Template, template} from './template';
+import {SymbolTableStack} from './symboltable';
+
 /**
  * TypeScript does not have a char type.
  * Create an alias for clarity.
@@ -14,7 +17,7 @@ export const EOF: Char = '\0';
  * @returns true if the character is an alphabetic character.
  */
 export function isLetter(value: string): boolean {
-    return value.match(/[a-z]/gi) != null;
+    return value.match(/[a-z]/giu) !== null;
 }
 
 /**
@@ -24,7 +27,7 @@ export function isLetter(value: string): boolean {
  * @returns true if the character is a numeric character.
  */
 export function isNumeric(value: string): boolean {
-    return value.match(/[0-9]/g) != null;
+    return value.match(/[0-9]/gu) !== null;
 }
 
 /**
@@ -34,7 +37,7 @@ export function isNumeric(value: string): boolean {
  * @returns true if the value is a whitespace character.
  */
 export function isWhitespace(value: string): boolean {
-    return value.match(/\s/g) != null;
+    return value.match(/\s/gu) !== null;
 }
 
 /**
@@ -63,20 +66,19 @@ export class Source {
      * @returns The current char.
      */
     public currentChar(): Char {
-        if (this.linePosition == -2) {
+        if (this.linePosition === -2) {
             // First time?
             this.readLine();
             return this.nextChar();
-        } else if (this.line == null) {
+        } else if (this.line === null || this.line === undefined) {
             // At end of file?
             return EOF;
-        } else if ((this.linePosition == -1) || (this.linePosition == this.line.length)) {
+        } else if (this.linePosition === -1 || this.linePosition === this.line.length) {
             // At end of line?
             this.readLine();
             return this.nextChar();
-        } else {
-            return this.line.charAt(this.linePosition);
         }
+        return this.line.charAt(this.linePosition);
     }
 
     /**
@@ -89,13 +91,13 @@ export class Source {
 
         const nextPos = this.linePosition + 1;
 
-        if (this.line == null) {
+        if (this.line === null) {
             return EOF;
         }
 
         return nextPos < this.line.length
-          ? this.line.charAt(nextPos)
-          : EOL;
+            ? this.line.charAt(nextPos)
+            : EOL;
     }
 
     /**
@@ -275,21 +277,68 @@ abstract class Scanner {
     public abstract extractToken(): Token;
 }
 
+enum ErrorType {
+    SYNTAX_ERROR = 'Syntax Error',
+    UNEXPECTED_SYMBOL = 'Unexpected Symbol'
+}
+
+/**
+ * ErrorHandler.
+ *
+ * Flag warning and errors to the user.
+ */
+interface ErrorHandler {
+    /**
+     * Flag an error or warning.
+     *
+     * @param token The token where the warning should be raised.
+     * @param errorType The type of warning or error.
+     */
+    flag(token: Token, errorType: ErrorType): void;
+}
+
+/**
+ * Log Warning and Errors to the user using the console.
+ */
+class ConsoleErrorHandler implements ErrorHandler {
+    private template: Template = template`ERROR: ${'errorType'}`;
+
+    /**
+     * Flag an error or warning.
+     *
+     * @param token The token where the warning should be raised.
+     * @param errorType The type of warning or error.
+     */
+    public flag(token: Token, errorType: ErrorType): void {
+        console.error(this.template({errorType}));
+    }
+}
+
 /**
  * Parser.
  *
  * Abstract parser class will be implemented by language-specific classes.
  */
 abstract class Parser<T> {
-    protected scanner: Scanner;
+    protected readonly scanner: Scanner;
+    protected readonly errorHandler: ErrorHandler;
+    protected readonly symbolStack: SymbolTableStack;
 
     /**
      * Constructor.
      *
      * @param scanner Scanner object.
+     * @param errorHandler ErrorHandler object.
+     * @param symbolStack Symbol Table Stack.
      */
-    public constructor(scanner: Scanner) {
+    public constructor(
+        scanner: Scanner,
+        errorHandler: ErrorHandler,
+        symbolStack: SymbolTableStack
+    ) {
         this.scanner = scanner;
+        this.errorHandler = errorHandler;
+        this.symbolStack = symbolStack;
     }
 
     /**
@@ -298,9 +347,16 @@ abstract class Parser<T> {
     public abstract parse(): T;
 }
 
-const SYMBOLS = new Map<string, string>()
-  .set('=', 'EQUALS')
-  .set('*', 'COMPOSE');
+enum LanguageTokenEnum {
+    COMPOSE = '*',
+    EQUAL = '=',
+}
+
+type LanguageTokenType = TokenType | LanguageTokenEnum;
+
+const SYMBOLS = new Map<string, LanguageTokenEnum>().
+    set('=', LanguageTokenEnum.EQUAL).
+    set('*', LanguageTokenEnum.COMPOSE);
 
 const RESERVED_WORDS = ['let'];
 
@@ -308,15 +364,6 @@ const RESERVED_WORDS = ['let'];
  * The scanner for this language.
  */
 export class LanguageScanner extends Scanner {
-    /**
-     * Constructor.
-     *
-     * @param source Source object.
-     */
-    public constructor(source: Source) {
-        super(source);
-    }
-
     /**
      * Extract a token based on the current character.
      *
@@ -328,7 +375,7 @@ export class LanguageScanner extends Scanner {
 
         const currentChar: Char = this.source.currentChar();
 
-        if (currentChar == EOF) {
+        if (currentChar === EOF) {
             token = new EoFToken();
         } else if (isLetter(currentChar)) {
             token = this.extractWord();
@@ -348,7 +395,7 @@ export class LanguageScanner extends Scanner {
     private skipWhitespace(): void {
         let currentChar = this.source.currentChar();
 
-        while (isWhitespace(currentChar) && (currentChar != EOF)) {
+        while (isWhitespace(currentChar) && currentChar !== EOF) {
             currentChar = this.source.nextChar();
         }
     }
@@ -369,9 +416,209 @@ export class LanguageScanner extends Scanner {
 
         if (RESERVED_WORDS.includes(word)) {
             return new IdentifierToken(word);
-        } else {
-            // Not a reserved word so it's just a word.
-            return new WordToken(word);
         }
+        // Not a reserved word so it's just a word.
+        return new WordToken(word);
+    }
+}
+
+/**
+ * ASTNodeType.
+ */
+enum ASTNodeType {
+    COMPOSE,
+    VARIABLE
+}
+
+/**
+ * Attributes an AST Node can store.
+ */
+enum ASTAttribute {
+    VARIABLE_NAME,
+    VALUE
+}
+
+/**
+ * AST Node.
+ */
+interface AST {
+    /**
+     * Get the type of AST Node.
+     *
+     * @returns The AST Node type.
+     */
+    getType(): ASTNodeType;
+
+    /**
+     * Add a child to the AST Node.
+     *
+     * @param node: AST Node.
+     */
+    addChild(node: AST): void;
+
+    /**
+     * Get a attribute from the node.
+     *
+     * @param key Attribute key.
+     * @returns the attribute value.
+     */
+    getAttribute(key: ASTAttribute): string | undefined;
+
+    /**
+     * Set an attribute on the node.
+     *
+     * @param key The attribute.
+     * @param value The attribute value.
+     */
+    setAttribute(key: ASTAttribute, value: string): void;
+}
+
+/**
+ * AST Implementation.
+ */
+class ASTImpl implements AST {
+    private readonly nodeType: ASTNodeType;
+    private readonly children: AST[] = [];
+    private readonly attributes: Map<ASTAttribute, string> = new Map();
+
+    /**
+     * Constructor.
+     *
+     * @param nodeType The AST Node Type.
+     */
+    public constructor(nodeType: ASTNodeType) {
+        this.nodeType = nodeType;
+    }
+
+    /**
+     * Get the type of AST Node.
+     *
+     * @returns The AST Node type.
+     */
+    public getType(): ASTNodeType {
+        return this.nodeType;
+    }
+
+    /**
+     * Add a child to the AST Node.
+     *
+     * @param node AST Node.
+     */
+    public addChild(node: AST): void {
+        this.children.push(node);
+    }
+
+    /**
+     * Get a attribute from the node.
+     *
+     * @param key Attribute key.
+     * @returns the attribute value.
+     */
+    public getAttribute(key: ASTAttribute): string | undefined {
+        return this.attributes.get(key);
+    }
+
+    /**
+     * Set an attribute on the node.
+     *
+     * @param key The attribute.
+     * @param value The attribute value.
+     */
+    public setAttribute(key: ASTAttribute, value: string): void {
+        this.attributes.set(key, value);
+    }
+}
+
+/**
+ * Create an AST Node.
+ *
+ * @param nodeType AST Node Type.
+ * @returns New AST Node.
+ */
+function createASTNode(nodeType: ASTNodeType): AST {
+    return new ASTImpl(nodeType);
+}
+
+/**
+ * ExpressionParser.
+ */
+class ExpressionParser extends Parser<AST> {
+    private static readonly OPS_MAP: Map<LanguageTokenType, ASTNodeType> = new Map().
+        set(LanguageTokenEnum.COMPOSE, ASTNodeType.COMPOSE);
+
+    /**
+     * Parse an expression.
+     *
+     * @returns Expression AST.
+     */
+    public parse(): AST {
+        let token: Token = this.scanner.extractToken();
+        let tokenType: TokenType = token.getTokenType();
+
+        if (tokenType !== TokenType.WordToken) {
+            this.errorHandler.flag(token, ErrorType.SYNTAX_ERROR);
+        }
+
+        // Create root AST
+        let rootAST = createASTNode(ASTNodeType.VARIABLE);
+
+        token = this.scanner.extractToken();
+        tokenType = token.getTokenType();
+
+        while (tokenType === TokenType.SymbolToken) {
+            const symbolToken = token as SymbolToken;
+            const symbol = symbolToken.getSymbol();
+            const symbolType = SYMBOLS.get(symbol);
+            if (symbolType === undefined) {
+                this.errorHandler.flag(token, ErrorType.UNEXPECTED_SYMBOL);
+                continue;
+            }
+            const astNodeType = ExpressionParser.OPS_MAP.get(symbolType);
+            if (astNodeType === undefined) {
+                this.errorHandler.flag(token, ErrorType.UNEXPECTED_SYMBOL);
+                continue;
+            }
+            const ast = createASTNode(astNodeType);
+            ast.addChild(rootAST);
+            rootAST = ast;
+        }
+
+        return rootAST;
+    }
+}
+
+/**
+ * LanguageParser.
+ */
+export class LanguageParser extends Parser<AST> {
+    private readonly expressionParser: ExpressionParser;
+
+    /**
+     * Constructor.
+     *
+     * @param scanner Scanner object.
+     * @param errorHandler Error Handler. Called when an error is raised
+     * @param symbolStack Symbol Table Stack.
+     */
+    constructor(scanner: Scanner, errorHandler: ErrorHandler, symbolStack: SymbolTableStack) {
+        super(scanner, errorHandler, symbolStack);
+        this.expressionParser = new ExpressionParser(scanner, errorHandler, symbolStack);
+    }
+
+    /**
+     * Parse the program.
+     *
+     * @returns Expression AST.
+     */
+    public parse(): AST {
+        const ast = this.expressionParser.parse();
+        const token = this.scanner.extractToken();
+
+        if (token.getTokenType() !== TokenType.EoFToken) {
+            // Error the string isn't finished.
+            this.errorHandler.flag(token, ErrorType.SYNTAX_ERROR);
+        }
+
+        return ast;
     }
 }

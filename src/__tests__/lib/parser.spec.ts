@@ -1,4 +1,12 @@
-import { Source, EOF, EOL, isLetter, isNumeric, LanguageScanner, Token, TokenType, isWhitespace } from './parser';
+import {
+    Source,
+    EOF, EOL,
+    isLetter,
+    isNumeric,
+    LanguageScanner,
+    Token, TokenType,
+    isWhitespace
+} from '../../lib/parser';
 
 const stringSource = 'A + B';
 
@@ -40,7 +48,7 @@ describe('parser module', () => {
         it('.currentChar should return first character', () => {
             expect.assertions(2);
             const source = new Source(stringSource);
-            const firstCharacter = stringSource[0];
+            const firstCharacter = stringSource.charAt(0);
 
             expect(source.currentChar()).toBe(firstCharacter);
             expect(source.currentChar()).toBe(firstCharacter);
@@ -49,8 +57,8 @@ describe('parser module', () => {
         it('.nextChar should get the next character', () => {
             expect.assertions(2);
             const source = new Source(stringSource);
-            const secondCharacter = stringSource[1];
-            const thirdCharacter = stringSource[2];
+            const secondCharacter = stringSource.charAt(1);
+            const thirdCharacter = stringSource.charAt(2);
 
             source.currentChar();
 
@@ -61,7 +69,7 @@ describe('parser module', () => {
         it('.peekChar should peek at the next character', () => {
             expect.assertions(2);
             const source = new Source(stringSource);
-            const secondCharacter = stringSource[1];
+            const secondCharacter = stringSource.charAt(1);
 
             source.currentChar();
 
@@ -96,7 +104,6 @@ describe('parser module', () => {
     });
 
     describe('language scanner', () => {
-
         it('should scan a string', () => {
             expect.assertions(4);
 
@@ -122,9 +129,7 @@ describe('parser module', () => {
             const source = new Source(program);
             const scanner = new LanguageScanner(source);
 
-            let token: Token;
-
-            token = scanner.extractToken();
+            let token = scanner.extractToken();
             expect(token.getTokenType()).toBe(TokenType.IdentifierToken);
             token = scanner.extractToken();
             expect(token.getTokenType()).toBe(TokenType.WordToken);

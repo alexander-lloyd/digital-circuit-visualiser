@@ -11,12 +11,12 @@ import './App.scss';
  *
  * @returns App
  */
-export default function App (): JSX.Element  {
+export default function App (): JSX.Element {
     return (
         <div className="fullscreen">
             <Header />
             <div className="columns is-fullheight-with-navbar is-gapless"
-                 style={{ height: 'calc(100% - 1rem)' }}>
+                 style={{height: 'calc(100% - 1rem)'}}>
                 <div className="column fullheight is-narrow">
                     <Sidebar />
                 </div>

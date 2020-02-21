@@ -18,22 +18,20 @@ export default function FeatureFlags(): JSX.Element {
         <div className="columns">
             <div className="column">
                 {
-                featureFlags.
-                    filter((_, i) => i % 2 == 0).
-                    map(([featureId, feature]) => (
-                        <FeatureFlag feature={feature}
-                                     key={featureId} />
-                    ))
+                    featureFlags.
+                        filter((_, i) => i % 2 === 0).
+                        map(([featureId, feature]) => (
+                            <FeatureFlag feature={feature}
+                                         key={featureId} />))
                 }
             </div>
             <div className="column">
                 {
-                featureFlags.
-                    filter((_, i) => i % 2 == 1)
-                    .map(([featureId, feature]) => (
-                        <FeatureFlag feature={feature}
-                                     key={featureId} />
-                    ))
+                    featureFlags.
+                        filter((_, i) => i % 2 === 1).
+                        map(([featureId, feature]) => (
+                            <FeatureFlag feature={feature}
+                                         key={featureId} />))
                 }
             </div>
         </div>
