@@ -152,7 +152,8 @@ class GroupedEntity implements Entity {
         const firstHeightB = first.height;
         const firstWidthB = first.width;
 
-        second.translate(firstWidthB - firstWidthA, firstHeightB - firstHeightA);
+        // TODO: firstWidthB - firstWidthA
+        second.translate(0, firstHeightB - firstHeightA);
     }
 
     /**
