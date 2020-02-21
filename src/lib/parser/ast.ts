@@ -81,7 +81,7 @@ export class ConstantAST implements AST {
      *
      * @param visitor AST Visitor.
      * @param context ASTVisitor context.
-     * @returns REturn value of visitConstant.
+     * @returns Return value of visitConstant.
      */
     public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
         return visitor.visitConstant(this, context);
