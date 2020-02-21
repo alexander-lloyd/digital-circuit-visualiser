@@ -17,7 +17,6 @@ import {
     ConstantAST,
     ApplicationAST
 } from '../../lib/parser/index';
-import { render } from 'enzyme';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
