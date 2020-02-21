@@ -337,20 +337,6 @@ interface CanvasContext {
 }
 
 /**
- * All entity renderers extend this interface.
- */
-export interface EntityRenderer<T extends Entity> {
-    /**
-     * Render an entity to the canvas.
-     *
-     * @param canvasCtx Canvas Context Data.
-     * @param ctx The Canvas Render Context.
-     * @param entity The entity to render.
-     */
-    render(canvasCtx: CanvasContext, ctx: CanvasRenderingContext2D, entity: T): void;
-}
-
-/**
  * EntityRendererVisitor Context
  */
 interface EntityRendererVisitorContext {
