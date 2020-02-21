@@ -34,7 +34,8 @@ module.exports = {
       ignoreJSX: 'multi-line',
       nestedBinaryExpressions: false
     }],
-    "@typescript-eslint/semi": ["error"],
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/semi": "error",
     "array-element-newline": ["error", "consistent"],
     "complexity": ["error", 10],
     "consistent-return": "error",
@@ -83,6 +84,7 @@ module.exports = {
     "no-ternary": "off",
     "no-undefined": "off",
     "no-underscore-dangle": "off",
+    "no-useless-constructor": "off",
     "no-warning-comments": "warn",
     "no-trailing-spaces": "error",
     "object-curly-spacing": ["error", "never", {
