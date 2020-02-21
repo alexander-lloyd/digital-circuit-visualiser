@@ -28,6 +28,7 @@ module.exports = {
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
+    "@typescript-eslint/indent": ["error", 4, { "ignoredNodes": ["JSXElement *", "JSXElement"]}],
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/semi": ["error"],
     "array-element-newline": ["error", "consistent"],
@@ -36,10 +37,12 @@ module.exports = {
     "class-methods-use-this": "off",
     "curly": "error",
     "default-case": "error",
-    "default-param-last": "error",
+    "default-param-last": "off",
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
     "function-call-argument-newline": "off",
     "id-length": "off",
+    // Use @typescript-eslint version instead.
+    "indent": "off",
     "init-declarations": "off",
     "jsdoc/no-bad-blocks" : "error",
     "jsdoc/no-types": 0,
@@ -70,6 +73,7 @@ module.exports = {
     "no-console": "warn",
     "no-continue": "off",
     "no-extra-parens": ["error", "all", {
+      ignoreJSX: 'multi-line',
       nestedBinaryExpressions: false
     }],
     "no-magic-numbers": "off",

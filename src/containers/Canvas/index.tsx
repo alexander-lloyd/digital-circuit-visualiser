@@ -6,7 +6,7 @@ import {swap} from '../../lib/hypernet';
 import {HypernetRenderer} from '../../lib/render';
 import {populateHyperPositional, HyperPositional} from '../../lib/hypernet-render';
 
-import {resetZoom, zoomIn, zoomOut, CanvasActionCreaters} from './actions';
+import * as actions from './actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from 'reducers';
 
@@ -89,7 +89,7 @@ interface CanvasProperties {
 /**
  * Canvas Props.
  */
-interface CanvasProps extends CanvasActionCreaters, CanvasProperties {}
+interface CanvasProps extends actions.CanvasActionCreaters, CanvasProperties {}
 
 /**
  * Canvas Component.
@@ -192,9 +192,9 @@ function mapStateToProps(state: GlobalState): CanvasProperties {
 }
 
 const mapDispatchToProps = {
-    resetZoom,
-    zoomIn,
-    zoomOut
+    resetZoom: actions.resetZoom,
+    zoomIn: actions.zoomIn,
+    zoomOut: actions.zoomOut
 };
 
 export default connect(
