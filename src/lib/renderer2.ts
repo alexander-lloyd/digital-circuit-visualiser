@@ -19,6 +19,11 @@ function buildTextLabelFunction(label: string): LabelFunction {
  * A rendered entity.
  */
 interface Entity {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+
     /**
      * Scale an entity.
      * A value of 1 wont change coordinates.
@@ -76,6 +81,7 @@ class FunctionEntity implements Entity {
      * @param scaleY Y Scale.
      */
     public scale(scaleX: number, scaleY: number): void {
+        console.debug('[Function Entity]', 'scale', scaleX, scaleY);
         this.width *= scaleX;
         this.height *= scaleY;
     }
@@ -87,6 +93,7 @@ class FunctionEntity implements Entity {
      * @param translateY Y Translation.
      */
     public translate(translateX: number, translateY: number): void {
+        console.debug('[Function Entity]', 'translate', translateX, translateY);
         this.x += translateX;
         this.y += translateY;
     }
@@ -122,7 +129,7 @@ class GroupedEntity implements Entity {
         public y: number = 0,
         public width: number = 1,
         public height: number = 1,
-        public children: Entity[] = []
+        public children: [Entity, Entity]
     ) {}
 
     /**
@@ -132,10 +139,20 @@ class GroupedEntity implements Entity {
      * @param scaleY Y Scale.
      */
     public scale(scaleX: number, scaleY: number): void {
+        console.debug('[Grouped Entity]', 'scale', scaleX, scaleY);
         this.width *= scaleX;
         this.height *= scaleY;
 
+        const [first, second] = this.children;
+        const firstHeightA = first.height;
+        const firstWidthA = first.width;
+
         this.children.forEach((e: Entity) => e.scale(scaleX, scaleY));
+
+        const firstHeightB = first.height;
+        const firstWidthB = first.width;
+
+        second.translate(firstWidthB - firstWidthA, firstHeightB - firstHeightA);
     }
 
     /**
@@ -145,6 +162,7 @@ class GroupedEntity implements Entity {
      * @param translateY Y Translation.
      */
     translate(translateX: number, translateY: number): void {
+        console.debug('[Grouped Entity]', 'translate', translateX, translateY);
         this.x += translateX;
         this.y += translateY;
 
