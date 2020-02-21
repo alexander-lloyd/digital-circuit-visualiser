@@ -119,6 +119,8 @@ export class ApplicationAST implements AST {
     }
 }
 
+export type BinaryOpeators = 'tensor' | 'compose';
+
 /**
  * Binary Operator AST Node.
  *
@@ -126,7 +128,7 @@ export class ApplicationAST implements AST {
  */
 export class BinaryOpAST implements AST {
     public readonly type = 'binary';
-    private readonly _operator: string;
+    private readonly _operator: BinaryOpeators;
     private readonly _left: ExpressionAST;
     private readonly _right: ExpressionAST;
 
@@ -137,7 +139,7 @@ export class BinaryOpAST implements AST {
      * @param left Left side of binary operator.
      * @param right Right side of binary operator.
      */
-    public constructor(operator: string, left: ExpressionAST, right: ExpressionAST) {
+    public constructor(operator: BinaryOpeators, left: ExpressionAST, right: ExpressionAST) {
         this._operator = operator;
         this._left = left;
         this._right = right;
