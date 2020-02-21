@@ -217,10 +217,20 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
      * Visit application. Make no change to node.
      *
      * @param ast AST Node.
+     * @param context Visitor Context.
      * @returns AST Node.
      */
-    public visitApplication(ast: ApplicationAST): AST {
-        return ast;
+    public visitApplication(ast: ApplicationAST, context: ASTOptimisingTransformerContext): AST {
+        const {name} = ast;
+        const {identifiers} = context;
+
+        const expression = identifiers.get(name);
+
+        if (expression === undefined) {
+            throw new Error(`Unknown Identifier '${name}'`);
+        }
+
+        return expression;
     }
 
     /**
