@@ -108,6 +108,24 @@ export class ApplicationAST implements AST {
     }
 
     /**
+     * Get the name of the identifier being applied.
+     *
+     * @returns The name of the identifier.
+     */
+    public get name(): string {
+        return this._name;
+    }
+
+    /**
+     * Get the list of parameters
+     *
+     * @returns The list of parameters.
+     */
+    public get parameters(): ExpressionAST[] {
+        return this._parameters;
+    }
+
+    /**
      * Visit the application in the AST Visitor.
      *
      * @param visitor AST Visitor.
