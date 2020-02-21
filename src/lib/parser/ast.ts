@@ -1,7 +1,7 @@
 /**
  * Base interface for all AST Nodes.
  */
-interface AST {
+export interface AST {
     type: string;
 
     /**
@@ -9,7 +9,7 @@ interface AST {
      *
      * @param visitor ASTVisitor.
      */
-    visit<R>(visitor: ASTVisitor<R>): R;
+    visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R;
 }
 
 /**
@@ -41,10 +41,11 @@ export class IdentifierAST implements AST {
      * Visit the identifier in the AST Visitor.
      *
      * @param visitor AST Visitor.
+     * @param context ASTVisitor Context.
      * @returns Return value of visitIdentifier.
      */
-    public visit<R>(visitor: ASTVisitor<R>): R {
-        return visitor.visitIdentifier(this);
+    public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
+        return visitor.visitIdentifier(this, context);
     }
 }
 
@@ -79,10 +80,11 @@ export class ConstantAST implements AST {
      * Visit the constant in the AST Visitor.
      *
      * @param visitor AST Visitor.
-     * @returns REturn value of visitConstant.
+     * @param context ASTVisitor context.
+     * @returns Return value of visitConstant.
      */
-    public visit<R>(visitor: ASTVisitor<R>): R {
-        return visitor.visitConstant(this);
+    public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
+        return visitor.visitConstant(this, context);
     }
 }
 
@@ -106,15 +108,36 @@ export class ApplicationAST implements AST {
     }
 
     /**
+     * Get the name of the identifier being applied.
+     *
+     * @returns The name of the identifier.
+     */
+    public get name(): string {
+        return this._name;
+    }
+
+    /**
+     * Get the list of parameters
+     *
+     * @returns The list of parameters.
+     */
+    public get parameters(): ExpressionAST[] {
+        return this._parameters;
+    }
+
+    /**
      * Visit the application in the AST Visitor.
      *
      * @param visitor AST Visitor.
+     * @param context ASTVisitor context.
      * @returns Return value of visitApplicationAST.
      */
-    public visit<R>(visitor: ASTVisitor<R>): R {
-        return visitor.visitApplication(this);
+    public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
+        return visitor.visitApplication(this, context);
     }
 }
+
+export type BinaryOpeators = 'tensor' | 'compose';
 
 /**
  * Binary Operator AST Node.
@@ -123,7 +146,7 @@ export class ApplicationAST implements AST {
  */
 export class BinaryOpAST implements AST {
     public readonly type = 'binary';
-    private readonly _operator: string;
+    private readonly _operator: BinaryOpeators;
     private readonly _left: ExpressionAST;
     private readonly _right: ExpressionAST;
 
@@ -134,7 +157,7 @@ export class BinaryOpAST implements AST {
      * @param left Left side of binary operator.
      * @param right Right side of binary operator.
      */
-    public constructor(operator: string, left: ExpressionAST, right: ExpressionAST) {
+    public constructor(operator: BinaryOpeators, left: ExpressionAST, right: ExpressionAST) {
         this._operator = operator;
         this._left = left;
         this._right = right;
@@ -171,14 +194,15 @@ export class BinaryOpAST implements AST {
      * Visit the binaryOperator visitor method.
      *
      * @param visitor ASTVisitor.
+     * @param context ASTVisitor context.
      * @returns Return value of ASTVisitor.visitBinaryOperator
      */
-    public visit<R>(visitor: ASTVisitor<R>): R {
-        return visitor.visitBinaryOperator(this);
+    public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
+        return visitor.visitBinaryOperator(this, context);
     }
 }
 
-export type ExpressionAST = ApplicationAST | ConstantAST | IdentifierAST;
+export type ExpressionAST = ApplicationAST | BinaryOpAST | ConstantAST | IdentifierAST;
 
 /**
  * Let AST Node.
@@ -234,30 +258,92 @@ export class LetAST implements AST {
      * Visit the ASTVisitor.visitExpression.
      *
      * @param visitor ASTVisitor.
+     * @param context ASTVisotor Context.
      * @returns Return value of ASTVisitor.visitExpression
      */
-    public visit<R>(visitor: ASTVisitor<R>): R {
-        return visitor.visitLet(this);
+    public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
+        return visitor.visitLet(this, context);
     }
+}
+
+/**
+ * Is this AST node an Identifier?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is an identifier node.
+ */
+export function isIdentifier(ast: AST): ast is IdentifierAST {
+    return ast.type === 'identifier';
+}
+
+/**
+ * Is this AST node a Constant?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is a constant node.
+ */
+export function isConstant(ast: AST): ast is ConstantAST {
+    return ast.type === 'constant';
+}
+
+/**
+ * Is this AST node an Application node?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is an application node.
+ */
+export function isApplication(ast: AST): ast is ApplicationAST {
+    return ast.type === 'application';
+}
+
+/**
+ * Is this AST node a Binary node?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is a binary node.
+ */
+export function isBinaryOp(ast: AST): ast is BinaryOpAST {
+    return ast.type === 'binary';
+}
+
+/**
+ * Is this AST node an Expression node?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is an expression node.
+ */
+export function isExpression(ast: AST): ast is ExpressionAST {
+    return isApplication(ast) || isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
+}
+
+/**
+ * Is this AST node a Let node?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is a let node.
+ */
+export function isLet(ast: AST): ast is LetAST {
+    return ast.type === 'let';
 }
 
 /**
  * ASTVisitor.
  */
-abstract class ASTVisitor<R> {
+export abstract class ASTVisitor<T, R> {
     /**
      * Visit an AST node.
      *
      * @param ast AST Node.
+     * @param context Context required while visiting.
      * @returns What ever the ASTVisitor returns.
      */
-    public visit(ast: AST): R {
-        return ast.visit<R>(this);
+    public visit(ast: AST, context: T): R {
+        return ast.visit<T, R>(this, context);
     }
 
-    abstract visitIdentifier(ast: IdentifierAST): R;
-    abstract visitConstant(ast: ConstantAST): R;
-    abstract visitApplication(ast: ApplicationAST): R;
-    abstract visitBinaryOperator(ast: BinaryOpAST): R;
-    abstract visitLet(ast: LetAST): R;
+    abstract visitIdentifier(ast: IdentifierAST, context: T): R;
+    abstract visitConstant(ast: ConstantAST, context: T): R;
+    abstract visitApplication(ast: ApplicationAST, context: T): R;
+    abstract visitBinaryOperator(ast: BinaryOpAST, context: T): R;
+    abstract visitLet(ast: LetAST, context: T): R;
 }

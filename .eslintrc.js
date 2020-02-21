@@ -30,7 +30,12 @@ module.exports = {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     "@typescript-eslint/indent": ["error", 4, { "ignoredNodes": ["JSXElement *", "JSXElement"]}],
     "@typescript-eslint/no-empty-interface": "warn",
-    "@typescript-eslint/semi": ["error"],
+    "@typescript-eslint/no-extra-parens": ["error", "all", {
+      ignoreJSX: 'multi-line',
+      nestedBinaryExpressions: false
+    }],
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/semi": "error",
     "array-element-newline": ["error", "consistent"],
     "complexity": ["error", 10],
     "consistent-return": "error",
@@ -72,16 +77,14 @@ module.exports = {
     "multiline-ternary": ["error", "always-multiline"],
     "no-console": "warn",
     "no-continue": "off",
-    "no-extra-parens": ["error", "all", {
-      ignoreJSX: 'multi-line',
-      nestedBinaryExpressions: false
-    }],
+    "no-extra-parens": "off",
     "no-magic-numbers": "off",
     "no-plusplus": "off",
     "no-sync": "off",
     "no-ternary": "off",
     "no-undefined": "off",
     "no-underscore-dangle": "off",
+    "no-useless-constructor": "off",
     "no-warning-comments": "warn",
     "no-trailing-spaces": "error",
     "object-curly-spacing": ["error", "never", {

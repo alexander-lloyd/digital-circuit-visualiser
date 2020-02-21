@@ -2,13 +2,21 @@ import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
 
-import {swap} from '../../lib/hypernet';
-import {HypernetRenderer} from '../../lib/render';
-import {populateHyperPositional, HyperPositional} from '../../lib/hypernet-render';
-
 import * as actions from './actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
-import {GlobalState} from 'reducers';
+import {GlobalState} from '../../reducers';
+import {
+    ASTOptimisingTransformer,
+    ASTRenderer,
+    EntityRendererVisitor
+} from '../../lib/renderer2';
+import {
+    LetAST,
+    IdentifierAST,
+    BinaryOpAST,
+    ConstantAST,
+    ApplicationAST
+} from '../../lib/parser/index';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -50,17 +58,37 @@ function drawDiagram(
         ctx.save();
         ctx.scale(scale, scale);
 
-        const hyper: HyperPositional = swap();
-        populateHyperPositional(hyper);
+        const ast = new LetAST(
+            new IdentifierAST('x'),
+            new BinaryOpAST(
+                'tensor',
+                new ConstantAST('AND'),
+                new ConstantAST('OR')
+            ),
+            new ApplicationAST('x', [])
+        );
 
-        const canvasContext = {
-            height: canvasHeight,
-            width: canvasWidth,
-            RENDER_UNITSQUARE_BOX: true
+        const astTransformerContext = {
+            identifiers: new Map()
         };
 
-        const renderer = new HypernetRenderer();
-        renderer.render(canvasContext, ctx, hyper);
+        const transformer = new ASTOptimisingTransformer();
+        const newAST = transformer.visit(ast, astTransformerContext);
+        const astRenderer = new ASTRenderer();
+        const renderTree = astRenderer.visit(newAST, null);
+        renderTree.scale(400, 400);
+        renderTree.translate(50, 50);
+        const entityRenderer = new EntityRendererVisitor();
+        const rendererContext = {
+            ctx,
+            canvasCtx: {
+                canvasHeight,
+                canvasWidth
+            }
+        };
+
+        entityRenderer.visit(renderTree, rendererContext);
+        // RENDER_UNITSQUARE_BOX: true
     });
 }
 
