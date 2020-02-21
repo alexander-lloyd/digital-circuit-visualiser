@@ -1,7 +1,7 @@
 /**
  * Base interface for all AST Nodes.
  */
-interface AST {
+export interface AST {
     type: string;
 
     /**
