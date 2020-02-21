@@ -36,6 +36,13 @@ interface Entity {
      * @param translateY Y translation. Positive will move downwards.
      */
     translate(translateX: number, translateY: number): void;
+
+    /**
+     * Visit the right method in the EntityVisitor.
+     *
+     * @param visitor EntityVisitor.
+     */
+    visit<T, R>(visitor: EntityVisitor<T, R>, context: T): R;
 }
 
 /**
@@ -79,9 +86,20 @@ class FunctionEntity implements Entity {
      * @param translateX X Translation.
      * @param translateY Y Translation.
      */
-    translate(translateX: number, translateY: number): void {
+    public translate(translateX: number, translateY: number): void {
         this.x += translateX;
         this.y += translateY;
+    }
+
+    /**
+     * Visit the FunctionEntity method in the EntityVisitor.
+     *
+     * @param visitor EntityVisitor.
+     * @param context EntityVisitor context.
+     * @returns Return value of visitFunction.
+     */
+    public visit<T, R>(visitor: EntityVisitor<T, R>, context: T): R {
+        return visitor.visitFunction(this, context);
     }
 }
 
@@ -132,8 +150,37 @@ class GroupedEntity implements Entity {
 
         this.children.forEach((e: Entity) => e.translate(translateX, translateY));
     }
+
+    /**
+     * Visit the GroupedEntity method in the EntityVisitor.
+     *
+     * @param visitor EntityVisitor.
+     * @param context EntityVisitor context.
+     * @returns Return value of visitGroup.
+     */
+    public visit<T, R>(visitor: EntityVisitor<T, R>, context: T): R {
+        return visitor.visitGrouped(this, context);
+    }
 }
 
+/**
+ * EntityVisitor.
+ */
+export abstract class EntityVisitor<T, R> {
+    /**
+     * Visit the entity tree.
+     *
+     * @param entity Entity.
+     * @param context Context required while visiting.
+     * @returns What ever the EntityVisitor implementation returns.
+     */
+    public visit(entity: Entity, context: T): R {
+        return entity.visit<T, R>(this, context);
+    }
+
+    abstract visitFunction(entity: FunctionEntity, context: T): R;
+    abstract visitGrouped(entity: GroupedEntity, context: T): R;
+}
 
 export type ASTOptimisingTransformerContext = {
     identifiers: Map<string, AST>;
@@ -268,5 +315,73 @@ export class ASTRenderer extends ASTVisitor<null, Entity> {
      */
     public visitLet(): never {
         throw new Error('Unexpected visit to Let node');
+    }
+}
+
+/**
+ * Canvas Context.
+ */
+interface CanvasContext {
+    canvasWidth: number;
+    canvasHeight: number;
+}
+
+/**
+ * All entity renderers extend this interface.
+ */
+export interface EntityRenderer<T extends Entity> {
+    /**
+     * Render an entity to the canvas.
+     *
+     * @param canvasCtx Canvas Context Data.
+     * @param ctx The Canvas Render Context.
+     * @param entity The entity to render.
+     */
+    render(canvasCtx: CanvasContext, ctx: CanvasRenderingContext2D, entity: T): void;
+}
+
+/**
+ * EntityRendererVisitor Context
+ */
+interface EntityRendererVisitorContext {
+    ctx: CanvasRenderingContext2D;
+    canvasCtx: CanvasContext;
+}
+
+/**
+ * Renderer the entities to the Canvas.
+ */
+class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorContext, void> {
+    /**
+     * Renderer a Function to the Canvas.
+     *
+     * @param entity Function Entity.
+     * @param context Renderer Context.
+     */
+    visitFunction(entity: FunctionEntity, context: EntityRendererVisitorContext): void {
+        const {ctx} = context;
+        const {x, y, width, height, label} = entity;
+
+        // Box
+        ctx.beginPath();
+        ctx.rect(x, y, width, height);
+        ctx.stroke();
+
+        // Label
+        const xCenter = (width / 2) + x;
+        const yCenter = (height / 2) + y;
+        label(xCenter, yCenter, ctx);
+    }
+
+    /**
+     * Renderer a Group of Entities.
+     *
+     * @param entity Grouped Entity.
+     * @param context Canvas Context.
+     */
+    visitGrouped(entity: GroupedEntity, context: EntityRendererVisitorContext): void {
+        const {children} = entity;
+
+        children.forEach((e: Entity) => e.visit(this, context));
     }
 }
