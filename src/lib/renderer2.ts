@@ -347,7 +347,7 @@ interface EntityRendererVisitorContext {
 /**
  * Renderer the entities to the Canvas.
  */
-class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorContext, void> {
+export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorContext, void> {
     /**
      * Renderer a Function to the Canvas.
      *
