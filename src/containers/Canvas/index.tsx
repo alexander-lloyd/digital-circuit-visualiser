@@ -110,8 +110,8 @@ function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchor
  * Canvas Properties.
  */
 interface CanvasProperties {
-    scale: number;
     downloadLoading: boolean;
+    scale: number;
 }
 
 /**

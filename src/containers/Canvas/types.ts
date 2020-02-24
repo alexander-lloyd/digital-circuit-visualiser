@@ -1,8 +1,17 @@
 import {
+    SET_SOURCE_CODE,
     RESET_SCALE,
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
+
+/**
+ * Set the source code of the canvas.
+ */
+export interface SetSourceCodeAction {
+    type: typeof SET_SOURCE_CODE;
+    code: string;
+}
 
 /**
  * Reset Scale Action.
@@ -29,6 +38,7 @@ export interface ZoomOutAction {
  * Canvas Actions.
  */
 export type CanvasActions =
+    | SetSourceCodeAction
     | ResetScaleAction
     | ZoomInAction
     | ZoomOutAction;
@@ -41,4 +51,5 @@ export interface CanvasState {
         loading: boolean;
     };
     scale: number;
+    code: string;
 }

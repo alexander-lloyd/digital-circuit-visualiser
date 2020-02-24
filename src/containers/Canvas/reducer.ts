@@ -1,7 +1,12 @@
 import {
-    MAXIMUM_SCALE, MINIMUM_SCALE,
-    RESET_SCALE, SCALING_FACTOR,
-    ZOOM_IN, ZOOM_OUT
+    INITIAL_CODE,
+    MAXIMUM_SCALE,
+    MINIMUM_SCALE,
+    RESET_SCALE,
+    SCALING_FACTOR,
+    SET_SOURCE_CODE,
+    ZOOM_IN,
+    ZOOM_OUT
 } from './constants';
 import {CanvasActions, CanvasState} from './types';
 
@@ -11,7 +16,8 @@ const initialCanvasState: CanvasState = {
     download: {
         loading: false
     },
-    scale: initialScale
+    scale: initialScale,
+    code: INITIAL_CODE
 };
 
 /**
@@ -25,6 +31,13 @@ export function canvasReducer(state = initialCanvasState, action: CanvasActions)
     const {scale: oldScale} = state;
 
     switch (action.type) {
+    case SET_SOURCE_CODE: {
+        const {code} = action;
+        return {
+            ...state,
+            code
+        };
+    }
     case RESET_SCALE: {
         return {
             ...state,
