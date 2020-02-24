@@ -86,17 +86,26 @@ function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchor
 }
 
 /**
- * Canvas Properties.
+ * Canvas State.
  */
-interface CanvasProperties {
+interface CanvasState {
     downloadLoading: boolean;
     scale: number;
 }
 
 /**
- * Canvas Props.
+ * Canvas Dispatch Properties
  */
-interface CanvasProps extends actions.ActionCreaters, CanvasProperties {}
+interface CanvasDispatchProps {
+    resetZoom: typeof actions.resetZoom;
+    zoomIn: typeof actions.zoomIn;
+    zoomOut: typeof actions.zoomOut;
+}
+
+/**
+ * Canvas Properties.
+ */
+interface CanvasProps extends CanvasState, CanvasDispatchProps {}
 
 /**
  * Canvas Component.
@@ -191,14 +200,14 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @param state Canvas State.
  * @returns Component Props.
  */
-function mapStateToProps(state: GlobalState): CanvasProperties {
+function mapStateToProps(state: GlobalState): CanvasState {
     return {
         scale: state.scale,
         downloadLoading: state.download.loading
     };
 }
 
-const mapDispatchToProps = {
+const mapDispatchToProps: CanvasDispatchProps = {
     resetZoom: actions.resetZoom,
     zoomIn: actions.zoomIn,
     zoomOut: actions.zoomOut
