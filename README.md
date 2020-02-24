@@ -7,6 +7,9 @@
     <a href="https://alexander-lloyd.github.io/fyp"><strong>View the WebApp »</strong></a>
 </p>
 
+![Build](https://github.com/alexander-lloyd/fyp/workflows/Build/badge.svg)
+[![codecov](https://codecov.io/gh/alexander-lloyd/fyp/branch/master/graph/badge.svg?token=7liikH1rI6)](https://codecov.io/gh/alexander-lloyd/fyp)
+
 ## Table of Contents
 
 * [About the Project](#about-the-project)
