@@ -1,4 +1,4 @@
-import React, {KeyboardEvent, useRef} from 'react';
+import React, {useRef} from 'react';
 import {connect} from 'react-redux';
 
 import ExamplesList from './ExamplesList';
@@ -45,16 +45,19 @@ function Sidebar(props: ComponentProps): JSX.Element {
 
     const textInputRef = useRef<HTMLTextAreaElement>(null);
 
-    const onKeyPressed = () => {
+    /**
+     * Handle TextArea key press.
+     */
+    const onKeyPressed = (): void => {
         const textarea = textInputRef.current;
 
         if (textarea === null) {
             return;
         }
 
-        const source = textarea.value;
+        const sourceCode = textarea.value;
 
-        setSourceCode(source);
+        setSourceCode(sourceCode);
     };
 
     return (
