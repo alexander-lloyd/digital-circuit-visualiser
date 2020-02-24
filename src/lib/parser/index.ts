@@ -1,5 +1,5 @@
 import {AST} from './ast';
-import {parse as parse$} from './parser';
+import {parse as parse$, SyntaxError} from './parser';
 import {
     ASTOptimisingTransformer,
     ASTOptimisingTransformerContext
@@ -32,3 +32,6 @@ export function compile(source: string): AST {
 }
 
 export * from './ast';
+export {
+    SyntaxError
+};
