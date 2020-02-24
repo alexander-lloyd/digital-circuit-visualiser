@@ -43,7 +43,7 @@ export function reducer(state = initialState, action: AppActions): GlobalState {
     case RESET_SCALE: {
         return {
             ...state,
-            scale: initialScale
+            scale: INITIAL_SCALE
         };
     }
     case ZOOM_IN: {
