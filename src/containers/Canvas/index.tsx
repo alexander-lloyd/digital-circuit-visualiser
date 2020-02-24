@@ -9,7 +9,7 @@ import {
     ASTRenderer,
     EntityRendererVisitor
 } from '../../lib/renderer2';
-import {compile} from '../../lib/parser/index';
+import {compile, AST} from '../../lib/parser/index';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -40,8 +40,11 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param scale The scaling factor.
  */
 function drawDiagram(
-    ctx: CanvasRenderingContext2D, canvasWidth: number,
-    canvasHeight: number, scale: number
+    ast: AST,
+    ctx: CanvasRenderingContext2D,
+    canvasWidth: number,
+    canvasHeight: number,
+    scale: number
 ): void {
     requestAnimationFrame(() => {
         // Clear canvas
@@ -51,8 +54,6 @@ function drawDiagram(
         ctx.save();
         ctx.scale(scale, scale);
 
-        const source = 'let x = AND tensor OR in x;';
-        const ast = compile(source);
         const astRenderer = new ASTRenderer();
         const renderTree = astRenderer.visit(ast, null);
         renderTree.scale(400, 400);
@@ -89,6 +90,7 @@ function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchor
  * Canvas State.
  */
 interface CanvasState {
+    ast: AST | null;
     downloadLoading: boolean;
     scale: number;
 }
@@ -115,6 +117,7 @@ interface CanvasProps extends CanvasState, CanvasDispatchProps {}
  */
 function Canvas(props: CanvasProps): JSX.Element {
     const {
+        ast,
         scale,
         downloadLoading,
         resetZoom,
@@ -126,34 +129,20 @@ function Canvas(props: CanvasProps): JSX.Element {
 
     const [resizeListener, sizes] = useResizeAware();
 
-    React.useEffect(() => {
-        console.log('canvas resize');
+    useEffect((): void => {
         const canvas: HTMLCanvasElement | null = canvasRef.current;
-        if (canvas === null) {
+        if (canvas === null || ast === null) {
             return;
         }
         fitCanvasToContainer(canvas);
-        // Dispatch a reset scale event
-        const ctx = canvas.getContext('2d');
-        if (ctx === null) {
-            return;
-        }
-        drawDiagram(ctx, canvas.width, canvas.height, scale);
-    }, [sizes.width, sizes.height, canvasRef, resetZoom, scale]);
-
-    useEffect((): void => {
-        const canvas: HTMLCanvasElement | null = canvasRef.current;
-        if (canvas === null) {
-            return;
-        }
 
         const ctx: CanvasRenderingContext2D | null = canvas.getContext('2d');
         if (ctx === null) {
             return;
         }
 
-        drawDiagram(ctx, canvas.width, canvas.height, scale);
-    }, [canvasRef, scale]);
+        drawDiagram(ast, ctx, canvas.width, canvas.height, scale);
+    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height]);
 
     /** Wrapper around download canvas function */
     const downloadCanvas = (): void => {
@@ -201,9 +190,11 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @returns Component Props.
  */
 function mapStateToProps(state: GlobalState): CanvasState {
+    const {ast, scale, download: {loading}} = state;
     return {
-        scale: state.scale,
-        downloadLoading: state.download.loading
+        ast,
+        scale,
+        downloadLoading: loading
     };
 }
 
