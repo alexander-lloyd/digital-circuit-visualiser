@@ -20,11 +20,11 @@ import {compile, SyntaxError, AST} from '../../lib/parser/index';
 /**
  * Set the source code. Fires off Actions.
  *
- * @param source The source code.
- * @returns Dispatch Function.
+ * @param dispatch Dispatch Function.
+ * @returns Action Creater with side effect.
  */
-export function setSourceCode(source: string): (dispatch: DispatchFunction) => void {
-    return (dispatch: DispatchFunction): void => {
+export function setSourceCode(dispatch: DispatchFunction): (source: string) => void {
+    return (source: string): void => {
         dispatch({
             type: SET_SOURCE_REQUEST,
             source

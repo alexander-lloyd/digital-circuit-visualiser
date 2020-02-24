@@ -35,13 +35,14 @@ const initialState: GlobalState = {
  */
 export function reducer(state = initialState, action: AppActions): GlobalState {
     const {scale: oldScale} = state;
+    console.log(`[GLOBAL] ${action.type}`, action);
 
     switch (action.type) {
     case SET_SOURCE_REQUEST: {
-        const {code} = action;
+        const {source} = action;
         return {
             ...state,
-            code
+            code: source
         };
     }
     case SET_SOURCE_SUCCESS: {
