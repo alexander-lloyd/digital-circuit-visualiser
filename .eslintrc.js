@@ -78,7 +78,7 @@ module.exports = {
     "no-console": "warn",
     "no-continue": "off",
     "no-extra-parens": "off",
-    "no-magic-numbers": "off",
+    "no-magic-numbers": "warn",
     "no-plusplus": "off",
     "no-sync": "off",
     "no-ternary": "off",

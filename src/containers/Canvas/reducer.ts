@@ -1,4 +1,8 @@
-import {RESET_SCALE, SCALING_FACTOR, ZOOM_IN, ZOOM_OUT} from './constants';
+import {
+    MAXIMUM_SCALE, MINIMUM_SCALE,
+    RESET_SCALE, SCALING_FACTOR,
+    ZOOM_IN, ZOOM_OUT
+} from './constants';
 import {CanvasActions, CanvasState} from './types';
 
 const initialScale = 1.0;
@@ -28,14 +32,14 @@ export function canvasReducer(state = initialCanvasState, action: CanvasActions)
         };
     }
     case ZOOM_IN: {
-        const newScale = Math.min(oldScale * SCALING_FACTOR, 5);
+        const newScale = Math.min(oldScale * SCALING_FACTOR, MAXIMUM_SCALE);
         return {
             ...state,
             scale: newScale
         };
     }
     case ZOOM_OUT: {
-        const newScale = Math.max(oldScale / SCALING_FACTOR, 0.5);
+        const newScale = Math.max(oldScale / SCALING_FACTOR, MINIMUM_SCALE);
         return {
             ...state,
             scale: newScale
