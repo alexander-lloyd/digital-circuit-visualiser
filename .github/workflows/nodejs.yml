@@ -16,8 +16,10 @@ jobs:
     - name: Install, Build & Test.
       run: |
         yarn install
-        yarn test
+        yarn test --coverage
+        yarn codecov
         yarn lint
         yarn build:production
       env:
         CI: true
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
