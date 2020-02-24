@@ -78,7 +78,9 @@ module.exports = {
     "no-console": "warn",
     "no-continue": "off",
     "no-extra-parens": "off",
-    "no-magic-numbers": "warn",
+    "no-magic-numbers": ["warn", {
+      "ignore": [0, 1, 2]
+    }],
     "no-plusplus": "off",
     "no-sync": "off",
     "no-ternary": "off",
@@ -134,6 +136,12 @@ module.exports = {
         "multiline-comment-style": "off",
         "quotes": "off",
         "strict": "off",
+      }
+    },
+    {
+      "files": ["src/**/*.spec.ts"],
+      "rules": {
+        "no-magic-numbers": "off"
       }
     }
   ]
