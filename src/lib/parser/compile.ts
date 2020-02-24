@@ -84,6 +84,6 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         const expression = ast.expression.visit(this, context);
         context.identifiers.set(name, expression);
 
-        return ast.expression.visit(this, context);
+        return ast.body.visit(this, context);
     }
 }
