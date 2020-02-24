@@ -6,17 +6,10 @@ import * as actions from '../App/actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
-    ASTOptimisingTransformer,
     ASTRenderer,
     EntityRendererVisitor
 } from '../../lib/renderer2';
-import {
-    LetAST,
-    IdentifierAST,
-    BinaryOpAST,
-    ConstantAST,
-    ApplicationAST
-} from '../../lib/parser/index';
+import {compile} from '../../lib/parser/index';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -58,24 +51,10 @@ function drawDiagram(
         ctx.save();
         ctx.scale(scale, scale);
 
-        const ast = new LetAST(
-            new IdentifierAST('x'),
-            new BinaryOpAST(
-                'tensor',
-                new ConstantAST('AND'),
-                new ConstantAST('OR')
-            ),
-            new ApplicationAST('x', [])
-        );
-
-        const astTransformerContext = {
-            identifiers: new Map()
-        };
-
-        const transformer = new ASTOptimisingTransformer();
-        const newAST = transformer.visit(ast, astTransformerContext);
+        const source = 'let x = AND tensor OR in x;';
+        const ast = compile(source);
         const astRenderer = new ASTRenderer();
-        const renderTree = astRenderer.visit(newAST, null);
+        const renderTree = astRenderer.visit(ast, null);
         renderTree.scale(400, 400);
         renderTree.translate(50, 50);
         const entityRenderer = new EntityRendererVisitor();
