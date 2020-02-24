@@ -37,7 +37,7 @@ export interface ZoomOutAction {
 /**
  * Canvas Actions.
  */
-export type CanvasActions =
+export type AppActions =
     | SetSourceCodeAction
     | ResetScaleAction
     | ZoomInAction
@@ -46,7 +46,7 @@ export type CanvasActions =
 /**
  * Canvas Container State.
  */
-export interface CanvasState {
+export interface GlobalState {
     download: {
         loading: boolean;
     };

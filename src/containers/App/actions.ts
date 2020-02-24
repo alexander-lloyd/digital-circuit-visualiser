@@ -60,7 +60,7 @@ export function zoomOut(): ZoomOutAction {
 /**
  * Canvas Action Creaters.
  */
-export interface CanvasActionCreaters {
+export interface ActionCreaters {
     setSourceCode: typeof setSourceCode;
     resetZoom: typeof resetZoom;
     zoomIn: typeof zoomIn;

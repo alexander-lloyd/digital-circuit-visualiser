@@ -2,9 +2,9 @@ import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
 
-import * as actions from './actions';
+import * as actions from '../App/actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
-import {GlobalState} from '../App/reducer';
+import {GlobalState} from '../App/types';
 import {
     ASTOptimisingTransformer,
     ASTRenderer,
@@ -117,7 +117,7 @@ interface CanvasProperties {
 /**
  * Canvas Props.
  */
-interface CanvasProps extends actions.CanvasActionCreaters, CanvasProperties {}
+interface CanvasProps extends actions.ActionCreaters, CanvasProperties {}
 
 /**
  * Canvas Component.
@@ -214,8 +214,8 @@ function Canvas(props: CanvasProps): JSX.Element {
  */
 function mapStateToProps(state: GlobalState): CanvasProperties {
     return {
-        scale: state.canvas.scale,
-        downloadLoading: state.canvas.download.loading
+        scale: state.scale,
+        downloadLoading: state.download.loading
     };
 }
 

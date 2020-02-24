@@ -1,19 +1,66 @@
-import {combineReducers} from 'redux';
+import {
+    RESET_SCALE,
+    SET_SOURCE_CODE,
+    ZOOM_IN,
+    ZOOM_OUT
+} from './constants';
+import {AppActions, GlobalState} from './types';
+import {
+    INITIAL_CODE,
+    MAXIMUM_SCALE,
+    MINIMUM_SCALE,
+    SCALING_FACTOR
+} from '../Canvas/constants';
 
-import {canvasReducer} from '../Canvas/reducer';
-import {CanvasState} from '../Canvas/types';
+const initialScale = 1.0;
+
+const initialState: GlobalState = {
+    download: {
+        loading: false
+    },
+    scale: initialScale,
+    code: INITIAL_CODE
+};
 
 /**
- * Global State Tree.
+ * Canvas Reducer.
+ *
+ * @param state Previous State.
+ * @param action Canvas Action.
+ * @returns New State.
  */
-export interface GlobalState {
-    canvas: CanvasState;
-}
+export function reducer(state = initialState, action: AppActions): GlobalState {
+    const {scale: oldScale} = state;
 
-export default function createReducers() { // eslint-disable-line
-    const rootReducer = combineReducers({
-        canvas: canvasReducer
-    });
-
-    return rootReducer;
+    switch (action.type) {
+    case SET_SOURCE_CODE: {
+        const {code} = action;
+        return {
+            ...state,
+            code
+        };
+    }
+    case RESET_SCALE: {
+        return {
+            ...state,
+            scale: initialScale
+        };
+    }
+    case ZOOM_IN: {
+        const newScale = Math.min(oldScale * SCALING_FACTOR, MAXIMUM_SCALE);
+        return {
+            ...state,
+            scale: newScale
+        };
+    }
+    case ZOOM_OUT: {
+        const newScale = Math.max(oldScale / SCALING_FACTOR, MINIMUM_SCALE);
+        return {
+            ...state,
+            scale: newScale
+        };
+    }
+    default:
+        return state;
+    }
 }
