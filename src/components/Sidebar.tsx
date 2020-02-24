@@ -36,7 +36,7 @@ interface ComponentProps extends DispatchProps, StateProps {}
  * @returns Menu Component.
  */
 function Sidebar(props: ComponentProps): JSX.Element {
-    const {setSourceCode} = props;
+    const {setSourceCode, errorReason} = props;
 
     const textInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -60,6 +60,10 @@ function Sidebar(props: ComponentProps): JSX.Element {
                       placeholder={exampleCode}
                       ref={textInputRef}
                       rows={10} />
+            <div className="notification is-danger"
+                 hidden={errorReason === null}>
+                { errorReason }
+            </div>
             <p className="menu-label is-size-5">Flags</p>
             <FeatureFlags />
             <p className="menu-label is-size-5">Examples</p>
