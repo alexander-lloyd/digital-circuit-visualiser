@@ -4,7 +4,7 @@ import useResizeAware from 'react-resize-aware';
 
 import * as actions from './actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
-import {GlobalState} from '../../reducers';
+import {GlobalState} from '../App/reducer';
 import {
     ASTOptimisingTransformer,
     ASTRenderer,
