@@ -1,5 +1,8 @@
 import {ASTVisitor, ConstantAST, BinaryOpAST} from './parser/index';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+import {ImageMetaData, images} from '../assets/images';
+
 type LabelFunction = (x: number, y: number, ctx: CanvasRenderingContext2D) => void;
 
 /**
@@ -12,6 +15,29 @@ function buildTextLabelFunction(label: string): LabelFunction {
     return (x: number, y: number, ctx: CanvasRenderingContext2D): void => {
         ctx.textAlign = 'center';
         ctx.fillText(label, x, y);
+    };
+}
+
+/**
+ * Draw an image into a function.
+ *
+ * @param imageMetaData Image meta data.
+ * @returns LabelFunction.
+ */
+function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunction {
+    const imageSrc = imageMetaData.image;
+
+    return (x: number, y: number, ctx: CanvasRenderingContext2D): void => {
+        const image = new Image();
+        image.onload = (): void => {
+            console.log(imageMetaData.name);
+            const imageHeight = image.height;
+            const imageWidth = image.width;
+
+            ctx.drawImage(image, x - (imageWidth / 2), y - (imageHeight / 2));
+        };
+
+        image.src = `data:image/svg+xml;base64,${btoa(imageSrc)}`;
     };
 }
 
@@ -219,7 +245,17 @@ export class ASTRenderer extends ASTVisitor<null, Entity> {
      * @returns Function Entity.
      */
     public visitConstant(ast: ConstantAST): Entity {
-        return new FunctionEntity(0, 0, 1, 1, buildTextLabelFunction(ast.name));
+        let labelFunc: LabelFunction;
+        const {name} = ast;
+        const imageMetaData = images[name];
+
+        if (imageMetaData === undefined) {
+            labelFunc = buildTextLabelFunction(name);
+        } else {
+            labelFunc = buildTextImageFunction(imageMetaData);
+        }
+
+        return new FunctionEntity(0, 0, 1, 1, labelFunc);
     }
 
     /**
