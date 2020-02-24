@@ -7,18 +7,18 @@ import {
 import {AppActions, GlobalState} from './types';
 import {
     INITIAL_CODE,
+    INITIAL_SCALE,
     MAXIMUM_SCALE,
     MINIMUM_SCALE,
     SCALING_FACTOR
 } from '../Canvas/constants';
 
-const initialScale = 1.0;
 
 const initialState: GlobalState = {
     download: {
         loading: false
     },
-    scale: initialScale,
+    scale: INITIAL_SCALE,
     code: INITIAL_CODE
 };
 
