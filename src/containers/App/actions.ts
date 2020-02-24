@@ -1,26 +1,87 @@
 import {
-    SET_SOURCE_CODE,
+    SET_SOURCE_REQUEST,
+    SET_SOURCE_SUCCESS,
+    SET_SOURCE_FAILURE,
     RESET_SCALE,
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
 import {
-    SetSourceCodeAction,
+    DispatchFunction,
+    SetSourceCodeRequestAction,
+    SetSourceCodeSuccessAction,
+    SetSourceCodeFailureAction,
     ResetScaleAction,
     ZoomInAction,
     ZoomOutAction
 } from './types';
+import {compile, SyntaxError, AST} from '../../lib/parser/index';
 
 /**
- * Create a SetSourceCodeAction.
+ * Set the source code. Fires off Actions.
  *
- * @param code The source code.
- * @returns SetSourceCodeAction
+ * @param source The source code.
+ * @returns Dispatch Function.
  */
-export function setSourceCode(code: string): SetSourceCodeAction {
+export function setSourceCode(source: string): (dispatch: DispatchFunction) => void {
+    return (dispatch: DispatchFunction): void => {
+        dispatch({
+            type: SET_SOURCE_REQUEST,
+            source
+        });
+        // Compile.
+        try {
+            const ast = compile(source);
+            dispatch({
+                type: SET_SOURCE_SUCCESS,
+                ast
+            });
+        } catch (e) {
+            const reason = (e as SyntaxError).message;
+            dispatch({
+                type: SET_SOURCE_FAILURE,
+                reason
+            });
+        }
+    };
+}
+
+/**
+ * Request to set the Source Code.
+ *
+ * @param source Source Code.
+ * @returns Set Source Code Request Action.
+ */
+export function setSourceCodeRequest(source: string): SetSourceCodeRequestAction {
     return {
-        type: SET_SOURCE_CODE,
-        code
+        type: SET_SOURCE_REQUEST,
+        source
+    };
+}
+
+/**
+ * Request to set the AST in the state.
+ *
+ * @param ast AST.
+ * @returns Set Source Code Success Action.
+ */
+export function setSourceCodeSuccess(ast: AST): SetSourceCodeSuccessAction {
+    return {
+        type: SET_SOURCE_SUCCESS,
+        ast
+    };
+}
+
+/**
+ * Fired if parsing failed.
+ *
+ * @param reason Failure Reason.
+ * @returns Set Source Code Request Action.
+ */
+export function setSourceCodeFailure(reason: string): SetSourceCodeFailureAction {
+    return {
+        type: SET_SOURCE_FAILURE,
+        reason
     };
 }
 
@@ -61,7 +122,7 @@ export function zoomOut(): ZoomOutAction {
  * Canvas Action Creaters.
  */
 export interface ActionCreaters {
-    setSourceCode: typeof setSourceCode;
+    setSourceCode: typeof setSourceCodeRequest;
     resetZoom: typeof resetZoom;
     zoomIn: typeof zoomIn;
     zoomOut: typeof zoomOut;

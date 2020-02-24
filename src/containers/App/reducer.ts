@@ -1,6 +1,8 @@
 import {
     RESET_SCALE,
-    SET_SOURCE_CODE,
+    SET_SOURCE_REQUEST,
+    SET_SOURCE_SUCCESS,
+    SET_SOURCE_FAILURE,
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
@@ -19,7 +21,9 @@ const initialState: GlobalState = {
         loading: false
     },
     scale: INITIAL_SCALE,
-    code: INITIAL_CODE
+    code: INITIAL_CODE,
+    ast: null,
+    errorString: null
 };
 
 /**
@@ -33,11 +37,28 @@ export function reducer(state = initialState, action: AppActions): GlobalState {
     const {scale: oldScale} = state;
 
     switch (action.type) {
-    case SET_SOURCE_CODE: {
+    case SET_SOURCE_REQUEST: {
         const {code} = action;
         return {
             ...state,
             code
+        };
+    }
+    case SET_SOURCE_SUCCESS: {
+        const {ast} = action;
+        return {
+            ...state,
+            ast,
+            // We don't have an error.
+            errorString: null
+        };
+    }
+    case SET_SOURCE_FAILURE: {
+        const {reason} = action;
+        return {
+            ...state,
+            // Set the AST to null?
+            errorString: reason
         };
     }
     case RESET_SCALE: {

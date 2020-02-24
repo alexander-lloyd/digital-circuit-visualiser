@@ -17,6 +17,7 @@ export function parse(source: string): AST {
 
 /**
  * Parse and apply optimisations to the AST.
+ *
  * @param source Source Code.
  * @returns AST Tree.
  */

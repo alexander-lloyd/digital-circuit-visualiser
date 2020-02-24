@@ -1,16 +1,37 @@
 import {
-    SET_SOURCE_CODE,
+    SET_SOURCE_REQUEST,
+    SET_SOURCE_SUCCESS,
+    SET_SOURCE_FAILURE,
     RESET_SCALE,
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
+import {AST} from 'lib/parser/ast';
+
+export type DispatchFunction = (action: AppActions) => void;
 
 /**
  * Set the source code of the canvas.
  */
-export interface SetSourceCodeAction {
-    type: typeof SET_SOURCE_CODE;
-    code: string;
+export interface SetSourceCodeRequestAction {
+    type: typeof SET_SOURCE_REQUEST;
+    source: string;
+}
+
+/**
+ * Code successfully compiled. Set the AST.
+ */
+export interface SetSourceCodeSuccessAction {
+    type: typeof SET_SOURCE_SUCCESS;
+    ast: AST;
+}
+
+/**
+ * Set the source code of the canvas.
+ */
+export interface SetSourceCodeFailureAction {
+    type: typeof SET_SOURCE_FAILURE;
+    reason: string;
 }
 
 /**
@@ -38,7 +59,9 @@ export interface ZoomOutAction {
  * Canvas Actions.
  */
 export type AppActions =
-    | SetSourceCodeAction
+    | SetSourceCodeRequestAction
+    | SetSourceCodeSuccessAction
+    | SetSourceCodeFailureAction
     | ResetScaleAction
     | ZoomInAction
     | ZoomOutAction;
@@ -52,4 +75,8 @@ export interface GlobalState {
     };
     scale: number;
     code: string;
+    // On initial load we won't have an AST until success Action.
+    ast: AST | null;
+    // No error string on successful Action.
+    errorString: string | null;
 }
