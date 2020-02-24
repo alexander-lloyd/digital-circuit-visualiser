@@ -1,7 +1,7 @@
 import {
     ASTOptimisingTransformer,
     ASTOptimisingTransformerContext
-} from '../../lib/renderer2';
+} from '../../../lib/parser/compile';
 import {
     LetAST,
     IdentifierAST,
@@ -10,7 +10,7 @@ import {
     ApplicationAST,
     isBinaryOp,
     isConstant
-} from '../../lib/parser/index';
+} from '../../../lib/parser/index';
 
 describe('optimising ast transformer', () => {
     it('should optimise a let statement', () => {

@@ -9,6 +9,8 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 
+const DEFAULT_PORT = 8000;
+
 const PATHS = {
     src: path.join(__dirname, 'src'),
     output: path.join(__dirname, 'build'),
@@ -122,7 +124,7 @@ module.exports = {
     devServer: {
         compress: true,
         contentBase: outputDir,
-        port: process.env.PORT || 8000,
+        port: process.env.PORT || DEFAULT_PORT,
         historyApiFallback: true
     }
 };
