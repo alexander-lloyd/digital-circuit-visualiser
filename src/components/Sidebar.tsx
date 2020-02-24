@@ -15,6 +15,7 @@ const exampleCode = 'let x = AND tensor OR;';
  */
 interface StateProps {
     errorReason: string | null;
+    source: string;
 }
 
 /**
@@ -36,7 +37,11 @@ interface ComponentProps extends DispatchProps, StateProps {}
  * @returns Menu Component.
  */
 function Sidebar(props: ComponentProps): JSX.Element {
-    const {setSourceCode, errorReason} = props;
+    const {
+        errorReason,
+        setSourceCode,
+        source
+    } = props;
 
     const textInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -60,8 +65,8 @@ function Sidebar(props: ComponentProps): JSX.Element {
                       placeholder={exampleCode}
                       ref={textInputRef}
                       rows={10} />
-            <div className="notification is-danger"
-                 hidden={errorReason === null}>
+            <div className="notification is-danger is-marginless"
+                 hidden={errorReason === null || source === ''}>
                 { errorReason }
             </div>
             <p className="menu-label is-size-5">Flags</p>
@@ -79,9 +84,10 @@ function Sidebar(props: ComponentProps): JSX.Element {
  * @returns Component Props.
  */
 function mapStateToProps(state: GlobalState): StateProps {
-    const {errorString} = state;
+    const {errorString, code} = state;
     return {
-        errorReason: errorString
+        errorReason: errorString,
+        source: code
     };
 }
 
