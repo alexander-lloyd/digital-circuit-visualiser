@@ -1,58 +1,13 @@
 import {ASTVisitor, ConstantAST, BinaryOpAST} from './parser/index';
 
-import {ImageMetaData, images} from '../assets/images';
+import {
+    buildTextImageFunction,
+    buildTextLabelFunction,
+    LabelFunction
+} from './render/label';
 
+import {images} from '../assets/images';
 
-function pipe<T extends any[], R>(
-    fn1: (...args: T) => R,
-    ...fns: Array<(a: R) => R>
-): (...args: T) => R {
-    const piped = fns.reduce(
-        (prevFn, nextFn) => (value: R) => nextFn(prevFn(value)),
-        (value) => value
-    );
-    return (...args: T) => piped(fn1(...args));
-}
-
-export const compose = <R>(fn1: (a: R) => R, ...fns: Array<(a: R) => R>) => fns.reduce((prevFn, nextFn) => (value) => prevFn(nextFn(value)), fn1);
-
-
-type LabelFunction = (x: number, y: number, ctx: CanvasRenderingContext2D) => void;
-
-/**
- * Build a text label function.
- *
- * @param label The label the function should generate.
- * @returns LabelFunction.
- */
-function buildTextLabelFunction(label: string): LabelFunction {
-    return (x: number, y: number, ctx: CanvasRenderingContext2D): void => {
-        ctx.textAlign = 'center';
-        ctx.fillText(label, x, y);
-    };
-}
-
-/**
- * Draw an image into a function.
- *
- * @param imageMetaData Image meta data.
- * @returns LabelFunction.
- */
-function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunction {
-    const imageSrc = imageMetaData.image;
-
-    return (x: number, y: number, ctx: CanvasRenderingContext2D): void => {
-        const image = new Image();
-        image.onload = (): void => {
-            const imageHeight = image.height;
-            const imageWidth = image.width;
-
-            ctx.drawImage(image, x - (imageWidth / 2), y - (imageHeight / 2));
-        };
-
-        image.src = `data:image/svg+xml;base64,${btoa(imageSrc)}`;
-    };
-}
 
 /**
  * A rendered entity.
