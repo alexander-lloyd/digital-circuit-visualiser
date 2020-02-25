@@ -7,9 +7,11 @@ import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
     ASTRenderer,
-    EntityRendererVisitor
+    scaleRenderResult,
+    transformRenderResult,
+    renderRenderResult
 } from '../../lib/renderer2';
-import {compile, AST} from '../../lib/parser/index';
+import {AST} from '../../lib/parser/index';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -34,6 +36,7 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
 /**
  * Draw the diagram on the canvas.
  *
+ * @param ast: Abstract Syntax Tree.
  * @param ctx Canvas Context.
  * @param canvasWidth Canvas width.
  * @param canvasHeight Canvas height.
@@ -55,19 +58,23 @@ function drawDiagram(
         ctx.scale(scale, scale);
 
         const astRenderer = new ASTRenderer();
-        const renderTree = astRenderer.visit(ast, null);
-        renderTree.scale(400, 400);
-        renderTree.translate(50, 50);
-        const entityRenderer = new EntityRendererVisitor();
-        const rendererContext = {
-            ctx,
-            canvasCtx: {
-                canvasHeight,
-                canvasWidth
-            }
-        };
+        let result = astRenderer.visit(ast, null);
+        // const entityRenderer = new EntityRendererVisitor();
+        // const rendererContext = {
+        //     ctx,
+        //     canvasCtx: {
+        //         canvasHeight,
+        //         canvasWidth
+        //     },
+        //     result: new EntityRendererResult()
+        // };
 
-        entityRenderer.visit(renderTree, rendererContext);
+        // entityRenderer.visit(renderTree, rendererContext);
+        // const {result} = rendererContext;
+        result = scaleRenderResult(result,400, 400);
+        result = transformRenderResult(result, 100, 100);
+        console.log(result);
+        renderRenderResult(result, ctx);
         // RENDER_UNITSQUARE_BOX: true
     });
 }
