@@ -40,12 +40,12 @@ function ExamplesList({setSourceCode}: DispatchProps): JSX.Element {
         <div className="field has-addons">
             <div className="control is-expanded">
                 <div className="select is-fullwidth">
-                    <select name="examples"
+                    <select defaultValue="DEFAULT"
+                            name="examples"
                             onChange={onExampleSelected}
                             ref={selectRef}>
                         <option disabled
-                                selected
-                                value="">
+                                value="DEFAULT">
                             Select an Example
                         </option>
                         {
