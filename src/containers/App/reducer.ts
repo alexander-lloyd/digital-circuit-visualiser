@@ -40,6 +40,9 @@ export function reducer(state = initialState, action: AppActions): GlobalState {
     switch (action.type) {
     case SET_SOURCE_REQUEST: {
         const {source} = action;
+        if (source === state.code) {
+            return state;
+        }
         return {
             ...state,
             code: source
@@ -59,6 +62,7 @@ export function reducer(state = initialState, action: AppActions): GlobalState {
         return {
             ...state,
             // Set the AST to null?
+            ast: null,
             errorString: reason
         };
     }
