@@ -22,7 +22,7 @@ describe('optimising ast transformer', () => {
                 new ConstantAST('AND'),
                 new ConstantAST('OR')
             ),
-            new ApplicationAST('x', [])
+            new IdentifierAST('x')
         );
 
         const transformer = new ASTOptimisingTransformer();

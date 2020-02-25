@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {ChangeEvent} from 'react';
 import {connect} from 'react-redux';
 
 import ExamplesList from './ExamplesList';
@@ -43,19 +43,13 @@ function Sidebar(props: ComponentProps): JSX.Element {
         source
     } = props;
 
-    const textInputRef = useRef<HTMLTextAreaElement>(null);
-
     /**
      * Handle TextArea key press.
+     *
+     * @param event Handle a change to the Code Input.
      */
-    const onKeyPressed = (): void => {
-        const textarea = textInputRef.current;
-
-        if (textarea === null) {
-            return;
-        }
-
-        const sourceCode = textarea.value;
+    const onKeyPressed = (event: ChangeEvent): void => {
+        const sourceCode = (event.target as HTMLTextAreaElement).value;
 
         setSourceCode(sourceCode);
     };
@@ -64,10 +58,10 @@ function Sidebar(props: ComponentProps): JSX.Element {
         <aside className="menu sidebar is-mobile is-fullheight box has-background-white-ter">
             <p className="menu-label is-size-5">Code</p>
             <textarea className="textarea"
-                      onKeyUp={onKeyPressed}
+                      onChange={onKeyPressed}
                       placeholder={exampleCode}
-                      ref={textInputRef}
-                      rows={10} />
+                      rows={10}
+                      value={source} />
             <div className="notification is-danger is-marginless"
                  hidden={errorReason === null || source === ''}>
                 { errorReason }

@@ -168,7 +168,7 @@ export class BinaryOpAST implements AST {
      *
      * @returns The operator.
      */
-    public get operator(): string {
+    public get operator(): BinaryOpeators {
         return this._operator;
     }
 

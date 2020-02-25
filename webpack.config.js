@@ -2,12 +2,10 @@
 /* eslint-disable no-process-env,prefer-named-capture-group */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
-const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const DEFAULT_PORT = 8000;
 
@@ -20,15 +18,14 @@ const PATHS = {
 PATHS.entry = path.join(PATHS.src, 'index.tsx');
 PATHS.template = path.join(PATHS.src, 'index.html');
 
-const outputDir = path.join(__dirname, 'build/');
 const isProd = process.env.NODE_ENV === 'production';
 
 const contentSecurityPolicy = {
     'default-src': '\'none\'',
-    'img-src': ['\'self\''],
+    'img-src': ['\'self\'', 'data: '],
     'script-src': ['\'self\''],
     'style-src': ['\'self\''],
-    'font-src': ['data:']
+    'font-src': ['\'self\'', 'data: ']
 };
 
 const cspPluginOptions = {
@@ -61,14 +58,6 @@ const optimisations = {
         }
     }
 };
-
-if (isProd) {
-    plugins.push(new PurgecssPlugin({
-        paths: glob.sync(`${PATHS.src}/**/*`, {
-            nodir: true
-        })
-    }));
-}
 
 module.exports = {
     entry: PATHS.entry,
@@ -123,7 +112,7 @@ module.exports = {
     },
     devServer: {
         compress: true,
-        contentBase: outputDir,
+        contentBase: PATHS.output,
         port: process.env.PORT || DEFAULT_PORT,
         historyApiFallback: true
     }
