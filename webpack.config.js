@@ -20,15 +20,14 @@ const PATHS = {
 PATHS.entry = path.join(PATHS.src, 'index.tsx');
 PATHS.template = path.join(PATHS.src, 'index.html');
 
-const outputDir = path.join(__dirname, 'build/');
 const isProd = process.env.NODE_ENV === 'production';
 
 const contentSecurityPolicy = {
     'default-src': '\'none\'',
-    'img-src': ['\'self\''],
+    'img-src': ['\'self\'', 'data: '],
     'script-src': ['\'self\''],
     'style-src': ['\'self\''],
-    'font-src': ['data:']
+    'font-src': ['\'self\'', 'data: ']
 };
 
 const cspPluginOptions = {
@@ -63,11 +62,12 @@ const optimisations = {
 };
 
 if (isProd) {
-    plugins.push(new PurgecssPlugin({
-        paths: glob.sync(`${PATHS.src}/**/*`, {
-            nodir: true
-        })
-    }));
+    // plugins.push(new PurgecssPlugin({
+    //     paths: glob.sync(`${PATHS.src}/**/*`, {
+    //         nodir: true,
+    //         whitelist: ['svg-inline--fa', 'fa-download', 'fa-w-16', 'fa-compress-arrows-alt']
+    //     })
+    // }));
 }
 
 module.exports = {
@@ -123,7 +123,7 @@ module.exports = {
     },
     devServer: {
         compress: true,
-        contentBase: outputDir,
+        contentBase: PATHS.output,
         port: process.env.PORT || DEFAULT_PORT,
         historyApiFallback: true
     }

@@ -5,6 +5,9 @@ $navbar-height: 2.6rem;
 
 @import '~bulma/bulma';
 
+/*** Font Awesome ***/
+@import '~@fortawesome/fontawesome-svg-core/styles.css';
+
 @import 'partials';
 
 html, body {
