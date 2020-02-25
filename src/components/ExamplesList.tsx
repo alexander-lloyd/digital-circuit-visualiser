@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {EXAMPLES} from '../assets/examples';
+
 /**
  * Examples List Component.
  *
@@ -11,8 +13,14 @@ export default function ExamplesList(): JSX.Element {
             <div className="control is-expanded">
                 <div className="select is-fullwidth">
                     <select name="country">
-                        <option value="AND Gate">AND Gate</option>
-                        <option value="OR Gate">OR Gate</option>
+                        {
+                        Object.entries(EXAMPLES).map(([key, example]) => (
+                            <option key={key}
+                                    value={key}>
+                                { example.name }
+                            </option>
+                        ))
+                        }
                     </select>
                 </div>
             </div>
