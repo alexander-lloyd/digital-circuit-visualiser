@@ -5,7 +5,8 @@ import {
     BinaryOpAST,
     ConstantAST,
     IdentifierAST,
-    LetAST
+    LetAST,
+    ExpressionAST
 } from './ast';
 
 export type ASTOptimisingTransformerContext = {
@@ -23,10 +24,19 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
      * Visit identifier. Make no change to node.
      *
      * @param ast AST Node.
+     * @param context ASTOptimising Context.
      * @returns Identifier AST.
      */
-    public visitIdentifier(ast: IdentifierAST): AST {
-        return ast;
+    public visitIdentifier(ast: IdentifierAST, context: ASTOptimisingTransformerContext): AST {
+        const {name} = ast;
+        const {identifiers} = context;
+        const newAST = identifiers.get(name);
+
+        if (newAST === undefined) {
+            throw new Error(`ASTOptimisingTransformer.visitIdentifier got unexpected variable '${name}'`);
+        }
+
+        return newAST;
     }
 
     /**
@@ -41,32 +51,27 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
 
     /**
      * Visit application. Make no change to node.
-     *
-     * @param ast AST Node.
-     * @param context Visitor Context.
-     * @returns AST Node.
      */
-    public visitApplication(ast: ApplicationAST, context: ASTOptimisingTransformerContext): AST {
-        const {name} = ast;
-        const {identifiers} = context;
-
-        const expression = identifiers.get(name);
-
-        if (expression === undefined) {
-            throw new Error(`Unknown Identifier '${name}'`);
-        }
-
-        return expression;
+    public visitApplication(): never {
+        throw new Error('[Error] ASTOptimisingTransformer.visitApplication was called unexpectedly.');
     }
 
     /**
      * Visit binary operator. Make no change to node.
      *
      * @param ast AST Node.
+     * @param context AST Visitor Context.
      * @returns AST Node.
      */
-    public visitBinaryOperator(ast: BinaryOpAST): AST {
-        return ast;
+    public visitBinaryOperator(ast: BinaryOpAST, context: ASTOptimisingTransformerContext): AST {
+        const left = ast.left.visit(this, context) as ExpressionAST;
+        const right = ast.right.visit(this, context) as ExpressionAST;
+
+        if (left === ast.left && right === ast.right) {
+            return ast;
+        }
+
+        return new BinaryOpAST(ast.operator, left, right);
     }
 
     /**
