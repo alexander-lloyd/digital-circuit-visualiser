@@ -79,7 +79,7 @@ module.exports = {
     "no-continue": "off",
     "no-extra-parens": "off",
     "no-magic-numbers": ["warn", {
-      "ignore": [0, 1, 2]
+      "ignore": [0, 0.5, 1, 2]
     }],
     "no-plusplus": "off",
     "no-sync": "off",
