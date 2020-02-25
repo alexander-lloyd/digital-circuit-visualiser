@@ -2,12 +2,10 @@
 /* eslint-disable no-process-env,prefer-named-capture-group */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
-const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const DEFAULT_PORT = 8000;
 
@@ -60,15 +58,6 @@ const optimisations = {
         }
     }
 };
-
-if (isProd) {
-    // plugins.push(new PurgecssPlugin({
-    //     paths: glob.sync(`${PATHS.src}/**/*`, {
-    //         nodir: true,
-    //         whitelist: ['svg-inline--fa', 'fa-download', 'fa-w-16', 'fa-compress-arrows-alt']
-    //     })
-    // }));
-}
 
 module.exports = {
     entry: PATHS.entry,
