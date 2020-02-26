@@ -9,6 +9,8 @@ import Sidebar from '../../components/Sidebar';
 import * as actions from './actions';
 import {GlobalState, DispatchFunction} from './types';
 
+import {HELP_TITLE, HelpContentComponent} from '../../assets/help';
+
 import './App.scss';
 
 /**
@@ -49,9 +51,10 @@ function App({showModal, closeModal}: AppProps): JSX.Element {
                 </div>
             </div>
             <Modal closeAction={closeModal}
-                   content="Test Content"
                    show={showModal}
-                   title="Test Title" />
+                   title={HELP_TITLE} >
+                <HelpContentComponent />
+            </Modal>
         </div>
     );
 }

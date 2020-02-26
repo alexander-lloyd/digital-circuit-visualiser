@@ -5,7 +5,7 @@ import React from 'react';
  */
 interface ModalProps {
     closeAction: () => void;
-    content: string;
+    children: JSX.Element;
     show: boolean;
     title: string;
 }
@@ -16,7 +16,7 @@ interface ModalProps {
  * @param props Modal Properties.
  * @returns Modal Component.
  */
-export default function Modal({closeAction, content, show, title}: ModalProps): JSX.Element {
+export default function Modal({closeAction, children, show, title}: ModalProps): JSX.Element {
     return (
         <div className={`modal ${show ? 'is-active' : ''}`}>
             <div className="modal-background" />
@@ -29,7 +29,7 @@ export default function Modal({closeAction, content, show, title}: ModalProps): 
                             type="button" />
                 </header>
                 <section className="modal-card-body">
-                    {content}
+                    {children}
                 </section>
                 <footer className="modal-card-foot">
                     <button className="button"
