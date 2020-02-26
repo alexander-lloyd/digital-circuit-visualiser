@@ -1,7 +1,5 @@
 import React from 'react';
 
-export type Direction = 'left' | 'right';
-
 /**
  * FeatreFlag Props.
  */

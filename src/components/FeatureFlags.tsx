@@ -1,12 +1,9 @@
+/* eslint no-magic-numbers: ["warn", { ignore: [0, 1, 2] }] */
 import React from 'react';
 
 import FeatureFlag from './FeatureFlag';
 
-const featureFlags: [string, string][] = [
-    ['feat1', 'Feature 1'],
-    ['feat2', 'Feature 2'],
-    ['feat3', 'Feature 3']
-];
+import {FEATURES} from '../assets/features';
 
 /**
  * Feature Flags Component.
@@ -18,7 +15,7 @@ export default function FeatureFlags(): JSX.Element {
         <div className="columns">
             <div className="column">
                 {
-                    featureFlags.
+                    FEATURES.
                         filter((_, i) => i % 2 === 0).
                         map(([featureId, feature]) => (
                             <FeatureFlag feature={feature}
@@ -27,7 +24,7 @@ export default function FeatureFlags(): JSX.Element {
             </div>
             <div className="column">
                 {
-                    featureFlags.
+                    FEATURES.
                         filter((_, i) => i % 2 === 1).
                         map(([featureId, feature]) => (
                             <FeatureFlag feature={feature}
