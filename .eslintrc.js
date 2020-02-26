@@ -108,7 +108,7 @@ module.exports = {
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "react/jsx-first-prop-new-line": ["error", "never"],
     "react/jsx-indent-props": ["error", "first"],
-    "react/jsx-max-depth": ["error", { "max": 5 }],
+    "react/jsx-max-depth": ["error", { "max": 6 }],
     "react/jsx-no-bind": ["error", {
       "ignoreDOMComponents": true,
     }],
