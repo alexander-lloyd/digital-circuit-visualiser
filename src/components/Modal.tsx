@@ -19,7 +19,8 @@ interface ModalProps {
 export default function Modal({closeAction, children, show, title}: ModalProps): JSX.Element {
     return (
         <div className={`modal ${show ? 'is-active' : ''}`}>
-            <div className="modal-background" />
+            <div className="modal-background"
+                 onClick={closeAction} />
             <div className="modal-card">
                 <header className="modal-card-head">
                     <p className="modal-card-title">{title}</p>
