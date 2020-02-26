@@ -1,4 +1,6 @@
 import {
+    MODAL_HIDE,
+    MODAL_SHOW,
     RESET_SCALE,
     SET_SOURCE_REQUEST,
     SET_SOURCE_SUCCESS,
@@ -23,7 +25,8 @@ const initialState: GlobalState = {
     scale: INITIAL_SCALE,
     code: INITIAL_CODE,
     ast: null,
-    errorString: null
+    errorString: null,
+    showModal: false
 };
 
 /**
@@ -38,6 +41,18 @@ export function reducer(state = initialState, action: AppActions): GlobalState {
     console.log(`[GLOBAL] ${action.type}`, action);
 
     switch (action.type) {
+    case MODAL_HIDE: {
+        return {
+            ...state,
+            showModal: false
+        };
+    }
+    case MODAL_SHOW: {
+        return {
+            ...state,
+            showModal: true
+        };
+    }
     case SET_SOURCE_REQUEST: {
         const {source} = action;
         if (source === state.code) {
