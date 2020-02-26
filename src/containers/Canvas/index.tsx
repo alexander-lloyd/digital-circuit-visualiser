@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [0]}] */
+/* eslint no-magic-numbers: ["warn", {"ignore": [0, 2]}] */
 import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
@@ -9,7 +9,9 @@ import {GlobalState} from '../App/types';
 import {
     ASTRenderer,
     EntityRendererVisitor,
-    renderResult
+    renderResult,
+    scaleRenderResult,
+    transformRenderResult
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
 
@@ -36,7 +38,7 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
 /**
  * Draw the diagram on the canvas.
  *
- * @param ast: Abstract Syntax Tree.
+ * @param ast Abstract Syntax Tree.
  * @param ctx Canvas Context.
  * @param canvasWidth Canvas width.
  * @param canvasHeight Canvas height.
@@ -59,15 +61,16 @@ function drawDiagram(
 
         const astRenderer = new ASTRenderer();
         const entityTree = astRenderer.visit(ast, null);
-        entityTree.scale(400, 400);
-        entityTree.translate(400, 400);
 
         const entityRenderer = new EntityRendererVisitor();
-        const result = entityRenderer.visit(entityTree, null);
+        let result = entityRenderer.visit(entityTree, null);
+
+        const scalingValue = Math.min(canvasHeight, canvasWidth);
+
+        result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
+        result = transformRenderResult(result, scalingValue / 2, scalingValue / 2);
 
         renderResult(ctx, result);
-
-        console.log(result);
         // RENDER_UNITSQUARE_BOX: true
     });
 }

@@ -11,6 +11,7 @@ export type LabelFunction = (x: number, y: number, ctx: CanvasRenderingContext2D
 export function buildTextLabelFunction(label: string): LabelFunction {
     return (x: number, y: number, ctx: CanvasRenderingContext2D): void => {
         ctx.textAlign = 'center';
+        ctx.font = '30px Arial';
         ctx.fillText(label, x, y);
     };
 }

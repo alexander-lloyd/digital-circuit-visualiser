@@ -1,7 +1,10 @@
 import {
     EntityRendererVisitor,
     EntityRendererVisitorContext,
-    renderResult
+    RenderResults,
+    renderResult,
+    scaleRenderResult,
+    transformRenderResult
 } from './render';
 import {
     ASTRenderer
@@ -11,5 +14,8 @@ export {
     ASTRenderer,
     EntityRendererVisitor,
     EntityRendererVisitorContext,
-    renderResult
+    RenderResults,
+    renderResult,
+    scaleRenderResult,
+    transformRenderResult
 };
