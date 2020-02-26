@@ -1,4 +1,6 @@
 import {
+    MODAL_HIDE,
+    MODAL_SHOW,
     SET_SOURCE_REQUEST,
     SET_SOURCE_SUCCESS,
     SET_SOURCE_FAILURE,
@@ -9,6 +11,20 @@ import {
 import {AST} from 'lib/parser/ast';
 
 export type DispatchFunction = (action: AppActions) => void;
+
+/**
+ * Hide the modal error.
+ */
+export interface ModalShowAction {
+    type: typeof MODAL_SHOW;
+}
+
+/**
+ * Show the modal error.
+ */
+export interface ModalHideAction {
+    type: typeof MODAL_HIDE;
+}
 
 /**
  * Set the source code of the canvas.
@@ -59,6 +75,8 @@ export interface ZoomOutAction {
  * Canvas Actions.
  */
 export type AppActions =
+    | ModalHideAction
+    | ModalShowAction
     | SetSourceCodeRequestAction
     | SetSourceCodeSuccessAction
     | SetSourceCodeFailureAction
@@ -79,4 +97,5 @@ export interface GlobalState {
     ast: AST | null;
     // No error string on successful Action.
     errorString: string | null;
+    showModal: boolean;
 }

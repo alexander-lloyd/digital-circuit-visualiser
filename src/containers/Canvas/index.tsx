@@ -71,7 +71,6 @@ function drawDiagram(
         result = transformRenderResult(result, scalingValue / 2, scalingValue / 2);
 
         renderResult(ctx, result);
-        // RENDER_UNITSQUARE_BOX: true
     });
 }
 

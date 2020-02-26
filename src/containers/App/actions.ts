@@ -1,4 +1,6 @@
 import {
+    MODAL_HIDE,
+    MODAL_SHOW,
     SET_SOURCE_REQUEST,
     SET_SOURCE_SUCCESS,
     SET_SOURCE_FAILURE,
@@ -8,6 +10,8 @@ import {
 } from './constants';
 import {
     DispatchFunction,
+    ModalHideAction,
+    ModalShowAction,
     SetSourceCodeRequestAction,
     SetSourceCodeSuccessAction,
     SetSourceCodeFailureAction,
@@ -16,6 +20,28 @@ import {
     ZoomOutAction
 } from './types';
 import {compile, SyntaxError, AST} from '../../lib/parser/index';
+
+/**
+ * Create a ModalHideAction.
+ *
+ * @returns ModalHideAction.
+ */
+export function modalHideAction(): ModalHideAction {
+    return {
+        type: MODAL_HIDE
+    };
+}
+
+/**
+ * Create a ModalShowAction.
+ *
+ * @returns ModalShowAction.
+ */
+export function modalShowAction(): ModalShowAction {
+    return {
+        type: MODAL_SHOW
+    };
+}
 
 /**
  * Set the source code. Fires off Actions.
