@@ -1,5 +1,5 @@
 /* eslint no-magic-numbers: ["warn", {"ignore": [0, 2]}] */
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState, MouseEvent} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
 
@@ -43,13 +43,15 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param canvasWidth Canvas width.
  * @param canvasHeight Canvas height.
  * @param scale The scaling factor.
+ * @param offsetPosition Canvas Offset.
  */
 function drawDiagram(
     ast: AST,
     ctx: CanvasRenderingContext2D,
     canvasWidth: number,
     canvasHeight: number,
-    scale: number
+    scale: number,
+    offsetPosition: [number, number]
 ): void {
     requestAnimationFrame(() => {
         // Clear canvas
@@ -57,8 +59,9 @@ function drawDiagram(
         // Reset the position and scaling.
         ctx.setTransform();
         ctx.save();
+        const [dragPositionX, dragPositionY] = offsetPosition;
+        ctx.translate(dragPositionX, dragPositionY);
         ctx.scale(scale, scale);
-
         const astRenderer = new ASTRenderer();
         const entityTree = astRenderer.visit(ast, null);
 
@@ -129,6 +132,9 @@ function Canvas(props: CanvasProps): JSX.Element {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const downloadRef = useRef<HTMLAnchorElement>(null);
 
+    const [dragStartPosition, setDragging] = useState<[number, number] | null>(null);
+    const [canvasPosition, setCanvasPosition] = useState<[number, number]>([0, 0]);
+
     const [resizeListener, sizes] = useResizeAware();
 
     useEffect((): void => {
@@ -143,8 +149,8 @@ function Canvas(props: CanvasProps): JSX.Element {
             return;
         }
 
-        drawDiagram(ast, ctx, canvas.width, canvas.height, scale);
-    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height]);
+        drawDiagram(ast, ctx, canvas.width, canvas.height, scale, canvasPosition);
+    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height, canvasPosition]);
 
     /** Wrapper around download canvas function */
     const downloadCanvas = (): void => {
@@ -154,6 +160,39 @@ function Canvas(props: CanvasProps): JSX.Element {
 
         downloadCanvasImage(canvasRef.current, downloadRef.current);
     };
+
+    /* Handle Canvas Drag Operations */
+
+    /**
+     * Canvas Mouse Down. Set Dragging.
+     *
+     * @param event MouseEvent.
+     */
+    function canvasOnMouseDown(event: MouseEvent): void {
+        const {offsetX, offsetY} = event.nativeEvent;
+        const [translateX, translateY] = canvasPosition;
+        setDragging([offsetX - translateX, offsetY - translateY]);
+    }
+
+    /**
+     * Mouse has moved. If dragging update the canvas position.
+     *
+     * @param event Mouse Event
+     */
+    function canvasOnMouseMove(event: MouseEvent): void {
+        if (dragStartPosition !== null) {
+            const [startX, startY] = dragStartPosition;
+            const {offsetX, offsetY} = event.nativeEvent;
+            setCanvasPosition([offsetX - startX, offsetY - startY]);
+        }
+    }
+
+    /**
+     * Mouse lifted on canvas. Turn off draggable.
+     */
+    function canvasOnMouseUp(): void {
+        setDragging(null);
+    }
 
     return (
         <div className="fullheight">
@@ -166,7 +205,10 @@ function Canvas(props: CanvasProps): JSX.Element {
                         height: 'calc(100% - (1rem + 1.25rem))'}
                 }>
                 {resizeListener}
-                <canvas onWheel={
+                <canvas onMouseDown={canvasOnMouseDown}
+                        onMouseMove={canvasOnMouseMove}
+                        onMouseUp={canvasOnMouseUp}
+                        onWheel={
                     ({deltaY}: React.WheelEvent): void => {
                         const delta = Math.sign(deltaY);
                         if (delta > 0) {
