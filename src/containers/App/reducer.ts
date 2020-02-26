@@ -1,7 +1,9 @@
+/* eslint complexity: ["error", 12] */
 import {
     MODAL_HIDE,
     MODAL_SHOW,
     RESET_SCALE,
+    SET_FEATURE_FLAG,
     SET_SOURCE_REQUEST,
     SET_SOURCE_SUCCESS,
     SET_SOURCE_FAILURE,
@@ -26,7 +28,8 @@ const initialState: GlobalState = {
     code: INITIAL_CODE,
     ast: null,
     errorString: null,
-    showModal: false
+    showModal: false,
+    featureFlags: {}
 };
 
 /**
@@ -51,6 +54,16 @@ export function reducer(state = initialState, action: AppActions): GlobalState {
         return {
             ...state,
             showModal: true
+        };
+    }
+    case SET_FEATURE_FLAG: {
+        const {name, value} = action;
+        return {
+            ...state,
+            featureFlags: {
+                ...state.featureFlags,
+                [name]: value
+            }
         };
     }
     case SET_SOURCE_REQUEST: {

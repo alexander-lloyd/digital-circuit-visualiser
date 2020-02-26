@@ -1,6 +1,7 @@
 import {
     MODAL_HIDE,
     MODAL_SHOW,
+    SET_FEATURE_FLAG,
     SET_SOURCE_REQUEST,
     SET_SOURCE_SUCCESS,
     SET_SOURCE_FAILURE,
@@ -24,6 +25,15 @@ export interface ModalShowAction {
  */
 export interface ModalHideAction {
     type: typeof MODAL_HIDE;
+}
+
+/**
+ * Set Feature Flag Action.
+ */
+export interface SetFeatureFlagAction {
+    type: typeof SET_FEATURE_FLAG;
+    name: string;
+    value: boolean;
 }
 
 /**
@@ -77,6 +87,7 @@ export interface ZoomOutAction {
 export type AppActions =
     | ModalHideAction
     | ModalShowAction
+    | SetFeatureFlagAction
     | SetSourceCodeRequestAction
     | SetSourceCodeSuccessAction
     | SetSourceCodeFailureAction
@@ -98,4 +109,5 @@ export interface GlobalState {
     // No error string on successful Action.
     errorString: string | null;
     showModal: boolean;
+    featureFlags: { [flag: string]: boolean};
 }

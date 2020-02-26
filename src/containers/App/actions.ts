@@ -1,6 +1,7 @@
 import {
     MODAL_HIDE,
     MODAL_SHOW,
+    SET_FEATURE_FLAG,
     SET_SOURCE_REQUEST,
     SET_SOURCE_SUCCESS,
     SET_SOURCE_FAILURE,
@@ -12,6 +13,7 @@ import {
     DispatchFunction,
     ModalHideAction,
     ModalShowAction,
+    SetFeatureFlagAction,
     SetSourceCodeRequestAction,
     SetSourceCodeSuccessAction,
     SetSourceCodeFailureAction,
@@ -40,6 +42,21 @@ export function modalHideAction(): ModalHideAction {
 export function modalShowAction(): ModalShowAction {
     return {
         type: MODAL_SHOW
+    };
+}
+
+/**
+ * Set a feaure flag.
+ *
+ * @param name Feature Name.
+ * @param value Set feature value.
+ * @returns SetFeatureFlagAction.
+ */
+export function setFeatureFlag(name: string, value: boolean): SetFeatureFlagAction {
+    return {
+        type: SET_FEATURE_FLAG,
+        name,
+        value
     };
 }
 
