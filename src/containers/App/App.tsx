@@ -37,7 +37,7 @@ interface AppProps extends AppState, AppDispatchProps {}
  *
  * @returns App
  */
-function App({showModal, closeModal}: AppProps): JSX.Element {
+export function App({showModal, closeModal}: AppProps): JSX.Element {
     return (
         <div className="fullscreen">
             <Header />
