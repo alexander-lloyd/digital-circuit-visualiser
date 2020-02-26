@@ -169,9 +169,7 @@ function Canvas(props: CanvasProps): JSX.Element {
      * @param event MouseEvent.
      */
     function canvasOnMouseDown(event: MouseEvent): void {
-        console.log('Turn On Dragging');
         const {offsetX, offsetY} = event.nativeEvent;
-        console.log('Start Drag Position:', [offsetX, offsetY]);
         const [translateX, translateY] = canvasPosition;
         setDragging([offsetX - translateX, offsetY - translateY]);
     }
@@ -185,7 +183,6 @@ function Canvas(props: CanvasProps): JSX.Element {
         if (dragStartPosition !== null) {
             const [startX, startY] = dragStartPosition;
             const {offsetX, offsetY} = event.nativeEvent;
-            console.log(offsetX - startX, offsetY - startY);
             setCanvasPosition([offsetX - startX, offsetY - startY]);
         }
     }
@@ -194,7 +191,6 @@ function Canvas(props: CanvasProps): JSX.Element {
      * Mouse lifted on canvas. Turn off draggable.
      */
     function canvasOnMouseUp(): void {
-        console.log('Turn Off Dragging');
         setDragging(null);
     }
 
