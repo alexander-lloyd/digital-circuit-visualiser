@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["warn", {"ignore": [0, 2]}] */
 import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
@@ -7,9 +8,12 @@ import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
     ASTRenderer,
-    EntityRendererVisitor
-} from '../../lib/renderer2';
-import {compile, AST} from '../../lib/parser/index';
+    EntityRendererVisitor,
+    renderResult,
+    scaleRenderResult,
+    transformRenderResult
+} from '../../lib/render/index';
+import {AST} from '../../lib/parser/index';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -34,6 +38,7 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
 /**
  * Draw the diagram on the canvas.
  *
+ * @param ast Abstract Syntax Tree.
  * @param ctx Canvas Context.
  * @param canvasWidth Canvas width.
  * @param canvasHeight Canvas height.
@@ -55,19 +60,17 @@ function drawDiagram(
         ctx.scale(scale, scale);
 
         const astRenderer = new ASTRenderer();
-        const renderTree = astRenderer.visit(ast, null);
-        renderTree.scale(400, 400);
-        renderTree.translate(50, 50);
-        const entityRenderer = new EntityRendererVisitor();
-        const rendererContext = {
-            ctx,
-            canvasCtx: {
-                canvasHeight,
-                canvasWidth
-            }
-        };
+        const entityTree = astRenderer.visit(ast, null);
 
-        entityRenderer.visit(renderTree, rendererContext);
+        const entityRenderer = new EntityRendererVisitor();
+        let result = entityRenderer.visit(entityTree, null);
+
+        const scalingValue = Math.min(canvasHeight, canvasWidth);
+
+        result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
+        result = transformRenderResult(result, scalingValue / 2, scalingValue / 2);
+
+        renderResult(ctx, result);
         // RENDER_UNITSQUARE_BOX: true
     });
 }
