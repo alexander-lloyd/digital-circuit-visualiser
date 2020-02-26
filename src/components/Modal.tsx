@@ -5,6 +5,7 @@ import React from 'react';
  */
 interface ModalProps {
     content: string;
+    show: boolean;
     title: string;
 }
 
@@ -14,9 +15,9 @@ interface ModalProps {
  * @param props Modal Properties.
  * @returns Modal Component.
  */
-export default function Modal({content, title}: ModalProps): JSX.Element {
+export default function Modal({content, show, title}: ModalProps): JSX.Element {
     return (
-        <div className="modal">
+        <div className={`modal ${show ? 'is-active' : ''}`}>
             <div className="modal-background" />
             <div className="modal-card">
                 <header className="modal-card-head">
