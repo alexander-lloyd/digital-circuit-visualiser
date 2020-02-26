@@ -1,7 +1,15 @@
 import {
+    EntityRendererVisitor,
+    EntityRendererVisitorContext,
+    renderResult
+} from './render';
+import {
     ASTRenderer
 } from './visitor';
 
 export {
-    ASTRenderer
+    ASTRenderer,
+    EntityRendererVisitor,
+    EntityRendererVisitorContext,
+    renderResult
 };

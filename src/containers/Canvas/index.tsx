@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["warn", {"ignore": [0]}] */
 import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
@@ -7,10 +8,9 @@ import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
     ASTRenderer,
-    scaleRenderResult,
-    transformRenderResult,
-    renderRenderResult
-} from '../../lib/renderer2';
+    EntityRendererVisitor,
+    renderResult
+} from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
 
 /**
@@ -58,23 +58,16 @@ function drawDiagram(
         ctx.scale(scale, scale);
 
         const astRenderer = new ASTRenderer();
-        let result = astRenderer.visit(ast, null);
-        // const entityRenderer = new EntityRendererVisitor();
-        // const rendererContext = {
-        //     ctx,
-        //     canvasCtx: {
-        //         canvasHeight,
-        //         canvasWidth
-        //     },
-        //     result: new EntityRendererResult()
-        // };
+        const entityTree = astRenderer.visit(ast, null);
+        entityTree.scale(400, 400);
+        entityTree.translate(400, 400);
 
-        // entityRenderer.visit(renderTree, rendererContext);
-        // const {result} = rendererContext;
-        result = scaleRenderResult(result,400, 400);
-        result = transformRenderResult(result, 100, 100);
+        const entityRenderer = new EntityRendererVisitor();
+        const result = entityRenderer.visit(entityTree, null);
+
+        renderResult(ctx, result);
+
         console.log(result);
-        renderRenderResult(result, ctx);
         // RENDER_UNITSQUARE_BOX: true
     });
 }
