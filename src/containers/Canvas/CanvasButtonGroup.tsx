@@ -1,12 +1,17 @@
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCompressArrowsAlt, faDownload} from '@fortawesome/free-solid-svg-icons';
+import {
+    faCompressArrowsAlt,
+    faDownload,
+    faWindowRestore
+} from '@fortawesome/free-solid-svg-icons';
 
 /**
  * CanvasButtonGroup Properties
  */
 interface CanvasButtonGroupProps {
     isDownloadLoading: boolean;
+    onResetPerspective: () => void;
     onResetScale: () => void;
     onDownload: () => void;
 }
@@ -19,18 +24,28 @@ interface CanvasButtonGroupProps {
  */
 export default function CanvasButtonGroup(props: CanvasButtonGroupProps): JSX.Element {
     const {
-        isDownloadLoading
+        isDownloadLoading,
+        onResetPerspective,
+        onResetScale
     } = props;
 
     return (
         <div className="buttons box">
             <button className="button is-outlined is-primary"
-                    onClick={(): void => props.onResetScale()}
+                    onClick={onResetScale}
                     type="button">
                 <span className="icon">
                     <FontAwesomeIcon icon={faCompressArrowsAlt} />
                 </span>
                 <span>Reset Scale</span>
+            </button>
+            <button className="button is-outlined is-primary"
+                    onClick={onResetPerspective}
+                    type="button">
+                <span className="icon">
+                    <FontAwesomeIcon icon={faWindowRestore} />
+                </span>
+                <span>Reset Perspective</span>
             </button>
             <button className={`button is-outlined is-primary ${isDownloadLoading ? 'is-loading' : ''}`}
                     onClick={(): void => props.onDownload()}

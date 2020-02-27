@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [0, 2]}] */
+/* eslint no-magic-numbers: ["warn", {"ignore": [0, 1, 2]}] */
 import React, {useEffect, useRef, useState, MouseEvent} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
@@ -44,6 +44,7 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param canvasHeight Canvas height.
  * @param scale The scaling factor.
  * @param offsetPosition Canvas Offset.
+ * @param featureFlags Feature Flags. E.g. Should the squares around functions be rendered?
  */
 function drawDiagram(
     ast: AST,
@@ -67,10 +68,10 @@ function drawDiagram(
         const entityTree = astRenderer.visit(ast, null);
 
         const entityRenderer = new EntityRendererVisitor();
-        const entityrendererConfig = {
+        const entityRendererConfig = {
             featureFlags
         };
-        let result = entityRenderer.visit(entityTree, entityrendererConfig);
+        let result = entityRenderer.visit(entityTree, entityRendererConfig);
 
         const scalingValue = Math.min(canvasHeight, canvasWidth);
 
@@ -200,10 +201,20 @@ function Canvas(props: CanvasProps): JSX.Element {
         setDragging(null);
     }
 
+    /**
+     * Reset the canvas perspective.
+     */
+    function onResetPerspective(): void {
+        if (canvasPosition[0] !== 0 || canvasPosition[1] !== 0) {
+            setCanvasPosition([0, 0]);
+        }
+    }
+
     return (
         <div className="fullheight">
             <CanvasButtonGroup isDownloadLoading={downloadLoading}
                                onDownload={downloadCanvas}
+                               onResetPerspective={onResetPerspective}
                                onResetScale={resetZoom} />
             <div className=""
                  style={
