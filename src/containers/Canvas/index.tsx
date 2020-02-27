@@ -44,6 +44,7 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param canvasHeight Canvas height.
  * @param scale The scaling factor.
  * @param offsetPosition Canvas Offset.
+ * @param featureFlags Feature Flags. E.g. Should the squares around functions be rendered?
  */
 function drawDiagram(
     ast: AST,
@@ -67,10 +68,10 @@ function drawDiagram(
         const entityTree = astRenderer.visit(ast, null);
 
         const entityRenderer = new EntityRendererVisitor();
-        const entityrendererConfig = {
+        const entityRendererConfig = {
             featureFlags
         };
-        let result = entityRenderer.visit(entityTree, entityrendererConfig);
+        let result = entityRenderer.visit(entityTree, entityRendererConfig);
 
         const scalingValue = Math.min(canvasHeight, canvasWidth);
 
