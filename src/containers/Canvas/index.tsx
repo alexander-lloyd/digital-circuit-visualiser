@@ -205,6 +205,7 @@ function Canvas(props: CanvasProps): JSX.Element {
         <div className="fullheight">
             <CanvasButtonGroup isDownloadLoading={downloadLoading}
                                onDownload={downloadCanvas}
+                               onResetPerspective={() => {}}
                                onResetScale={resetZoom} />
             <div className=""
                  style={
