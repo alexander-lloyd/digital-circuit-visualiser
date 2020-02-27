@@ -117,6 +117,14 @@ const images: ImageMap = {
     OR: {
         name: 'OR Gate',
         image: OR_GATE
+    },
+    JOIN: {
+        name: 'JOIN',
+        image: ''
+    },
+    SPLIT: {
+        name: 'SPLIT',
+        image: ''
     }
 };
 
