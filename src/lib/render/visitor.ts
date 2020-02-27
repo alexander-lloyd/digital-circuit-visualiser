@@ -7,7 +7,8 @@ import {
 import {
     Entity,
     FunctionEntity,
-    GroupedEntity
+    GroupedEntity,
+    Wire
 } from './entities';
 import {
     ASTVisitor,
@@ -33,14 +34,23 @@ export class ASTRenderer extends ASTVisitor<null, Entity> {
         let label: LabelFunction;
         const {name} = ast;
         const imageMetaData = images[name];
+        const wires: Wire[] = [];
 
         if (imageMetaData === undefined) {
             label = buildTextLabelFunction(name);
         } else {
+            const {height, width, inputs, outputs} = imageMetaData;
             label = buildTextImageFunction(imageMetaData);
+            wires.push(
+                // TODO: Remove hard coded Origin.
+                ...inputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]]),
+                ...outputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]])
+            );
         }
 
-        return new FunctionEntity(0, 0, 1, 1, label);
+        console.log(wires);
+
+        return new FunctionEntity(0, 0, 1, 1, label, wires);
     }
 
     /**

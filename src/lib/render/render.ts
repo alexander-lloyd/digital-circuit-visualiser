@@ -14,6 +14,23 @@ type LineEntry = [Point, Point];
 type BoxEntry = [Point, number, number];
 type LabelEntry = [LabelFunction, Point];
 
+const DEFAULT_CROSS_SIZE = 5;
+
+/**
+ * Used in Debugging.
+ *
+ * @param point The position to draw the cross.
+ * @param size The size of the cross.
+ * @returns Line entries to draw the x.
+ */
+function drawCross([x, y]: Point, size = DEFAULT_CROSS_SIZE): LineEntry[] {
+    const halfSize = size / 2;
+    return [
+        [[x - halfSize, y - halfSize], [x + halfSize, y + halfSize]],
+        [[x - halfSize, y + halfSize], [x + halfSize, y - halfSize]]
+    ];
+}
+
 /**
  * Canvas Context.
  */
@@ -50,11 +67,11 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
      * @returns All the individual canvas elements to draw.
      */
     visitFunction(entity: FunctionEntity, context: EntityRendererVisitorContext): RenderResults {
-        const {x, y, width, height, label} = entity;
+        const {x, y, width, height, label, wires} = entity;
         const {featureFlags} = context;
 
         const functionRenderResult: RenderResults = {
-            lines: [],
+            lines: [...wires],
             boxes: [],
             labels: [[label, [x, y]]]
         };
@@ -124,7 +141,7 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
     });
 
     return {
-        lines,
+        lines: newLines,
         boxes: boxes.map(([[x, y], width, height]) => {
             const newWidth = width * scaleX;
             const newHeight = height * scaleY;
@@ -168,7 +185,7 @@ export function transformRenderResult(
     const newLabels = labels.map(([label, [x, y]]): LabelEntry => [label, [x + translateX, y + translateY]]);
 
     return {
-        lines,
+        lines: newLines,
         boxes: newBoxes,
         labels: newLabels
     };
@@ -183,13 +200,6 @@ export function transformRenderResult(
  */
 export function renderResult(ctx: CanvasRenderingContext2D, renderResults: RenderResults): void {
     const {lines, boxes, labels} = renderResults;
-    // Lines
-    lines.forEach(([[x1, y1], [x2, y2]]): void => {
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-    });
 
     // Boxes
     boxes.forEach(([[x, y], width, height]) => {
@@ -202,5 +212,13 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     labels.forEach(([label, [x, y]]) => {
         // TODO: Font / Image sizing.
         label(x, y, ctx);
+    });
+
+    // Lines
+    [...lines, ...drawCross([100, 100], 10)].forEach(([[x1, y1], [x2, y2]]): void => {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
     });
 }
