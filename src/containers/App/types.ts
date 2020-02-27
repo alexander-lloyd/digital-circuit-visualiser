@@ -9,7 +9,8 @@ import {
     ZOOM_IN,
     ZOOM_OUT
 } from './constants';
-import {AST} from 'lib/parser/ast';
+import {AST} from '../../lib/parser/ast';
+import {FEATURES_KEYS} from '../../assets/features';
 
 export type DispatchFunction = (action: AppActions) => void;
 
@@ -32,7 +33,7 @@ export interface ModalHideAction {
  */
 export interface SetFeatureFlagAction {
     type: typeof SET_FEATURE_FLAG;
-    name: string;
+    name: FEATURES_KEYS;
     value: boolean;
 }
 

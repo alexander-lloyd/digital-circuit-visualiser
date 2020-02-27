@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import FeatureFlag from './FeatureFlag';
 
-import {FEATURES} from '../assets/features';
+import {FEATURES, FEATURES_KEYS} from '../assets/features';
 import * as actions from '../containers/App/actions';
 import {GlobalState, DispatchFunction} from '../containers/App/types';
 
@@ -19,8 +19,8 @@ interface FeatureFlagsState {
  * Feature Flag Actions.
  */
 interface FeatureFlagsActions {
-    setFlag: (name: string) => (() => void);
-    unsetFlag: (name: string) => (() => void);
+    setFlag: (name: FEATURES_KEYS) => (() => void);
+    unsetFlag: (name: FEATURES_KEYS) => (() => void);
 }
 
 /**
@@ -87,8 +87,8 @@ function mapStateToProps(state: GlobalState): FeatureFlagsState {
  */
 function mapDispatchToProps(dispatch: DispatchFunction): FeatureFlagsActions {
     return {
-        setFlag: (feature: string): (() => void) => (): void => dispatch(actions.setFeatureFlag(feature, true)),
-        unsetFlag: (feature: string): (() => void) => (): void => dispatch(actions.setFeatureFlag(feature, false))
+        setFlag: (feature: FEATURES_KEYS): (() => void) => (): void => dispatch(actions.setFeatureFlag(feature, true)),
+        unsetFlag: (feature: FEATURES_KEYS): (() => void) => (): void => dispatch(actions.setFeatureFlag(feature, false))
     };
 }
 

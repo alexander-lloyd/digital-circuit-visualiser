@@ -1,4 +1,11 @@
-// (Id, Name)
-type Feature = [string, string];
+// Features:
+export const RENDER_UNIT_SQUARE = 'RENDER_UNIT_SQUARE';
 
-export const FEATURES = [['RENDER_UNIT_SQUARE', 'Render Unit Squares']];
+export type FEATURES_KEYS = typeof RENDER_UNIT_SQUARE;
+
+// (Id, Name)
+
+type Feature = [FEATURES_KEYS, string];
+
+export type Features = Feature[];
+export const FEATURES: Features = [['RENDER_UNIT_SQUARE', 'Render Unit Squares']];

@@ -22,6 +22,7 @@ import {
     ZoomOutAction
 } from './types';
 import {compile, SyntaxError, AST} from '../../lib/parser/index';
+import {FEATURES_KEYS} from '../../assets/features';
 
 /**
  * Create a ModalHideAction.
@@ -52,7 +53,7 @@ export function modalShowAction(): ModalShowAction {
  * @param value Set feature value.
  * @returns SetFeatureFlagAction.
  */
-export function setFeatureFlag(name: string, value: boolean): SetFeatureFlagAction {
+export function setFeatureFlag(name: FEATURES_KEYS, value: boolean): SetFeatureFlagAction {
     return {
         type: SET_FEATURE_FLAG,
         name,
