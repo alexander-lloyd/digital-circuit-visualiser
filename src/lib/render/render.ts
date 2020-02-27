@@ -7,6 +7,7 @@ import {
 import {
     LabelFunction
 } from './label';
+import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
 type Point = [number, number];
 type LineEntry = [Point, Point];
@@ -25,8 +26,7 @@ export interface CanvasContext {
  * EntityRendererVisitor Context
  */
 export interface EntityRendererVisitorContext {
-    ctx: CanvasRenderingContext2D;
-    canvasCtx: CanvasContext;
+    featureFlags: {[featureId: string]: boolean};
 }
 
 export type RenderResults = {
@@ -41,30 +41,39 @@ export type RenderResults = {
 /**
  * Renderer the entities to the Canvas.
  */
-export class EntityRendererVisitor extends EntityVisitor<null, RenderResults> {
+export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorContext, RenderResults> {
     /**
      * Renderer a Function to the Canvas.
      *
      * @param entity Function Entity.
+     * @param context Visitor Context.
      * @returns All the individual canvas elements to draw.
      */
-    visitFunction(entity: FunctionEntity): RenderResults {
+    visitFunction(entity: FunctionEntity, context: EntityRendererVisitorContext): RenderResults {
         const {x, y, width, height, label} = entity;
+        const {featureFlags} = context;
 
-        return {
+        const functionRenderResult: RenderResults = {
             lines: [],
-            boxes: [[[x, y], width, height]],
+            boxes: [],
             labels: [[label, [x, y]]]
         };
+
+        if (featureFlags[RENDER_UNIT_SQUARE] || false) {
+            functionRenderResult.boxes.push([[x, y], width, height]);
+        }
+
+        return functionRenderResult;
     }
 
     /**
      * Renderer a Group of Entities.
      *
      * @param entity Grouped Entity.
+     * @param context Visitor Context.
      * @returns All the individual canvas elements to draw.
      */
-    visitGrouped(entity: GroupedEntity): RenderResults {
+    visitGrouped(entity: GroupedEntity, context: EntityRendererVisitorContext): RenderResults {
         const {children} = entity;
         const [left, right] = children;
 
@@ -72,12 +81,12 @@ export class EntityRendererVisitor extends EntityVisitor<null, RenderResults> {
             lines: llines,
             boxes: lboxes,
             labels: llabel
-        } = left.visit(this, null);
+        } = left.visit(this, context);
         const {
             lines: rlines,
             boxes: rboxes,
             labels: rlabels
-        } = right.visit(this, null);
+        } = right.visit(this, context);
 
         return {
             lines: [...llines, ...rlines],

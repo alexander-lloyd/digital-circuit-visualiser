@@ -7,6 +7,9 @@ export const ZOOM_OUT = 'ZOOM_OUT';
 export const RESET_SCALE = 'RESET_SCALE';
 export const DOWNLOAD_SUCCESS = 'DOWNLOAD_SUCCESS';
 
+// Feature Action
+export const SET_FEATURE_FLAG = 'SET_FEATURE_FLAG';
+
 // Modal Actions
 export const MODAL_SHOW = 'MODAL_SHOW';
 export const MODAL_HIDE = 'MODAL_HIDE';

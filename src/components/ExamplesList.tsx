@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["warn", {"ignore": [1]}] */
 import React, {useRef} from 'react';
 import {connect} from 'react-redux';
 

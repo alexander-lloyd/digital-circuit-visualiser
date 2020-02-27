@@ -69,7 +69,7 @@ module.exports = {
     "lines-around-comment": "off",
     "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
     "max-classes-per-file": ["warn", 20],
-    "max-len": ["warn", 120],
+    "max-len": ["warn", 130],
     "max-lines": ["warn", 1000],
     "max-lines-per-function": ["error", 300],
     "max-params": ["error", 8],
@@ -137,7 +137,7 @@ module.exports = {
       }
     },
     {
-      "files": ["src/**/*.spec.ts"],
+      "files": ["src/**/*.spec.ts[x]"],
       "rules": {
         "no-magic-numbers": "off"
       }
