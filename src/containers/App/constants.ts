@@ -13,3 +13,5 @@ export const SET_FEATURE_FLAG = 'SET_FEATURE_FLAG';
 // Modal Actions
 export const MODAL_SHOW = 'MODAL_SHOW';
 export const MODAL_HIDE = 'MODAL_HIDE';
+
+export const INITIAL_CODE = 'let x = AND in AND tensor AND;';
