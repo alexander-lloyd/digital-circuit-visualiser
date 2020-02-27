@@ -75,13 +75,6 @@ export class ASTRenderer extends ASTVisitor<null, Entity> {
     }
 
     /**
-     * Visit application. Make no change to node.
-     */
-    public visitApplication(): never {
-        throw new Error('ASTRenderer.visitApplication is not implemened');
-    }
-
-    /**
      * Visit identifier.
      */
     public visitIdentifier(): never {
