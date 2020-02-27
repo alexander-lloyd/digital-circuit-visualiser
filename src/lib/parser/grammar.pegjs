@@ -6,7 +6,7 @@ statement
 expression
   = letdeclaration
   / left:term _ operator:tensor _ right:expression {
-    return new AST.BinaryOpAST(operator, left, right);
+    return new AST.BinaryOpAST('tensor', left, right);
   } 
   / term
 
@@ -17,7 +17,7 @@ letdeclaration
 
 term
   = left:factor _ operator:compose _ right:term {
-    return new AST.BinaryOpAST(operator, left, right);
+    return new AST.BinaryOpAST('compose', left, right);
   } / factor
 
 factor
@@ -49,8 +49,8 @@ rightparam = ")"
 /* Reserved Words */
 let = "let"
 in = "in"
-tensor = "tensor"
-compose = "compose"
+tensor = "*"
+compose = "."
 
 _ "whitespace"
   = [ \t\n\r]*
