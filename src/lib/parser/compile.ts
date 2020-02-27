@@ -1,7 +1,6 @@
 import {
     AST,
     ASTVisitor,
-    ApplicationAST,
     BinaryOpAST,
     ConstantAST,
     IdentifierAST,
@@ -47,13 +46,6 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
      */
     public visitConstant(ast: ConstantAST): AST {
         return ast;
-    }
-
-    /**
-     * Visit application. Make no change to node.
-     */
-    public visitApplication(): never {
-        throw new Error('[Error] ASTOptimisingTransformer.visitApplication was called unexpectedly.');
     }
 
     /**

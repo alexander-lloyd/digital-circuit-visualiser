@@ -21,18 +21,11 @@ term
   } / factor
 
 factor
-  = application /
-    constant /
+  = constant /
     identifier /
     leftparam _ expression:expression _ rightparam {
       return expression;
     }
-
-application
-  = identifier:identifier _ leftparam _ rightparam {
-    // TODO: Parameter list.
-    return new AST.ApplicationAST(identifier, []);
-  }
 
 constant
   = head:[A-Z] tail:[A-Z]* {

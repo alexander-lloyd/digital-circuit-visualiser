@@ -88,54 +88,6 @@ export class ConstantAST implements AST {
     }
 }
 
-/**
- * Function Application AST.
- */
-export class ApplicationAST implements AST {
-    public readonly type = 'application';
-    private _name: string;
-    private _parameters: ExpressionAST[];
-
-    /**
-     * Constructor.
-     *
-     * @param name Function name.
-     * @param parameters Parameters list.
-     */
-    public constructor(name: string, parameters: ExpressionAST[]) {
-        this._name = name;
-        this._parameters = parameters;
-    }
-
-    /**
-     * Get the name of the identifier being applied.
-     *
-     * @returns The name of the identifier.
-     */
-    public get name(): string {
-        return this._name;
-    }
-
-    /**
-     * Get the list of parameters
-     *
-     * @returns The list of parameters.
-     */
-    public get parameters(): ExpressionAST[] {
-        return this._parameters;
-    }
-
-    /**
-     * Visit the application in the AST Visitor.
-     *
-     * @param visitor AST Visitor.
-     * @param context ASTVisitor context.
-     * @returns Return value of visitApplicationAST.
-     */
-    public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
-        return visitor.visitApplication(this, context);
-    }
-}
 
 export type BinaryOpeators = 'tensor' | 'compose';
 
@@ -202,7 +154,7 @@ export class BinaryOpAST implements AST {
     }
 }
 
-export type ExpressionAST = ApplicationAST | BinaryOpAST | ConstantAST | IdentifierAST;
+export type ExpressionAST = BinaryOpAST | ConstantAST | IdentifierAST;
 
 /**
  * Let AST Node.
@@ -286,15 +238,6 @@ export function isConstant(ast: AST): ast is ConstantAST {
     return ast.type === 'constant';
 }
 
-/**
- * Is this AST node an Application node?
- *
- * @param ast AST Node.
- * @returns True if AST node is an application node.
- */
-export function isApplication(ast: AST): ast is ApplicationAST {
-    return ast.type === 'application';
-}
 
 /**
  * Is this AST node a Binary node?
@@ -313,7 +256,7 @@ export function isBinaryOp(ast: AST): ast is BinaryOpAST {
  * @returns True if AST node is an expression node.
  */
 export function isExpression(ast: AST): ast is ExpressionAST {
-    return isApplication(ast) || isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
+    return isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
 }
 
 /**
@@ -343,7 +286,6 @@ export abstract class ASTVisitor<T, R> {
 
     abstract visitIdentifier(ast: IdentifierAST, context: T): R;
     abstract visitConstant(ast: ConstantAST, context: T): R;
-    abstract visitApplication(ast: ApplicationAST, context: T): R;
     abstract visitBinaryOperator(ast: BinaryOpAST, context: T): R;
     abstract visitLet(ast: LetAST, context: T): R;
 }
