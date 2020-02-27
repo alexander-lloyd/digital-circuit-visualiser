@@ -1,5 +1,6 @@
 /* eslint complexity: ["error", 12] */
 import {
+    INITIAL_CODE,
     MODAL_HIDE,
     MODAL_SHOW,
     RESET_SCALE,
@@ -12,7 +13,6 @@ import {
 } from './constants';
 import {AppActions, GlobalState} from './types';
 import {
-    INITIAL_CODE,
     INITIAL_SCALE,
     MAXIMUM_SCALE,
     MINIMUM_SCALE,

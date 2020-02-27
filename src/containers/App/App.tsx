@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 
 import Canvas from '../Canvas/index';
@@ -7,6 +7,7 @@ import Modal from '../../components/Modal';
 import Sidebar from '../../components/Sidebar';
 
 import * as actions from './actions';
+import {INITIAL_CODE} from './constants';
 import {GlobalState, DispatchFunction} from './types';
 
 import {HELP_TITLE, HelpContentComponent} from '../../assets/help';
@@ -25,6 +26,7 @@ interface AppState {
  */
 interface AppDispatchProps {
     closeModal: () => void;
+    setInitialSourceCode: () => void;
 }
 
 /**
@@ -37,7 +39,11 @@ interface AppProps extends AppState, AppDispatchProps {}
  *
  * @returns App
  */
-export function App({showModal, closeModal}: AppProps): JSX.Element {
+export function App({showModal, closeModal, setInitialSourceCode}: AppProps): JSX.Element {
+    useEffect(() => {
+        setInitialSourceCode();
+    });
+
     return (
         <div className="fullscreen">
             <Header />
@@ -78,9 +84,10 @@ function mapStateToProps({showModal}: GlobalState): AppState {
  * @returns Props.
  */
 function mapDispatchToProps(dispatch: DispatchFunction): AppDispatchProps {
-    const {modalHideAction} = actions;
+    const {modalHideAction, setSourceCode} = actions;
     return {
-        closeModal: (): void => dispatch(modalHideAction())
+        closeModal: (): void => dispatch(modalHideAction()),
+        setInitialSourceCode: (): void => setSourceCode(dispatch)(INITIAL_CODE)
     };
 }
 
