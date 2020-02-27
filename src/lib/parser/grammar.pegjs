@@ -1,6 +1,9 @@
 statement
-  = l:letdeclaration _ semicolon _ {
+  = _ l:letdeclaration _ {
     return l;
+  }
+  / _ e:expression _ {
+    return e;
   }
 
 letdeclaration
@@ -12,8 +15,7 @@ letdeclaration
 expression
   = left:term _ operator:tensor _ right:expression {
     return new AST.BinaryOpAST(operator, left, right);
-  } /
-  term
+  } / term
 
 term
   = left:factor _ operator:compose _ right:term {
