@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [0, 2]}] */
+/* eslint no-magic-numbers: ["warn", {"ignore": [0, 1, 2]}] */
 import React, {useEffect, useRef, useState, MouseEvent} from 'react';
 import {connect} from 'react-redux';
 import useResizeAware from 'react-resize-aware';
@@ -201,11 +201,20 @@ function Canvas(props: CanvasProps): JSX.Element {
         setDragging(null);
     }
 
+    /**
+     * Reset the canvas perspective.
+     */
+    function onResetPerspective(): void {
+        if (canvasPosition[0] !== 0 || canvasPosition[1] !== 0) {
+            setCanvasPosition([0, 0]);
+        }
+    }
+
     return (
         <div className="fullheight">
             <CanvasButtonGroup isDownloadLoading={downloadLoading}
                                onDownload={downloadCanvas}
-                               onResetPerspective={() => {}}
+                               onResetPerspective={onResetPerspective}
                                onResetScale={resetZoom} />
             <div className=""
                  style={
