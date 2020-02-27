@@ -34,7 +34,7 @@ interface FeatureFlagProps extends FeatureFlagsState, FeatureFlagsActions {}
  * @param props FeatureFlagProps.
  * @returns Feature Flags Component.
  */
-export function FeatureFlags({setFlag, unsetFlag}: FeatureFlagProps): JSX.Element {
+export function FeatureFlags({setFlag, unsetFlag, featureFlags}: FeatureFlagProps): JSX.Element {
     return (
         <div className="columns">
             <div className="column">
@@ -42,7 +42,8 @@ export function FeatureFlags({setFlag, unsetFlag}: FeatureFlagProps): JSX.Elemen
                     FEATURES.
                         filter((_, i) => i % 2 === 0).
                         map(([featureId, feature]) => (
-                            <FeatureFlag feature={feature}
+                            <FeatureFlag checked={featureFlags[featureId] || false}
+                                         feature={feature}
                                          key={featureId}
                                          onChecked={setFlag(featureId)}
                                          onUnchecked={unsetFlag(featureId)} />
@@ -54,7 +55,8 @@ export function FeatureFlags({setFlag, unsetFlag}: FeatureFlagProps): JSX.Elemen
                     FEATURES.
                         filter((_, i) => i % 2 === 1).
                         map(([featureId, feature]) => (
-                            <FeatureFlag feature={feature}
+                            <FeatureFlag checked={featureFlags[featureId] || false}
+                                         feature={feature}
                                          key={featureId}
                                          onChecked={setFlag(featureId)}
                                          onUnchecked={unsetFlag(featureId)} />))

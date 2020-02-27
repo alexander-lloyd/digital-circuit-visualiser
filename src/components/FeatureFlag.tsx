@@ -1,9 +1,10 @@
-import React, {MouseEvent as ReactMouseEvent} from 'react';
+import React, {ChangeEvent} from 'react';
 
 /**
  * FeatureFlag Props.
  */
 interface FeatureFlagProps {
+    checked: boolean;
     feature: string;
     onChecked: () => void;
     onUnchecked: () => void;
@@ -15,13 +16,13 @@ interface FeatureFlagProps {
  * @param props FeatureFlag props.
  * @returns FeatureFlag Component.
  */
-export default function FeatureFlag({feature, onChecked, onUnchecked}: FeatureFlagProps): JSX.Element {
+export default function FeatureFlag({checked, feature, onChecked, onUnchecked}: FeatureFlagProps): JSX.Element {
     /**
      * Emit onChecked on Input checked and Unchecked otherwise.
      *
      * @param event React MouseEvent.
      */
-    function onClick(event: ReactMouseEvent): void {
+    function onChange(event: ChangeEvent): void {
         const element = event.nativeEvent.target as HTMLInputElement;
 
         if (element.checked) {
@@ -34,7 +35,8 @@ export default function FeatureFlag({feature, onChecked, onUnchecked}: FeatureFl
     return (
         <div className="field">
             <label className="checkbox label">
-                <input onClick={onClick}
+                <input checked={checked}
+                       onChange={onChange}
                        type="checkbox" />
                 {feature}
             </label>
