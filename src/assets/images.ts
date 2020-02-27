@@ -1,8 +1,14 @@
-/* eslint-disable max-len */
+/* eslint-disable max-len, no-magic-numbers */
+
+type Point = [number, number];
 
 export type ImageMetaData = {
     name: string;
     image: string;
+    inputs: Point[];
+    outputs: Point[];
+    width: number;
+    height: number;
 };
 
 export type ImageMap = {
@@ -60,7 +66,6 @@ const AND_GATE = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 </svg>`;
 
 const OR_GATE = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -112,11 +117,19 @@ const OR_GATE = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 const images: ImageMap = {
     AND: {
         name: 'AND Gate',
-        image: AND_GATE
+        image: AND_GATE,
+        inputs: [[25, 50], [25, 25]],
+        outputs: [[175, 38]],
+        width: 200,
+        height: 75
     },
     OR: {
         name: 'OR Gate',
-        image: OR_GATE
+        image: OR_GATE,
+        inputs: [[25, 50], [25, 25]],
+        outputs: [[175, 38]],
+        width: 200,
+        height: 75
     }
 };
 
