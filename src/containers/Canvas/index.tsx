@@ -19,7 +19,7 @@ import {AST} from '../../lib/parser/index';
  * As a workaround for not being able to set height and width to 100%.
  *
  * Sets height and width to 100%, gets the computed value and then sets
- * them statically. Needs to be called everytime the screen size changes.
+ * them statically. Needs to be called every time the screen size changes.
  *
  * Base on https://stackoverflow.com/questions/10214873/make-canvas-as-wide-and-as-high-as-parent.
  *
@@ -51,7 +51,8 @@ function drawDiagram(
     canvasWidth: number,
     canvasHeight: number,
     scale: number,
-    offsetPosition: [number, number]
+    offsetPosition: [number, number],
+    featureFlags: { [featureId: string]: boolean}
 ): void {
     requestAnimationFrame(() => {
         // Clear canvas
@@ -66,7 +67,10 @@ function drawDiagram(
         const entityTree = astRenderer.visit(ast, null);
 
         const entityRenderer = new EntityRendererVisitor();
-        let result = entityRenderer.visit(entityTree, null);
+        const entityrendererConfig = {
+            featureFlags
+        };
+        let result = entityRenderer.visit(entityTree, entityrendererConfig);
 
         const scalingValue = Math.min(canvasHeight, canvasWidth);
 
@@ -98,6 +102,7 @@ interface CanvasState {
     ast: AST | null;
     downloadLoading: boolean;
     scale: number;
+    featureFlags: { [featureId: string]: boolean};
 }
 
 /**
@@ -125,6 +130,7 @@ function Canvas(props: CanvasProps): JSX.Element {
         ast,
         scale,
         downloadLoading,
+        featureFlags,
         resetZoom,
         zoomIn,
         zoomOut
@@ -149,8 +155,8 @@ function Canvas(props: CanvasProps): JSX.Element {
             return;
         }
 
-        drawDiagram(ast, ctx, canvas.width, canvas.height, scale, canvasPosition);
-    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height, canvasPosition]);
+        drawDiagram(ast, ctx, canvas.width, canvas.height, scale, canvasPosition, featureFlags);
+    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height, canvasPosition, featureFlags]);
 
     /** Wrapper around download canvas function */
     const downloadCanvas = (): void => {
@@ -234,11 +240,12 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @returns Component Props.
  */
 function mapStateToProps(state: GlobalState): CanvasState {
-    const {ast, scale, download: {loading}} = state;
+    const {ast, scale, download: {loading}, featureFlags} = state;
     return {
         ast,
         scale,
-        downloadLoading: loading
+        downloadLoading: loading,
+        featureFlags
     };
 }
 
