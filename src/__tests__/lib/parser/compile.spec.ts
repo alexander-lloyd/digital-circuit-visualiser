@@ -38,4 +38,32 @@ describe('optimising ast transformer', () => {
         expect(isConstant(right)).toBe(true);
         expect((right as ConstantAST).name).toBe('OR');
     });
+
+    it('should throw an error if variable is not defined in simple expression', () => {
+        const ast = new IdentifierAST('x');
+
+        const transformer = new ASTOptimisingTransformer();
+        const context: ASTOptimisingTransformerContext = {
+            identifiers: new Map()
+        };
+        expect(() => transformer.visit(ast, context)).toThrowError(Error);
+    });
+
+    it('should throw an error if variable is not defined in complex expression', () => {
+        const ast = new LetAST(
+            new IdentifierAST('x'),
+            new BinaryOpAST(
+                'tensor',
+                new ConstantAST('AND'),
+                new ConstantAST('OR')
+            ),
+            new IdentifierAST('y')
+        );
+
+        const transformer = new ASTOptimisingTransformer();
+        const context: ASTOptimisingTransformerContext = {
+            identifiers: new Map()
+        };
+        expect(() => transformer.visit(ast, context)).toThrowError();
+    });
 });
