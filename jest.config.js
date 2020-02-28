@@ -11,7 +11,7 @@ module.exports = {
         'jest-canvas-mock'
     ],
     collectCoverageFrom: [
-        '<rootDir>/src/**/*.{ts,ts}',
+        '<rootDir>/src/**/*.{ts,tsx}',
         '!**/node_modules/**',
         '!<rootDir>/src/lib/parser/parser.ts'
     ]
