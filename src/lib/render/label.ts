@@ -47,7 +47,14 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             const imageHeight = image.height;
             const imageWidth = image.width;
 
-            ctx.drawImage(image, x - (imageWidth / 2), y - (imageHeight / 2));
+            if (imageWidth > width || imageHeight > height) {
+                // Scale the image evenly in both x & y.
+                const scale = Math.min(width / imageWidth, height / imageHeight);
+                image.width = imageWidth * scale;
+                image.height = imageHeight * scale;
+            }
+
+            ctx.drawImage(image, x - (image.width / 2), y - (image.height / 2), image.width, image.height);
         };
 
         image.src = imageSrc;
