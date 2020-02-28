@@ -137,7 +137,10 @@ module.exports = {
       }
     },
     {
-      "files": ["src/**/*.spec.ts[x]"],
+      "files": [
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx"
+      ],
       "rules": {
         "no-magic-numbers": "off"
       }

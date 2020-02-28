@@ -1,3 +1,4 @@
+/* eslint no-magic-numbers: ["warn", {ignore: [2]}] */
 import {ImageMetaData} from '../../assets/images';
 
 export type LabelFunction = (x: number, y: number, ctx: CanvasRenderingContext2D) => void;
@@ -34,6 +35,6 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             ctx.drawImage(image, x - (imageWidth / 2), y - (imageHeight / 2));
         };
 
-        image.src = `data:image/svg+xml;base64,${btoa(imageSrc)}`;
+        image.src = imageSrc;
     };
 }
