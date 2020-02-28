@@ -191,17 +191,16 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     });
 
     // Boxes
-    boxes.forEach(([[x, y], width, height, drawBox]) => {
+    boxes.forEach(([[x, y], width, height, drawBox], i) => {
+        // This only works because theres a 1 to 1 relation between function boxes and labels.
+        const [label, [labelX, labelY]] = labels[i];
+
         if (drawBox) {
             ctx.beginPath();
             ctx.rect(x - (width / 2), y - (height / 2), width, height);
             ctx.stroke();
         }
-    });
 
-    // Labels
-    labels.forEach(([label, [x, y]]) => {
-        // TODO: Font / Image sizing.
-        label(x, y, 400, 400, ctx);
+        label(labelX, labelY, width, height, ctx);
     });
 }
