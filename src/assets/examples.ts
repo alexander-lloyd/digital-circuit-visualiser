@@ -11,12 +11,12 @@ type Examples = {
 export const EXAMPLES: Examples = {
     AND: {
         name: 'AND Gate',
-        description: 'Example with an AND Gate',
-        source: 'let x = AND in x;'
+        descrition: 'Example with an AND Gate',
+        source: 'AND'
     },
     OR: {
         name: 'OR Gate',
-        description: 'Example with an OR Gate',
-        source: 'let x = OR in x;'
+        descrition: 'Example with an OR Gate',
+        source: 'OR'
     }
 };
