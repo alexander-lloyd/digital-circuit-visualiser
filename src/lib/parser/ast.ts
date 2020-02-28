@@ -294,6 +294,16 @@ export function isConstant(ast: AST): ast is ConstantAST {
     return ast.type === 'constant';
 }
 
+/**
+ * Is this AST node a Unary node?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is a unary node.
+ */
+export function isUnaryOp(ast: AST): ast is UnaryOpAST {
+    return ast.type === 'unary';
+}
+
 
 /**
  * Is this AST node a Binary node?
@@ -312,7 +322,7 @@ export function isBinaryOp(ast: AST): ast is BinaryOpAST {
  * @returns True if AST node is an expression node.
  */
 export function isExpression(ast: AST): ast is ExpressionAST {
-    return isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
+    return isUnaryOp(ast) || isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
 }
 
 /**
