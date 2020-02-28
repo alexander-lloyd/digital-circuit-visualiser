@@ -33,13 +33,11 @@ export default function FeatureFlag({checked, feature, onChecked, onUnchecked}: 
     }
 
     return (
-        <div className="field">
-            <label className="checkbox label">
-                <input checked={checked}
-                       onChange={onChange}
-                       type="checkbox" />
-                {feature}
-            </label>
-        </div>
+        <label className="checkbox">
+            <input checked={checked}
+                   onChange={onChange}
+                   type="checkbox" />
+            {feature}
+        </label>
     );
 }
