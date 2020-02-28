@@ -88,6 +88,57 @@ export class ConstantAST implements AST {
     }
 }
 
+export type UnaryOperators = 'feedback';
+
+/**
+ * Unary Operator AST.
+ */
+export class UnaryOpAST implements AST {
+    public readonly type = 'unary';
+    private readonly _operator: UnaryOperators;
+    private readonly _child: ExpressionAST;
+
+    /**
+     * Constructor
+     *
+     * @param operator Unary operator. E.g. 'feedback'.
+     * @param child Child AST Node.
+     */
+    public constructor(operator: UnaryOperators, child: ExpressionAST) {
+        this._operator = operator;
+        this._child = child;
+    }
+
+    /**
+     * Get the operator.
+     *
+     * @returns The operator.
+     */
+    public get operator(): UnaryOperators {
+        return this._operator;
+    }
+
+    /**
+     * Get the child node.
+     *
+     * @returns The child node.
+     */
+    public get child(): ExpressionAST {
+        return this._child;
+    }
+
+    /**
+     * Visit the unaryOperator visitor method.
+     *
+     * @param visitor ASTVisitor.
+     * @param context ASTVisitor context.
+     * @returns Return value of ASTVisitor.visitUnaryOperator
+     */
+    public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
+        return visitor.visitUnaryOperator(this, context);
+    }
+}
+
 
 export type BinaryOpeators = 'tensor' | 'compose';
 
@@ -154,7 +205,12 @@ export class BinaryOpAST implements AST {
     }
 }
 
-export type ExpressionAST = BinaryOpAST | ConstantAST | IdentifierAST;
+export type ExpressionAST =
+  | BinaryOpAST
+  | ConstantAST
+  | IdentifierAST
+  | LetAST
+  | UnaryOpAST;
 
 /**
  * Let AST Node.
@@ -238,6 +294,16 @@ export function isConstant(ast: AST): ast is ConstantAST {
     return ast.type === 'constant';
 }
 
+/**
+ * Is this AST node a Unary node?
+ *
+ * @param ast AST Node.
+ * @returns True if AST node is a unary node.
+ */
+export function isUnaryOp(ast: AST): ast is UnaryOpAST {
+    return ast.type === 'unary';
+}
+
 
 /**
  * Is this AST node a Binary node?
@@ -256,7 +322,7 @@ export function isBinaryOp(ast: AST): ast is BinaryOpAST {
  * @returns True if AST node is an expression node.
  */
 export function isExpression(ast: AST): ast is ExpressionAST {
-    return isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
+    return isUnaryOp(ast) || isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
 }
 
 /**
@@ -286,6 +352,7 @@ export abstract class ASTVisitor<T, R> {
 
     abstract visitIdentifier(ast: IdentifierAST, context: T): R;
     abstract visitConstant(ast: ConstantAST, context: T): R;
+    abstract visitUnaryOperator(ast: UnaryOpAST, context: T): R;
     abstract visitBinaryOperator(ast: BinaryOpAST, context: T): R;
     abstract visitLet(ast: LetAST, context: T): R;
 }
