@@ -201,6 +201,6 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     // Labels
     labels.forEach(([label, [x, y]]) => {
         // TODO: Font / Image sizing.
-        label(x, y, ctx);
+        label(x, y, 300, 300, ctx);
     });
 }
