@@ -14,6 +14,22 @@ export type ASTOptimisingTransformerContext = {
 };
 
 /**
+ * Error raised when a variable is referenced but not
+ * defined in the map identifiers.
+ */
+export class NameError extends Error {}
+
+/**
+ * Build error message.
+ *
+ * @param name variable name to include in message.
+ * @returns Error message.
+ */
+export function buildNameErrorMessage(name: string): string {
+    return `ASTOptimisingTransformer.visitIdentifier got unexpected variable '${name}'`;
+}
+
+/**
  * Explore an AST and substitute variables from let bindings with the expression.
  *
  * E.g. let x = 5 in x + x
@@ -26,6 +42,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
      * @param ast AST Node.
      * @param context ASTOptimising Context.
      * @returns Identifier AST.
+     * @throws NameError if a variable is referenced and not defined in the context.
      */
     public visitIdentifier(ast: IdentifierAST, context: ASTOptimisingTransformerContext): AST {
         const {name} = ast;
@@ -33,7 +50,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         const newAST = identifiers.get(name);
 
         if (newAST === undefined) {
-            throw new Error(`ASTOptimisingTransformer.visitIdentifier got unexpected variable '${name}'`);
+            throw new NameError(buildNameErrorMessage(name));
         }
 
         return newAST;

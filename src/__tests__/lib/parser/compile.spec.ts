@@ -1,6 +1,7 @@
 import {
     ASTOptimisingTransformer,
-    ASTOptimisingTransformerContext
+    ASTOptimisingTransformerContext,
+    buildNameErrorMessage
 } from '../../../lib/parser/compile';
 import {
     LetAST,
@@ -40,16 +41,18 @@ describe('optimising ast transformer', () => {
     });
 
     it('should throw an error if variable is not defined in simple expression', () => {
+        expect.assertions(1);
         const ast = new IdentifierAST('x');
 
         const transformer = new ASTOptimisingTransformer();
         const context: ASTOptimisingTransformerContext = {
             identifiers: new Map()
         };
-        expect(() => transformer.visit(ast, context)).toThrowError(Error);
+        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('x'));
     });
 
     it('should throw an error if variable is not defined in complex expression', () => {
+        expect.assertions(1);
         const ast = new LetAST(
             new IdentifierAST('x'),
             new BinaryOpAST(
@@ -64,6 +67,6 @@ describe('optimising ast transformer', () => {
         const context: ASTOptimisingTransformerContext = {
             identifiers: new Map()
         };
-        expect(() => transformer.visit(ast, context)).toThrowError();
+        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('y'));
     });
 });
