@@ -18,5 +18,15 @@ export const EXAMPLES: Examples = {
         name: 'OR Gate',
         description: 'Example with an OR Gate',
         source: 'OR'
+    },
+    JOIN_GATES: {
+        name: 'Join Two Gates',
+        description: 'Join two outputs.',
+        source: 'let x = AND * AND in x . JOIN'
+    },
+    SPLIT_GATES: {
+        name: 'Split Output',
+        description: 'Split output into two outputs.',
+        source: 'let x = AND * AND in OR. SPLIT . x'
     }
 };
