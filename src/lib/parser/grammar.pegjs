@@ -16,12 +16,19 @@ letdeclaration
   }
 
 term
-  = left:factor _ operator:compose _ right:term {
+  = left:term2 _ operator:compose _ right:term {
     return new AST.BinaryOpAST('compose', left, right);
-  } / factor
+  }
+  / term2
+
+term2
+  = feedback _ child:factor {
+    return new AST.UnaryOpAST('feedback', child);
+  }
+  / factor 
 
 factor
-  = constant
+  = constant 
   / identifier
   / leftparam _ expression:expression _ rightparam {
       return expression;
@@ -51,6 +58,7 @@ let = "let"
 in = "in"
 tensor = "*"
 compose = "."
+feedback = "feedback"
 
 _ "whitespace"
   = [ \t\n\r]*

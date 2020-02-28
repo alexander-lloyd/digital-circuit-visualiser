@@ -15,7 +15,14 @@ const cases = [
     ['let x = SPLIT in x'],
     ['let x = ( AND . AND ) in (x)'],
     ['let x = (((((AND . AND ))))) in (((((x)))))'],
-    ['let x = AND in let y = OR in SPLIT . (x * y) . JOIN']
+    ['let x = AND in let y = OR in SPLIT . (x * y) . JOIN'],
+    ['feedback AND'],
+    ['feedback ASDAS'],
+    ['let x = AND in feedback x'],
+    ['feedback (AND . OR)'],
+    ['feedback (AND * OR)'],
+    ['feedback AND . OR'],
+    ['feedback AND * OR']
 ];
 
 describe('parser', () => {
