@@ -21,11 +21,11 @@ term
   } / factor
 
 factor
-  = constant /
-    identifier /
-    leftparam _ expression:expression _ rightparam {
+  = constant
+  / identifier
+  / leftparam _ expression:expression _ rightparam {
       return expression;
-    }
+  }
 
 constant
   = head:[A-Z] tail:[A-Z]* {

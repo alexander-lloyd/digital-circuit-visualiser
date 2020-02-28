@@ -184,7 +184,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     };
   const peg$c4 = function(expression: any): any {
         return expression;
-      };
+    };
   const peg$c5 = /^[A-Z]/;
   const peg$c6 = peg$classExpectation([["A", "Z"]], false, false);
   const peg$c7 = function(head: any, tail: any): any {
