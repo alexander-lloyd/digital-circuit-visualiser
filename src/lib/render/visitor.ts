@@ -87,4 +87,11 @@ export class ASTRenderer extends ASTVisitor<null, Entity> {
     public visitLet(): never {
         throw new Error('ASTRenderer.visitIdentifier is not implemened');
     }
+
+    /**
+     * Visit Unary Operator.
+     */
+    public visitUnaryOperator(): never {
+        throw new Error('ASTRenderer.visitIdentifier is not implemened');
+    }
 }

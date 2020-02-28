@@ -3,9 +3,10 @@ import {
     ASTVisitor,
     BinaryOpAST,
     ConstantAST,
+    ExpressionAST,
     IdentifierAST,
     LetAST,
-    ExpressionAST
+    UnaryOpAST
 } from './ast';
 
 export type ASTOptimisingTransformerContext = {
@@ -82,5 +83,21 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         context.identifiers.set(name, expression);
 
         return ast.body.visit(this, context);
+    }
+
+    /**
+     * Visit Unary Operator.
+     *
+     * @param ast UnaryOpAST Node.
+     * @param context Optimiser Context.
+     * @returns Optmisied AST.
+     */
+    public visitUnaryOperator(ast: UnaryOpAST, context: ASTOptimisingTransformerContext): AST {
+        const {operator, child} = ast;
+        const newChild = child.visit(this, context);
+        if (newChild !== child) {
+            return new UnaryOpAST(operator, newChild as ExpressionAST);
+        }
+        return ast;
     }
 }
