@@ -7,7 +7,6 @@ import {
     IdentifierAST,
     BinaryOpAST,
     ConstantAST,
-    ApplicationAST,
     isBinaryOp,
     isConstant
 } from '../../../lib/parser/index';
