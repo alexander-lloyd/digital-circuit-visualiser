@@ -170,59 +170,52 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$startRuleFunctions: {[id: string]: any} = { statement: peg$parsestatement };
   let peg$startRuleFunction: () => any = peg$parsestatement;
 
-  const peg$c0 = function(l: any): any {
-      return l;
+  const peg$c0 = function(e: any): any {
+      return e;
     };
-  const peg$c1 = function(name: any, expression: any, body: any): any {
-
+  const peg$c1 = function(left: any, operator: any, right: any): any {
+      return new AST.BinaryOpAST('tensor', left, right);
+    };
+  const peg$c2 = function(name: any, expression: any, body: any): any {
       return new AST.LetAST(name, expression, body);
     };
-  const peg$c2 = function(left: any, operator: any, right: any): any {
-      return new AST.BinaryOpAST(operator, left, right);
+  const peg$c3 = function(left: any, operator: any, right: any): any {
+      return new AST.BinaryOpAST('compose', left, right);
     };
-  const peg$c3 = function(expression: any): any {
+  const peg$c4 = function(expression: any): any {
         return expression;
       };
-  const peg$c4 = function(identifier: any): any {
-      // TODO: Parameter list.
-      return new AST.ApplicationAST(identifier, []);
-    };
   const peg$c5 = /^[A-Z]/;
   const peg$c6 = peg$classExpectation([["A", "Z"]], false, false);
   const peg$c7 = function(head: any, tail: any): any {
-
       const name = [head, ...tail].join('');
       return new AST.ConstantAST(name);
-
     };
   const peg$c8 = /^[a-z]/;
   const peg$c9 = peg$classExpectation([["a", "z"]], false, false);
   const peg$c10 = /^[A-Za-z0-9]/;
   const peg$c11 = peg$classExpectation([["A", "Z"], ["a", "z"], ["0", "9"]], false, false);
   const peg$c12 = function(head: any, tail: any): any {
-
       const name = [head, ...tail].join('');
       return new AST.IdentifierAST(name);
     };
   const peg$c13 = "=";
   const peg$c14 = peg$literalExpectation("=", false);
-  const peg$c15 = ";";
-  const peg$c16 = peg$literalExpectation(";", false);
-  const peg$c17 = "(";
-  const peg$c18 = peg$literalExpectation("(", false);
-  const peg$c19 = ")";
-  const peg$c20 = peg$literalExpectation(")", false);
-  const peg$c21 = "let";
-  const peg$c22 = peg$literalExpectation("let", false);
-  const peg$c23 = "in";
-  const peg$c24 = peg$literalExpectation("in", false);
-  const peg$c25 = "tensor";
-  const peg$c26 = peg$literalExpectation("tensor", false);
-  const peg$c27 = "compose";
-  const peg$c28 = peg$literalExpectation("compose", false);
-  const peg$c29 = peg$otherExpectation("whitespace");
-  const peg$c30 = /^[ \t\n\r]/;
-  const peg$c31 = peg$classExpectation([" ", "\t", "\n", "\r"], false, false);
+  const peg$c15 = "(";
+  const peg$c16 = peg$literalExpectation("(", false);
+  const peg$c17 = ")";
+  const peg$c18 = peg$literalExpectation(")", false);
+  const peg$c19 = "let";
+  const peg$c20 = peg$literalExpectation("let", false);
+  const peg$c21 = "in";
+  const peg$c22 = peg$literalExpectation("in", false);
+  const peg$c23 = "*";
+  const peg$c24 = peg$literalExpectation("*", false);
+  const peg$c25 = ".";
+  const peg$c26 = peg$literalExpectation(".", false);
+  const peg$c27 = peg$otherExpectation("whitespace");
+  const peg$c28 = /^[ \t\n\r]/;
+  const peg$c29 = peg$classExpectation([" ", "\t", "\n", "\r"], false, false);
 
   let peg$currPos = 0;
   let peg$savedPos = 0;
@@ -367,20 +360,61 @@ function peg$parse(input: string, options?: IParseOptions) {
   }
 
   function peg$parsestatement(): any {
-    let s0, s1, s2, s3, s4;
+    let s0, s1, s2, s3;
 
     s0 = peg$currPos;
-    s1 = peg$parseletdeclaration();
+    s1 = peg$parse_();
     if (s1 !== peg$FAILED) {
-      s2 = peg$parse_();
+      s2 = peg$parseexpression();
       if (s2 !== peg$FAILED) {
-        s3 = peg$parsesemicolon();
+        s3 = peg$parse_();
         if (s3 !== peg$FAILED) {
-          s4 = peg$parse_();
-          if (s4 !== peg$FAILED) {
-            peg$savedPos = s0;
-            s1 = peg$c0(s1);
-            s0 = s1;
+          peg$savedPos = s0;
+          s1 = peg$c0(s2);
+          s0 = s1;
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    } else {
+      peg$currPos = s0;
+      s0 = peg$FAILED;
+    }
+
+    return s0;
+  }
+
+  function peg$parseexpression(): AST.ExpressionAST {
+    let s0, s1, s2, s3, s4, s5;
+
+    s0 = peg$parseletdeclaration();
+    if (s0 === peg$FAILED) {
+      s0 = peg$currPos;
+      s1 = peg$parseterm();
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          s3 = peg$parsetensor();
+          if (s3 !== peg$FAILED) {
+            s4 = peg$parse_();
+            if (s4 !== peg$FAILED) {
+              s5 = peg$parseexpression();
+              if (s5 !== peg$FAILED) {
+                peg$savedPos = s0;
+                s1 = peg$c1(s1, s3, s5);
+                s0 = s1;
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
           } else {
             peg$currPos = s0;
             s0 = peg$FAILED;
@@ -393,9 +427,9 @@ function peg$parse(input: string, options?: IParseOptions) {
         peg$currPos = s0;
         s0 = peg$FAILED;
       }
-    } else {
-      peg$currPos = s0;
-      s0 = peg$FAILED;
+      if (s0 === peg$FAILED) {
+        s0 = peg$parseterm();
+      }
     }
 
     return s0;
@@ -428,7 +462,7 @@ function peg$parse(input: string, options?: IParseOptions) {
                         s11 = peg$parseexpression();
                         if (s11 !== peg$FAILED) {
                           peg$savedPos = s0;
-                          s1 = peg$c1(s3, s7, s11);
+                          s1 = peg$c2(s3, s7, s11);
                           s0 = s1;
                         } else {
                           peg$currPos = s0;
@@ -478,50 +512,6 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parseexpression(): AST.ExpressionAST {
-    let s0, s1, s2, s3, s4, s5;
-
-    s0 = peg$currPos;
-    s1 = peg$parseterm();
-    if (s1 !== peg$FAILED) {
-      s2 = peg$parse_();
-      if (s2 !== peg$FAILED) {
-        s3 = peg$parsetensor();
-        if (s3 !== peg$FAILED) {
-          s4 = peg$parse_();
-          if (s4 !== peg$FAILED) {
-            s5 = peg$parseexpression();
-            if (s5 !== peg$FAILED) {
-              peg$savedPos = s0;
-              s1 = peg$c2(s1, s3, s5);
-              s0 = s1;
-            } else {
-              peg$currPos = s0;
-              s0 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-    } else {
-      peg$currPos = s0;
-      s0 = peg$FAILED;
-    }
-    if (s0 === peg$FAILED) {
-      s0 = peg$parseterm();
-    }
-
-    return s0;
-  }
-
   function peg$parseterm(): any {
     let s0, s1, s2, s3, s4, s5;
 
@@ -537,7 +527,7 @@ function peg$parse(input: string, options?: IParseOptions) {
             s5 = peg$parseterm();
             if (s5 !== peg$FAILED) {
               peg$savedPos = s0;
-              s1 = peg$c2(s1, s3, s5);
+              s1 = peg$c3(s1, s3, s5);
               s0 = s1;
             } else {
               peg$currPos = s0;
@@ -569,30 +559,24 @@ function peg$parse(input: string, options?: IParseOptions) {
   function peg$parsefactor(): any {
     let s0, s1, s2, s3, s4, s5;
 
-    s0 = peg$parseapplication();
+    s0 = peg$parseconstant();
     if (s0 === peg$FAILED) {
-      s0 = peg$parseconstant();
+      s0 = peg$parseidentifier();
       if (s0 === peg$FAILED) {
-        s0 = peg$parseidentifier();
-        if (s0 === peg$FAILED) {
-          s0 = peg$currPos;
-          s1 = peg$parseleftparam();
-          if (s1 !== peg$FAILED) {
-            s2 = peg$parse_();
-            if (s2 !== peg$FAILED) {
-              s3 = peg$parseexpression();
-              if (s3 !== peg$FAILED) {
-                s4 = peg$parse_();
-                if (s4 !== peg$FAILED) {
-                  s5 = peg$parserightparam();
-                  if (s5 !== peg$FAILED) {
-                    peg$savedPos = s0;
-                    s1 = peg$c3(s3);
-                    s0 = s1;
-                  } else {
-                    peg$currPos = s0;
-                    s0 = peg$FAILED;
-                  }
+        s0 = peg$currPos;
+        s1 = peg$parseleftparam();
+        if (s1 !== peg$FAILED) {
+          s2 = peg$parse_();
+          if (s2 !== peg$FAILED) {
+            s3 = peg$parseexpression();
+            if (s3 !== peg$FAILED) {
+              s4 = peg$parse_();
+              if (s4 !== peg$FAILED) {
+                s5 = peg$parserightparam();
+                if (s5 !== peg$FAILED) {
+                  peg$savedPos = s0;
+                  s1 = peg$c4(s3);
+                  s0 = s1;
                 } else {
                   peg$currPos = s0;
                   s0 = peg$FAILED;
@@ -609,49 +593,11 @@ function peg$parse(input: string, options?: IParseOptions) {
             peg$currPos = s0;
             s0 = peg$FAILED;
           }
-        }
-      }
-    }
-
-    return s0;
-  }
-
-  function peg$parseapplication(): AST.ApplicationAST {
-    let s0, s1, s2, s3, s4, s5;
-
-    s0 = peg$currPos;
-    s1 = peg$parseidentifier();
-    if (s1 !== peg$FAILED) {
-      s2 = peg$parse_();
-      if (s2 !== peg$FAILED) {
-        s3 = peg$parseleftparam();
-        if (s3 !== peg$FAILED) {
-          s4 = peg$parse_();
-          if (s4 !== peg$FAILED) {
-            s5 = peg$parserightparam();
-            if (s5 !== peg$FAILED) {
-              peg$savedPos = s0;
-              s1 = peg$c4(s1);
-              s0 = s1;
-            } else {
-              peg$currPos = s0;
-              s0 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
         } else {
           peg$currPos = s0;
           s0 = peg$FAILED;
         }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
       }
-    } else {
-      peg$currPos = s0;
-      s0 = peg$FAILED;
     }
 
     return s0;
@@ -763,10 +709,10 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parsesemicolon(): any {
+  function peg$parseleftparam(): any {
     let s0;
 
-    if (input.charCodeAt(peg$currPos) === 59) {
+    if (input.charCodeAt(peg$currPos) === 40) {
       s0 = peg$c15;
       peg$currPos++;
     } else {
@@ -777,10 +723,10 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parseleftparam(): any {
+  function peg$parserightparam(): any {
     let s0;
 
-    if (input.charCodeAt(peg$currPos) === 40) {
+    if (input.charCodeAt(peg$currPos) === 41) {
       s0 = peg$c17;
       peg$currPos++;
     } else {
@@ -791,12 +737,12 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parserightparam(): any {
+  function peg$parselet(): any {
     let s0;
 
-    if (input.charCodeAt(peg$currPos) === 41) {
+    if (input.substr(peg$currPos, 3) === peg$c19) {
       s0 = peg$c19;
-      peg$currPos++;
+      peg$currPos += 3;
     } else {
       s0 = peg$FAILED;
       if (peg$silentFails === 0) { peg$fail(peg$c20); }
@@ -805,12 +751,12 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parselet(): any {
+  function peg$parsein(): any {
     let s0;
 
-    if (input.substr(peg$currPos, 3) === peg$c21) {
+    if (input.substr(peg$currPos, 2) === peg$c21) {
       s0 = peg$c21;
-      peg$currPos += 3;
+      peg$currPos += 2;
     } else {
       s0 = peg$FAILED;
       if (peg$silentFails === 0) { peg$fail(peg$c22); }
@@ -819,12 +765,12 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parsein(): any {
+  function peg$parsetensor(): any {
     let s0;
 
-    if (input.substr(peg$currPos, 2) === peg$c23) {
+    if (input.charCodeAt(peg$currPos) === 42) {
       s0 = peg$c23;
-      peg$currPos += 2;
+      peg$currPos++;
     } else {
       s0 = peg$FAILED;
       if (peg$silentFails === 0) { peg$fail(peg$c24); }
@@ -833,29 +779,15 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parsetensor(): any {
-    let s0;
-
-    if (input.substr(peg$currPos, 6) === peg$c25) {
-      s0 = peg$c25;
-      peg$currPos += 6;
-    } else {
-      s0 = peg$FAILED;
-      if (peg$silentFails === 0) { peg$fail(peg$c26); }
-    }
-
-    return s0;
-  }
-
   function peg$parsecompose(): any {
     let s0;
 
-    if (input.substr(peg$currPos, 7) === peg$c27) {
-      s0 = peg$c27;
-      peg$currPos += 7;
+    if (input.charCodeAt(peg$currPos) === 46) {
+      s0 = peg$c25;
+      peg$currPos++;
     } else {
       s0 = peg$FAILED;
-      if (peg$silentFails === 0) { peg$fail(peg$c28); }
+      if (peg$silentFails === 0) { peg$fail(peg$c26); }
     }
 
     return s0;
@@ -866,27 +798,27 @@ function peg$parse(input: string, options?: IParseOptions) {
 
     peg$silentFails++;
     s0 = [];
-    if (peg$c30.test(input.charAt(peg$currPos))) {
+    if (peg$c28.test(input.charAt(peg$currPos))) {
       s1 = input.charAt(peg$currPos);
       peg$currPos++;
     } else {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) { peg$fail(peg$c31); }
+      if (peg$silentFails === 0) { peg$fail(peg$c29); }
     }
     while (s1 !== peg$FAILED) {
       s0.push(s1);
-      if (peg$c30.test(input.charAt(peg$currPos))) {
+      if (peg$c28.test(input.charAt(peg$currPos))) {
         s1 = input.charAt(peg$currPos);
         peg$currPos++;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c31); }
+        if (peg$silentFails === 0) { peg$fail(peg$c29); }
       }
     }
     peg$silentFails--;
     if (s0 === peg$FAILED) {
       s1 = peg$FAILED;
-      if (peg$silentFails === 0) { peg$fail(peg$c29); }
+      if (peg$silentFails === 0) { peg$fail(peg$c27); }
     }
 
     return s0;
