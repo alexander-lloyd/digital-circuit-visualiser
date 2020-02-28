@@ -7,7 +7,7 @@ expression
   = letdeclaration
   / left:term _ operator:tensor _ right:expression {
     return new AST.BinaryOpAST('tensor', left, right);
-  } 
+  }
   / term
 
 letdeclaration
@@ -25,10 +25,10 @@ term2
   = feedback _ child:factor {
     return new AST.UnaryOpAST('feedback', child);
   }
-  / factor 
+  / factor
 
 factor
-  = constant 
+  = constant
   / identifier
   / leftparam _ expression:expression _ rightparam {
       return expression;
