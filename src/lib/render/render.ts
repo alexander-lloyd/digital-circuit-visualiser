@@ -11,7 +11,7 @@ import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
 type Point = [number, number];
 type LineEntry = [Point, Point];
-type BoxEntry = [Point, number, number];
+type BoxEntry = [Point, number, number, boolean];
 type LabelEntry = [LabelFunction, Point];
 
 /**
@@ -59,9 +59,8 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
             labels: [[label, [x, y]]]
         };
 
-        if (featureFlags[RENDER_UNIT_SQUARE] || false) {
-            functionRenderResult.boxes.push([[x, y], width, height]);
-        }
+        const drawBox = featureFlags[RENDER_UNIT_SQUARE] || false;
+        functionRenderResult.boxes.push([[x, y], width, height, drawBox]);
 
         return functionRenderResult;
     }
@@ -125,10 +124,10 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
 
     return {
         lines,
-        boxes: boxes.map(([[x, y], width, height]) => {
+        boxes: boxes.map(([[x, y], width, height, drawBox]) => {
             const newWidth = width * scaleX;
             const newHeight = height * scaleY;
-            return [[x * (scaleX / 2), y * (scaleY / 2)], newWidth, newHeight];
+            return [[x * (scaleX / 2), y * (scaleY / 2)], newWidth, newHeight, drawBox];
         }),
         labels: labels.map(([label, [x, y]]) => [label, [x * (scaleX / 2), y * (scaleY / 2)]])
     };
@@ -158,11 +157,11 @@ export function transformRenderResult(
     });
 
     // Boxes
-    const newBoxes = boxes.map(([[x, y], width, height]): BoxEntry => {
+    const newBoxes = boxes.map(([[x, y], width, height, drawBox]): BoxEntry => {
         const x2 = x + translateX;
         const y2 = y + translateY;
 
-        return [[x2, y2], width, height];
+        return [[x2, y2], width, height, drawBox];
     });
 
     const newLabels = labels.map(([label, [x, y]]): LabelEntry => [label, [x + translateX, y + translateY]]);
@@ -192,10 +191,12 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     });
 
     // Boxes
-    boxes.forEach(([[x, y], width, height]) => {
-        ctx.beginPath();
-        ctx.rect(x - (width / 2), y - (height / 2), width, height);
-        ctx.stroke();
+    boxes.forEach(([[x, y], width, height, drawBox]) => {
+        if (drawBox) {
+            ctx.beginPath();
+            ctx.rect(x - (width / 2), y - (height / 2), width, height);
+            ctx.stroke();
+        }
     });
 
     // Labels
