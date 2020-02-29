@@ -116,5 +116,6 @@ module.exports = {
         contentBase: PATHS.output,
         port: process.env.PORT || DEFAULT_PORT,
         historyApiFallback: true
-    }
+    },
+    devtool: 'eval-source-map'
 };

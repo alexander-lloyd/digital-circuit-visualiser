@@ -35,6 +35,6 @@ describe('ast', () => {
         [isExpression, new UnaryOpAST('feedback', new IdentifierAST('abc'))],
         [isExpression, new BinaryOpAST('compose', new ConstantAST(''), new ConstantAST(''))]
     ])('%s(%s) -> true', (isFunc: (ast: AST) => boolean, ast: AST) => {
-        expect(isFunc(ast)).toBeTruthy();
+        expect(isFunc(ast)).toBe(true);
     });
-})
+});
