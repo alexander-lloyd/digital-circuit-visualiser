@@ -151,9 +151,7 @@ describe('ast renderer', () => {
 
         const renderer = new ASTRenderer();
 
-        expect(() => renderer.visit(ast, 1)).toThrow(
-            buildNotImplementedError(operator)
-        );
+        expect(() => renderer.visit(ast, 1)).toThrow(buildNotImplementedError(operator));
     });
 
     it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(

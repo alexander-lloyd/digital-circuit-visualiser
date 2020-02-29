@@ -177,7 +177,7 @@ describe('scale render result', () => {
         const mockLabel = (): void => {};
         const renderResult: RenderResults = {
             boxes: [[[0, 0], [1, 1], true]],
-            labels: [[mockLabel, [0,0]]],
+            labels: [[mockLabel, [0, 0]]],
             lines: []
         };
 

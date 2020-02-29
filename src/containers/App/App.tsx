@@ -87,7 +87,7 @@ function mapDispatchToProps(dispatch: DispatchFunction): AppDispatchProps {
     const {modalHideAction, setSourceCode} = actions;
     return {
         closeModal: (): void => dispatch(modalHideAction()),
-        setInitialSourceCode: (): void => setSourceCode(dispatch)('A . B . C')
+        setInitialSourceCode: (): void => setSourceCode(dispatch)(INITIAL_CODE)
     };
 }
 

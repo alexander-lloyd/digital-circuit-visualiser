@@ -169,7 +169,11 @@ export function transformRenderResult(
 
     // Boxes
     const newBoxes = boxes.map(([[x, y], [x2, y2], drawBox]): BoxEntry => {
-        return [[x + translateX, y + translateY], [x2 + translateX, y2 + translateY], drawBox];
+        const newX1 = x + translateX;
+        const newX2 = x2 + translateX;
+        const newY1 = y + translateY;
+        const newY2 = y2 + translateY;
+        return [[newX1, newY1], [newX2, newY2], drawBox];
     });
 
     const newLabels = labels.map(([label, [x, y]]): LabelEntry => [label, [x + translateX, y + translateY]]);
