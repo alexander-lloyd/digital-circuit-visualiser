@@ -20,6 +20,22 @@ import {
 
 
 /**
+ * Build error message.
+ *
+ * @param operator Operator not implemented.
+ * @returns Error message.
+ */
+export function buildNotImplementedError(operator: string): string {
+    return `Operator '${operator}' is not implemented`;
+}
+
+/**
+ * Not Implemented Error.
+ */
+export class NotImplementedError extends Error {}
+
+
+/**
  * Scale and Transform the AST Nodes.
  */
 export class ASTRenderer extends ASTVisitor<null, Entity> {
@@ -58,17 +74,19 @@ export class ASTRenderer extends ASTVisitor<null, Entity> {
             // Two operators are on top of each other.
             left.
                 scale(1, 0.5).
-                translate(0, 0.5);
+                translate(0, 0);
             right.
                 scale(1, 0.5).
-                translate(0, -0.5);
+                translate(0, 0.5);
         } else if (operator === 'compose') {
             left.
                 scale(0.5, 1).
-                translate(-0.5, 0);
+                translate(0, 0);
             right.
                 scale(0.5, 1).
                 translate(0.5, 0);
+        } else {
+            throw new NotImplementedError(buildNotImplementedError(operator));
         }
 
         return new GroupedEntity(0, 0, 1, 1, [left, right]);
