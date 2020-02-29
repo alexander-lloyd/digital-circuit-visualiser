@@ -1,5 +1,12 @@
-import {ASTRenderer, buildNotImplementedError} from '../../../lib/render/visitor';
-import {ConstantAST, BinaryOpAST} from '../../../lib/parser/ast';
+import {
+    ASTRenderer,
+    buildNotImplementedError
+} from '../../../lib/render/visitor';
+import {
+    ConstantAST,
+    BinaryOpAST,
+    BinaryOpeators
+} from '../../../lib/parser/ast';
 import {GroupedEntity} from 'lib/render/entities';
 
 describe('ast renderer', () => {
@@ -8,7 +15,7 @@ describe('ast renderer', () => {
 
         const ast = new ConstantAST('AND');
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, null);
+        const entity = renderer.visit(ast, 1);
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -25,7 +32,7 @@ describe('ast renderer', () => {
             new ConstantAST('OR')
         );
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, null) as GroupedEntity;
+        const entity = renderer.visit(ast, 1) as GroupedEntity;
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -53,7 +60,7 @@ describe('ast renderer', () => {
             new ConstantAST('OR')
         );
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, null) as GroupedEntity;
+        const entity = renderer.visit(ast, 1) as GroupedEntity;
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -85,7 +92,7 @@ describe('ast renderer', () => {
             )
         );
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, null) as GroupedEntity;
+        const entity = renderer.visit(ast, 1) as GroupedEntity;
         expect(entity).toMatchInlineSnapshot(`
             GroupedEntity {
               "children": Array [
@@ -113,7 +120,7 @@ describe('ast renderer', () => {
                       "type": "functionEntity",
                       "width": 0.5,
                       "x": 0.5,
-                      "y": 0.5,
+                      "y": 0.25,
                     },
                   ],
                   "height": 1,
@@ -134,7 +141,7 @@ describe('ast renderer', () => {
 
     it('should throw error with unexpected operator', () => {
         expect.assertions(1);
-        const operator = 'operator does not exist';
+        const operator = 'operator does not exist' as BinaryOpeators;
         expect.assertions(1);
         const ast = new BinaryOpAST(
             operator,
@@ -144,18 +151,19 @@ describe('ast renderer', () => {
 
         const renderer = new ASTRenderer();
 
-        expect(() => renderer.visit(ast, null)).toThrow(buildNotImplementedError(operator));
+        expect(() => renderer.visit(ast, 1)).toThrow(
+            buildNotImplementedError(operator)
+        );
     });
 
-    it.each([
-        ['visitIdentifier'],
-        ['visitLet'],
-        ['visitUnaryOperator']
-    ])('should throw error when calling %s method', (methodName: string) => {
-        const ast = new ASTRenderer();
-        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-        const method = (ast as any)[methodName] as () => void;
+    it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(
+        'should throw error when calling %s method',
+        (methodName: string) => {
+            const ast = new ASTRenderer();
+            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+            const method = (ast as any)[methodName] as () => void;
 
-        expect(() => method()).toThrow(expect.anything());
-    });
+            expect(() => method()).toThrow(expect.anything());
+        }
+    );
 });

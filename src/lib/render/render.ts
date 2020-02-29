@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [1, 2]}] */
+/* eslint no-magic-numbers: ["warn", {"ignore": [0.5, 1, 2]}] */
 import {
     EntityVisitor,
     FunctionEntity,
@@ -11,7 +11,8 @@ import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
 type Point = [number, number];
 type LineEntry = [Point, Point];
-type BoxEntry = [Point, number, number, boolean];
+// [x1,y1], [x2,y2], isDrawn.
+type BoxEntry = [Point, Point, boolean];
 type LabelEntry = [LabelFunction, Point];
 
 /**
@@ -53,14 +54,15 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
         const {x, y, width, height, label} = entity;
         const {featureFlags} = context;
 
+        const drawBox = featureFlags[RENDER_UNIT_SQUARE] || false;
+        const halfWidth = width / 2;
+        const halfHeight = height / 2;
+
         const functionRenderResult: RenderResults = {
             lines: [],
-            boxes: [],
-            labels: [[label, [x, y]]]
+            boxes: [[[x, y], [x + width, y + height], drawBox]],
+            labels: [[label, [x + halfWidth, y + halfHeight]]]
         };
-
-        const drawBox = featureFlags[RENDER_UNIT_SQUARE] || false;
-        functionRenderResult.boxes.push([[x, y], width, height, drawBox]);
 
         return functionRenderResult;
     }
@@ -122,14 +124,23 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
         return [[x1b, y1b], [x2b, y2b]];
     });
 
+    const items: [BoxEntry, LabelEntry][] = boxes.map(([[x, y], [x2, y2], drawBox], i) => {
+        const [labelFunc] = labels[i];
+        const newX = x * scaleX;
+        const newX2 = x2 * scaleX;
+        const newY = y * scaleY;
+        const newY2 = y2 * scaleY;
+
+        return [[[newX, newY], [newX2, newY2], drawBox], [labelFunc, [0.5 * (newX2 + newX), 0.5 * (newY2 + newY)]]];
+    });
+
+    const newBoxes = items.map(([b]) => b);
+    const newLabels = items.map(([, l]) => l);
+
     return {
         lines,
-        boxes: boxes.map(([[x, y], width, height, drawBox]) => {
-            const newWidth = width * scaleX;
-            const newHeight = height * scaleY;
-            return [[x * (scaleX / 2), y * (scaleY / 2)], newWidth, newHeight, drawBox];
-        }),
-        labels: labels.map(([label, [x, y]]) => [label, [x * (scaleX / 2), y * (scaleY / 2)]])
+        boxes: newBoxes,
+        labels: newLabels
     };
 }
 
@@ -157,11 +168,8 @@ export function transformRenderResult(
     });
 
     // Boxes
-    const newBoxes = boxes.map(([[x, y], width, height, drawBox]): BoxEntry => {
-        const x2 = x + translateX;
-        const y2 = y + translateY;
-
-        return [[x2, y2], width, height, drawBox];
+    const newBoxes = boxes.map(([[x, y], [x2, y2], drawBox]): BoxEntry => {
+        return [[x + translateX, y + translateY], [x2 + translateX, y2 + translateY], drawBox];
     });
 
     const newLabels = labels.map(([label, [x, y]]): LabelEntry => [label, [x + translateX, y + translateY]]);
@@ -191,13 +199,16 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     });
 
     // Boxes
-    boxes.forEach(([[x, y], width, height, drawBox], i) => {
+    boxes.forEach(([[x, y], [x2, y2], drawBox], i) => {
         // This only works because theres a 1 to 1 relation between function boxes and labels.
         const [label, [labelX, labelY]] = labels[i];
+        console.log('render box: ', x, y, x2, y2, labelX, labelY);
+        const width = Math.abs(x2 - x);
+        const height = Math.abs(y2 - y);
 
         if (drawBox) {
             ctx.beginPath();
-            ctx.rect(x - (width / 2), y - (height / 2), width, height);
+            ctx.rect(x, y, width, height);
             ctx.stroke();
         }
 
