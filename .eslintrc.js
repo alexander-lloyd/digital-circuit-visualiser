@@ -142,6 +142,7 @@ module.exports = {
         "src/**/*.spec.tsx"
       ],
       "rules": {
+        '@typescript-eslint/no-empty-function': "off",
         "no-magic-numbers": "off"
       }
     }
