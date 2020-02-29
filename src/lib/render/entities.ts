@@ -161,11 +161,7 @@ export class GroupedEntity implements Entity {
         this.width *= scaleX;
         this.height *= scaleY;
 
-        const [left, right] = this.children;
-        left.scale(scaleX, scaleY);
-        right.scale(scaleX, scaleY);
-
-        this.children = [left, right];
+        this.children.forEach((e: Entity) => e.scale(scaleX, scaleY));
 
         return this;
     }
@@ -182,11 +178,7 @@ export class GroupedEntity implements Entity {
         this.x += translateX;
         this.y += translateY;
 
-        const [left, right] = this.children;
-        left.translate(translateX, translateY);
-        right.translate(translateX, translateY);
-
-        this.children = [left, right];
+        this.children.forEach((e: Entity) => e.translate(translateX, translateY));
 
         return this;
     }
