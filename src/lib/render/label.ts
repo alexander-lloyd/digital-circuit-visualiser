@@ -40,13 +40,14 @@ export function buildTextLabelFunction(label: string): LabelFunction {
  */
 export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunction {
     const imageSrc = imageMetaData.image;
+    const image = new Image();
+    image.src = imageSrc;
+
+    const imageHeight = image.height;
+    const imageWidth = image.width;
 
     return (x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D): void => {
-        const image = new Image();
         image.onload = (): void => {
-            const imageHeight = image.height;
-            const imageWidth = image.width;
-
             if (imageWidth > width || imageHeight > height) {
                 // Scale the image evenly in both x & y.
                 const scale = Math.min(width / imageWidth, height / imageHeight);
@@ -56,7 +57,5 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
 
             ctx.drawImage(image, x - (image.width / 2), y - (image.height / 2), image.width, image.height);
         };
-
-        image.src = imageSrc;
     };
 }
