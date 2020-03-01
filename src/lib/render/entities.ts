@@ -1,4 +1,4 @@
-import {LabelFunction} from './label';
+import {LabelFunction} from './types';
 
 export type Point = [number, number];
 export type Wire = [Point, Point];

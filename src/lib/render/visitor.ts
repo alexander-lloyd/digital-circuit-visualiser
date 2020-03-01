@@ -1,8 +1,7 @@
 /* eslint no-magic-numbers: ["warn", {"ignore": [-0.5, 0, 0.5, 1, 2]}] */
 import {
     buildTextImageFunction,
-    buildTextLabelFunction,
-    LabelFunction
+    buildTextLabelFunction
 } from './label';
 import {
     Entity,
@@ -10,6 +9,9 @@ import {
     GroupedEntity,
     Wire
 } from './entities';
+import {
+    LabelFunction
+} from './types';
 import {
     ASTVisitor,
     BinaryOpAST,

@@ -6,7 +6,7 @@ import {
 } from './entities';
 import {
     LabelFunction
-} from './label';
+} from './types';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
 type Point = [number, number];

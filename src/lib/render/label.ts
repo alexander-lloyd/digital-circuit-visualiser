@@ -1,12 +1,7 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
 
-export type LabelFunction = (
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    ctx: CanvasRenderingContext2D) => void;
+import {LabelFunction} from './types';
 
 const DEFAULT_FONT = 'Arial';
 const DEFAULT_FONT_SIZE = 120;
