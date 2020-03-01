@@ -1,13 +1,13 @@
 import {
     ASTOptimisingTransformer,
-    ASTOptimisingTransformerContext
+    ASTOptimisingTransformerContext,
+    buildNameErrorMessage
 } from '../../../lib/parser/compile';
 import {
     LetAST,
     IdentifierAST,
     BinaryOpAST,
     ConstantAST,
-    ApplicationAST,
     isBinaryOp,
     isConstant
 } from '../../../lib/parser/index';
@@ -38,5 +38,35 @@ describe('optimising ast transformer', () => {
         expect((left as ConstantAST).name).toBe('AND');
         expect(isConstant(right)).toBe(true);
         expect((right as ConstantAST).name).toBe('OR');
+    });
+
+    it('should throw an error if variable is not defined in simple expression', () => {
+        expect.assertions(1);
+        const ast = new IdentifierAST('x');
+
+        const transformer = new ASTOptimisingTransformer();
+        const context: ASTOptimisingTransformerContext = {
+            identifiers: new Map()
+        };
+        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('x'));
+    });
+
+    it('should throw an error if variable is not defined in complex expression', () => {
+        expect.assertions(1);
+        const ast = new LetAST(
+            new IdentifierAST('x'),
+            new BinaryOpAST(
+                'tensor',
+                new ConstantAST('AND'),
+                new ConstantAST('OR')
+            ),
+            new IdentifierAST('y')
+        );
+
+        const transformer = new ASTOptimisingTransformer();
+        const context: ASTOptimisingTransformerContext = {
+            identifiers: new Map()
+        };
+        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('y'));
     });
 });

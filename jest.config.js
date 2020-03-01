@@ -9,5 +9,10 @@ module.exports = {
     setupFilesAfterEnv: [
         '<rootDir>/setupTests.js',
         'jest-canvas-mock'
+    ],
+    collectCoverageFrom: [
+        '<rootDir>/src/**/*.{ts,tsx}',
+        '!**/node_modules/**',
+        '!<rootDir>/src/lib/parser/parser.ts'
     ]
 };

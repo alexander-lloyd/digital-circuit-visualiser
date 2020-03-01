@@ -137,8 +137,13 @@ module.exports = {
       }
     },
     {
-      "files": ["src/**/*.spec.ts[x]"],
+      "files": [
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx"
+      ],
       "rules": {
+        "@typescript-eslint/no-empty-function": "off",
+        "jsdoc/require-jsdoc": "off",
         "no-magic-numbers": "off"
       }
     }

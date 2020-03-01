@@ -1,17 +1,33 @@
 import {
     AST,
     ASTVisitor,
-    ApplicationAST,
     BinaryOpAST,
     ConstantAST,
+    ExpressionAST,
     IdentifierAST,
     LetAST,
-    ExpressionAST
+    UnaryOpAST
 } from './ast';
 
 export type ASTOptimisingTransformerContext = {
     identifiers: Map<string, AST>;
 };
+
+/**
+ * Error raised when a variable is referenced but not
+ * defined in the map identifiers.
+ */
+export class NameError extends Error {}
+
+/**
+ * Build error message.
+ *
+ * @param name variable name to include in message.
+ * @returns Error message.
+ */
+export function buildNameErrorMessage(name: string): string {
+    return `ASTOptimisingTransformer.visitIdentifier got unexpected variable '${name}'`;
+}
 
 /**
  * Explore an AST and substitute variables from let bindings with the expression.
@@ -26,6 +42,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
      * @param ast AST Node.
      * @param context ASTOptimising Context.
      * @returns Identifier AST.
+     * @throws NameError if a variable is referenced and not defined in the context.
      */
     public visitIdentifier(ast: IdentifierAST, context: ASTOptimisingTransformerContext): AST {
         const {name} = ast;
@@ -33,7 +50,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         const newAST = identifiers.get(name);
 
         if (newAST === undefined) {
-            throw new Error(`ASTOptimisingTransformer.visitIdentifier got unexpected variable '${name}'`);
+            throw new NameError(buildNameErrorMessage(name));
         }
 
         return newAST;
@@ -47,13 +64,6 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
      */
     public visitConstant(ast: ConstantAST): AST {
         return ast;
-    }
-
-    /**
-     * Visit application. Make no change to node.
-     */
-    public visitApplication(): never {
-        throw new Error('[Error] ASTOptimisingTransformer.visitApplication was called unexpectedly.');
     }
 
     /**
@@ -90,5 +100,21 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         context.identifiers.set(name, expression);
 
         return ast.body.visit(this, context);
+    }
+
+    /**
+     * Visit Unary Operator.
+     *
+     * @param ast UnaryOpAST Node.
+     * @param context Optimiser Context.
+     * @returns Optmisied AST.
+     */
+    public visitUnaryOperator(ast: UnaryOpAST, context: ASTOptimisingTransformerContext): AST {
+        const {operator, child} = ast;
+        const newChild = child.visit(this, context);
+        if (newChild !== child) {
+            return new UnaryOpAST(operator, newChild as ExpressionAST);
+        }
+        return ast;
     }
 }

@@ -38,7 +38,8 @@ const cspPluginOptions = {
 const plugins = [
     new HtmlWebpackPlugin({
         template: PATHS.template,
-        inject: true
+        inject: true,
+        favicon: './src/assets/favicon.ico'
     }),
     new MiniCssExtractPlugin({
         filename: '[name].bundle.css'

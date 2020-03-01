@@ -88,54 +88,57 @@ export class ConstantAST implements AST {
     }
 }
 
+export type UnaryOperators = 'feedback';
+
 /**
- * Function Application AST.
+ * Unary Operator AST.
  */
-export class ApplicationAST implements AST {
-    public readonly type = 'application';
-    private _name: string;
-    private _parameters: ExpressionAST[];
+export class UnaryOpAST implements AST {
+    public readonly type = 'unary';
+    private readonly _operator: UnaryOperators;
+    private readonly _child: ExpressionAST;
 
     /**
-     * Constructor.
+     * Constructor
      *
-     * @param name Function name.
-     * @param parameters Parameters list.
+     * @param operator Unary operator. E.g. 'feedback'.
+     * @param child Child AST Node.
      */
-    public constructor(name: string, parameters: ExpressionAST[]) {
-        this._name = name;
-        this._parameters = parameters;
+    public constructor(operator: UnaryOperators, child: ExpressionAST) {
+        this._operator = operator;
+        this._child = child;
     }
 
     /**
-     * Get the name of the identifier being applied.
+     * Get the operator.
      *
-     * @returns The name of the identifier.
+     * @returns The operator.
      */
-    public get name(): string {
-        return this._name;
+    public get operator(): UnaryOperators {
+        return this._operator;
     }
 
     /**
-     * Get the list of parameters
+     * Get the child node.
      *
-     * @returns The list of parameters.
+     * @returns The child node.
      */
-    public get parameters(): ExpressionAST[] {
-        return this._parameters;
+    public get child(): ExpressionAST {
+        return this._child;
     }
 
     /**
-     * Visit the application in the AST Visitor.
+     * Visit the unaryOperator visitor method.
      *
-     * @param visitor AST Visitor.
+     * @param visitor ASTVisitor.
      * @param context ASTVisitor context.
-     * @returns Return value of visitApplicationAST.
+     * @returns Return value of ASTVisitor.visitUnaryOperator
      */
     public visit<T, R>(visitor: ASTVisitor<T, R>, context: T): R {
-        return visitor.visitApplication(this, context);
+        return visitor.visitUnaryOperator(this, context);
     }
 }
+
 
 export type BinaryOpeators = 'tensor' | 'compose';
 
@@ -202,7 +205,12 @@ export class BinaryOpAST implements AST {
     }
 }
 
-export type ExpressionAST = ApplicationAST | BinaryOpAST | ConstantAST | IdentifierAST;
+export type ExpressionAST =
+  | BinaryOpAST
+  | ConstantAST
+  | IdentifierAST
+  | LetAST
+  | UnaryOpAST;
 
 /**
  * Let AST Node.
@@ -287,14 +295,15 @@ export function isConstant(ast: AST): ast is ConstantAST {
 }
 
 /**
- * Is this AST node an Application node?
+ * Is this AST node a Unary node?
  *
  * @param ast AST Node.
- * @returns True if AST node is an application node.
+ * @returns True if AST node is a unary node.
  */
-export function isApplication(ast: AST): ast is ApplicationAST {
-    return ast.type === 'application';
+export function isUnaryOp(ast: AST): ast is UnaryOpAST {
+    return ast.type === 'unary';
 }
+
 
 /**
  * Is this AST node a Binary node?
@@ -313,7 +322,7 @@ export function isBinaryOp(ast: AST): ast is BinaryOpAST {
  * @returns True if AST node is an expression node.
  */
 export function isExpression(ast: AST): ast is ExpressionAST {
-    return isApplication(ast) || isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
+    return isUnaryOp(ast) || isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
 }
 
 /**
@@ -343,7 +352,7 @@ export abstract class ASTVisitor<T, R> {
 
     abstract visitIdentifier(ast: IdentifierAST, context: T): R;
     abstract visitConstant(ast: ConstantAST, context: T): R;
-    abstract visitApplication(ast: ApplicationAST, context: T): R;
+    abstract visitUnaryOperator(ast: UnaryOpAST, context: T): R;
     abstract visitBinaryOperator(ast: BinaryOpAST, context: T): R;
     abstract visitLet(ast: LetAST, context: T): R;
 }

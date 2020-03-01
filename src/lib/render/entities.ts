@@ -31,6 +31,7 @@ function translateWire([[x1, y1], [x2, y2]]: Wire, translateX: number, translate
  * A rendered entity.
  */
 export interface Entity {
+    type: string;
     x: number;
     y: number;
     width: number;
@@ -69,6 +70,7 @@ export interface Entity {
  * drawing.
  */
 export class FunctionEntity implements Entity {
+    public readonly type = 'functionEntity';
     public x: number;
     public y: number;
     public width: number;
@@ -152,6 +154,7 @@ export class FunctionEntity implements Entity {
  * For example, a binary operation,
  */
 export class GroupedEntity implements Entity {
+    public readonly type = 'groupedEntity';
     public x: number;
     public y: number;
     public width: number;
@@ -192,11 +195,7 @@ export class GroupedEntity implements Entity {
         this.width *= scaleX;
         this.height *= scaleY;
 
-        const [left, right] = this.children;
-        left.scale(scaleX, scaleY);
-        right.scale(scaleX, scaleY);
-
-        this.children = [left, right];
+        this.children.forEach((e: Entity) => e.scale(scaleX, scaleY));
 
         return this;
     }
@@ -213,11 +212,7 @@ export class GroupedEntity implements Entity {
         this.x += translateX;
         this.y += translateY;
 
-        const [left, right] = this.children;
-        left.translate(translateX, translateY);
-        right.translate(translateX, translateY);
-
-        this.children = [left, right];
+        this.children.forEach((e: Entity) => e.translate(translateX, translateY));
 
         return this;
     }
@@ -251,4 +246,24 @@ export abstract class EntityVisitor<T, R> {
 
     abstract visitFunction(entity: FunctionEntity, context: T): R;
     abstract visitGrouped(entity: GroupedEntity, context: T): R;
+}
+
+/**
+ * Is the Entity a function entity?
+ *
+ * @param entity Entity
+ * @returns true if entity is a function entity. Returns false otherwise.
+ */
+export function isFunctionEntity(entity: Entity): entity is FunctionEntity {
+    return entity.type === 'functionEntity';
+}
+
+/**
+ * Is the Entity a grouped entity?
+ *
+ * @param entity Entity
+ * @returns true if entity is a grouped entity. Returns false otherwise.
+ */
+export function isGroupedEntity(entity: Entity): entity is GroupedEntity {
+    return entity.type === 'groupedEntity';
 }

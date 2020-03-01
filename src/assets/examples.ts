@@ -1,6 +1,6 @@
 export type ExampleMetaData = {
     name: string;
-    descrition: string;
+    description: string;
     source: string;
 };
 
@@ -11,12 +11,22 @@ type Examples = {
 export const EXAMPLES: Examples = {
     AND: {
         name: 'AND Gate',
-        descrition: 'Example with an AND Gate',
-        source: 'let x = AND in x;'
+        description: 'Example with an AND Gate',
+        source: 'AND'
     },
     OR: {
         name: 'OR Gate',
-        descrition: 'Example with an OR Gate',
-        source: 'let x = OR in x;'
+        description: 'Example with an OR Gate',
+        source: 'OR'
+    },
+    JOIN_GATES: {
+        name: 'Join Two Gates',
+        description: 'Join two outputs.',
+        source: 'let x = AND * AND in x . JOIN'
+    },
+    SPLIT_GATES: {
+        name: 'Split Output',
+        description: 'Split output into two outputs.',
+        source: 'let x = AND * AND in OR. SPLIT . x'
     }
 };

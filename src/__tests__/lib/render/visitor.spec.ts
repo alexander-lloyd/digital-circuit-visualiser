@@ -1,8 +1,11 @@
 import {
-    ASTRenderer
+    ASTRenderer,
+    buildNotImplementedError
 } from '../../../lib/render/visitor';
 import {
-    ConstantAST, BinaryOpAST
+    ConstantAST,
+    BinaryOpAST,
+    BinaryOpeators
 } from '../../../lib/parser/ast';
 import {GroupedEntity} from 'lib/render/entities';
 
@@ -12,7 +15,7 @@ describe('ast renderer', () => {
 
         const ast = new ConstantAST('AND');
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, null);
+        const entity = renderer.visit(ast, 1);
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -29,7 +32,7 @@ describe('ast renderer', () => {
             new ConstantAST('OR')
         );
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, null) as GroupedEntity;
+        const entity = renderer.visit(ast, 1) as GroupedEntity;
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -38,12 +41,12 @@ describe('ast renderer', () => {
 
         const [left, right] = entity.children;
         expect(left.x).toBe(0);
-        expect(left.y).toBe(0.5);
+        expect(left.y).toBe(0);
         expect(left.width).toBe(1);
         expect(left.height).toBe(0.5);
 
         expect(right.x).toBe(0);
-        expect(right.y).toBe(-0.5);
+        expect(right.y).toBe(0.5);
         expect(right.width).toBe(1);
         expect(right.height).toBe(0.5);
     });
@@ -57,7 +60,7 @@ describe('ast renderer', () => {
             new ConstantAST('OR')
         );
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, null) as GroupedEntity;
+        const entity = renderer.visit(ast, 1) as GroupedEntity;
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -65,7 +68,7 @@ describe('ast renderer', () => {
         expect(entity.height).toBe(1);
 
         const [left, right] = entity.children;
-        expect(left.x).toBe(-0.5);
+        expect(left.x).toBe(0);
         expect(left.y).toBe(0);
         expect(left.width).toBe(0.5);
         expect(left.height).toBe(1);
@@ -75,4 +78,90 @@ describe('ast renderer', () => {
         expect(right.width).toBe(0.5);
         expect(right.height).toBe(1);
     });
+
+    it('should handle nested expressions', () => {
+        expect.assertions(1);
+
+        const ast = new BinaryOpAST(
+            'compose',
+            new ConstantAST('ABC'),
+            new BinaryOpAST(
+                'tensor',
+                new ConstantAST('DEF'),
+                new ConstantAST('GHI')
+            )
+        );
+        const renderer = new ASTRenderer();
+        const entity = renderer.visit(ast, 1) as GroupedEntity;
+        expect(entity).toMatchInlineSnapshot(`
+            GroupedEntity {
+              "children": Array [
+                FunctionEntity {
+                  "height": 1,
+                  "label": [Function],
+                  "type": "functionEntity",
+                  "width": 0.5,
+                  "x": 0,
+                  "y": 0,
+                },
+                GroupedEntity {
+                  "children": Array [
+                    FunctionEntity {
+                      "height": 0.5,
+                      "label": [Function],
+                      "type": "functionEntity",
+                      "width": 0.5,
+                      "x": 0.5,
+                      "y": 0,
+                    },
+                    FunctionEntity {
+                      "height": 0.5,
+                      "label": [Function],
+                      "type": "functionEntity",
+                      "width": 0.5,
+                      "x": 0.5,
+                      "y": 0.25,
+                    },
+                  ],
+                  "height": 1,
+                  "type": "groupedEntity",
+                  "width": 0.5,
+                  "x": 0.5,
+                  "y": 0,
+                },
+              ],
+              "height": 1,
+              "type": "groupedEntity",
+              "width": 1,
+              "x": 0,
+              "y": 0,
+            }
+        `);
+    });
+
+    it('should throw error with unexpected operator', () => {
+        expect.assertions(1);
+        const operator = 'operator does not exist' as BinaryOpeators;
+        expect.assertions(1);
+        const ast = new BinaryOpAST(
+            operator,
+            new ConstantAST('ABC'),
+            new ConstantAST('DEF')
+        );
+
+        const renderer = new ASTRenderer();
+
+        expect(() => renderer.visit(ast, 1)).toThrow(buildNotImplementedError(operator));
+    });
+
+    it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(
+        'should throw error when calling %s method',
+        (methodName: string) => {
+            const ast = new ASTRenderer();
+            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+            const method = (ast as any)[methodName] as () => void;
+
+            expect(() => method()).toThrow(expect.anything());
+        }
+    );
 });
