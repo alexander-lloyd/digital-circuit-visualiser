@@ -5,15 +5,12 @@ import {
     GroupedEntity
 } from './entities';
 import {
-    LabelFunction
+    BoxEntry,
+    LabelEntry,
+    LineEntry,
+    Point
 } from './types';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
-
-type Point = [number, number];
-type LineEntry = [Point, Point];
-// [x1,y1], [x2,y2], isDrawn.
-type BoxEntry = [Point, Point, boolean];
-type LabelEntry = [LabelFunction, Point];
 
 const DEFAULT_CROSS_SIZE = 5;
 
