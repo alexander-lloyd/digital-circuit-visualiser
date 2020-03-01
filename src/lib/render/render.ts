@@ -128,17 +128,11 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
     const {lines, boxes, labels} = renderResults;
     // Lines
     const newLines = lines.map(([[x1, y1], [x2, y2]]): LineEntry => {
-        // X
-        const tx = (1 - scaleX) / 2;
-        const x1b = tx + x1;
-        const x2b = x2 - tx;
-
-        // Y
-        const ty = (1 - scaleY) / 2;
-        const y1b = ty + y1;
-        const y2b = y2 - ty;
-
-        return [[x1b, y1b], [x2b, y2b]];
+        const newX1 = x1 * scaleX;
+        const newY1 = y1 * scaleY;
+        const newX2 = x2 * scaleX;
+        const newY2 = y2 * scaleY;
+        return [[newX1, newY1], [newX2, newY2]];
     });
 
     const items: [BoxEntry, LabelEntry][] = boxes.map(([[x, y], [x2, y2], drawBox], i) => {
