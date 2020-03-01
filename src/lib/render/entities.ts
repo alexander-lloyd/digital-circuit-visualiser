@@ -1,6 +1,5 @@
-import {LabelFunction} from './types';
+import {LabelFunction, Point} from './types';
 
-export type Point = [number, number];
 export type Wire = [Point, Point];
 
 /**
