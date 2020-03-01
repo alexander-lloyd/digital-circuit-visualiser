@@ -117,5 +117,5 @@ module.exports = {
         port: process.env.PORT || DEFAULT_PORT,
         historyApiFallback: true
     },
-    devtool: 'eval-source-map'
+    devtool: isProd ? 'nosources-source-map' : 'eval-source-map'
 };
