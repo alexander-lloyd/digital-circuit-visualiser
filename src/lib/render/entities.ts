@@ -3,6 +3,17 @@ import {LabelFunction, Point} from './types';
 export type Wire = [Point, Point];
 
 /**
+ * Flat Map implementation.
+ *
+ * @param array Array.
+ * @param callbackfn Map function.
+ * @returns Flattened mapped array.
+ */
+function flatMap<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[] {
+    return Array.prototype.concat(...array.map(callbackfn));
+}
+
+/**
  * Scale a Wire.
  *
  * @param wire Wire.
@@ -35,6 +46,8 @@ export interface Entity {
     y: number;
     width: number;
     height: number;
+    inputs: number[];
+    outputs: number[];
 
     /**
      * Scale an entity.
@@ -76,6 +89,8 @@ export class FunctionEntity implements Entity {
     public height: number;
     public label: LabelFunction;
     public wires: Wire[];
+    public inputs: number[];
+    public outputs: number[];
 
     /**
      * Constructor.
@@ -86,6 +101,8 @@ export class FunctionEntity implements Entity {
      * @param height Box height
      * @param label Function to draw the label.
      * @param wires Additional Wires required.
+     * @param inputs Inputs into this Entity.
+     * @param outputs Outputs to the next entity.
      */
     public constructor(
         x: number,
@@ -93,7 +110,9 @@ export class FunctionEntity implements Entity {
         width: number,
         height: number,
         label: LabelFunction,
-        wires: Wire[]
+        wires: Wire[],
+        inputs: number[],
+        outputs: number[]
     ) {
         this.x = x;
         this.y = y;
@@ -101,6 +120,8 @@ export class FunctionEntity implements Entity {
         this.height = height;
         this.label = label;
         this.wires = wires;
+        this.inputs = inputs;
+        this.outputs = outputs;
     }
 
     /**
@@ -114,6 +135,8 @@ export class FunctionEntity implements Entity {
         this.width *= scaleX;
         this.height *= scaleY;
         this.wires = this.wires.map((wire) => scaleWire(wire, scaleX, scaleY));
+        this.inputs = this.inputs.map((i: number) => i * scaleY);
+        this.outputs = this.outputs.map((o: number) => o * scaleY);
 
         return this;
     }
@@ -128,8 +151,9 @@ export class FunctionEntity implements Entity {
     public translate(translateX: number, translateY: number): this {
         this.x += translateX;
         this.y += translateY;
-
         this.wires = this.wires.map((wire) => translateWire(wire, translateX, translateY));
+        this.inputs = this.inputs.map((i: number) => i + translateY);
+        this.outputs = this.outputs.map((o: number) => o + translateY);
 
         return this;
     }
@@ -157,6 +181,7 @@ export class GroupedEntity implements Entity {
     public width: number;
     public height: number;
     public children: [Entity, Entity];
+
     /**
      * Constructor.
      *
@@ -178,6 +203,24 @@ export class GroupedEntity implements Entity {
         this.width = width;
         this.height = height;
         this.children = children;
+    }
+
+    /**
+     * Get all the nested inputs.
+     *
+     * @returns All the inputs.
+     */
+    public get inputs(): number[] {
+        return flatMap(this.children, (e: Entity) => e.inputs);
+    }
+
+    /**
+     * Get all the nested outputs
+     *
+     * @returns All the outputs.
+     */
+    public get outputs(): number[] {
+        return flatMap(this.children, (e: Entity) => e.outputs);
     }
 
     /**

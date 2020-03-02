@@ -84,7 +84,7 @@ describe('image label', () => {
         // eslint-disable-next-line no-multi-assign, jest/prefer-spy-on
         const imageMock = jest.fn();
         window.Image = imageMock;
-        imageMock.mockImplementation(() => new HTMLImageElement());
+        imageMock.mockImplementation();
 
         const metadata: ImageMetaData = {
             name: 'Mock Gate',

@@ -3,6 +3,7 @@ import {
     buildTextImageFunction,
     buildTextLabelFunction
 } from './label';
+import {getTerminatorPositions} from './draw';
 import {
     Entity,
     FunctionEntity,
@@ -60,6 +61,8 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
         const {name} = ast;
         const imageMetaData = images[name];
         const wires: Wire[] = [];
+        let inputPositions: number[] = [];
+        let outputPositions: number[] = [];
 
         if (imageMetaData === undefined) {
             label = buildTextLabelFunction(name);
@@ -71,9 +74,12 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
                 ...inputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]]),
                 ...outputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]])
             );
+
+            inputPositions = getTerminatorPositions(inputs.length);
+            outputPositions = getTerminatorPositions(outputs.length);
         }
 
-        return new FunctionEntity(0, 0, 1, 1, label, wires);
+        return new FunctionEntity(0, 0, 1, 1, label, wires, inputPositions, outputPositions);
     }
 
     /**
