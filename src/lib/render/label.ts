@@ -39,20 +39,14 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
     const image = new Image();
     image.src = imageSrc;
 
-    const imageHeight = image.height;
-    const imageWidth = image.width;
-
     return (x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D): void => {
         image.onload = (): void => {
-            let scale = 1;
-            if (imageWidth > width || imageHeight > height) {
-                // Scale the image evenly in both x & y.
-                scale = Math.min(width / imageWidth, height / imageHeight);
-                if (scale !== 1) {
-                    image.width = imageWidth * scale;
-                    image.height = imageHeight * scale;
-                }
-            }
+            const oldHeight = image.height;
+            const oldWidth = image.width;
+            const ratio = image.width / image.height;
+            image.height = 40;
+            image.width = ratio * image.height;
+            const scale = image.height / oldHeight;
 
             const centerX = image.width / 2;
             const centerY = image.height / 2;

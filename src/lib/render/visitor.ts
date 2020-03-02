@@ -79,7 +79,7 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
             outputPositions = getTerminatorPositions(outputs.length);
         }
 
-        return new FunctionEntity(0, 0, 1, 1, label, wires, inputPositions, outputPositions);
+        return new FunctionEntity(0, 0, 1, 1, label, [], inputPositions, outputPositions);
     }
 
     /**

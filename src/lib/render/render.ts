@@ -15,7 +15,9 @@ import {
 } from './transform';
 import {
     renderBoxEntry,
-    renderLineEntry
+    renderLineEntry,
+    renderBezier,
+    getTerminatorPositions
 } from './draw';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
@@ -58,7 +60,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
      * @returns All the individual canvas elements to draw.
      */
     visitFunction(entity: FunctionEntity, context: EntityRendererVisitorContext): RenderResults {
-        const {x, y, width, height, label, wires} = entity;
+        const {x, y, width, height, label, wires, inputs, outputs} = entity;
         const {featureFlags} = context;
 
         const drawBox = featureFlags[RENDER_UNIT_SQUARE] || false;
@@ -68,7 +70,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
         const functionRenderResult: RenderResults = {
             lines: [...wires],
             boxes: [[[x, y], [x + width, y + height], drawBox]],
-            labels: [[label, [x + halfWidth, y + halfHeight]]],
+            labels: [[label, [x + halfWidth, y + halfHeight], inputs.length, outputs.length]],
             beziers: []
         };
 
@@ -89,19 +91,21 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
         const {
             lines: llines,
             boxes: lboxes,
-            labels: llabel
+            labels: llabel,
+            beziers: lbeziers
         } = left.visit(this, context);
         const {
             lines: rlines,
             boxes: rboxes,
-            labels: rlabels
+            labels: rlabels,
+            beziers: rbeziers
         } = right.visit(this, context);
 
         return {
             lines: [...llines, ...rlines],
             boxes: [...lboxes, ...rboxes],
             labels: [...llabel, ...rlabels],
-            beziers: []
+            beziers: [...lbeziers, ...rbeziers]
         };
     }
 }
@@ -123,13 +127,16 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
     const newBeziers = beziers.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
 
     const items: [BoxEntry, LabelEntry][] = boxes.map(([[x, y], [x2, y2], drawBox], i) => {
-        const [labelFunc] = labels[i];
+        const [labelFunc, , inputs, outputs] = labels[i];
         const newX = x * scaleX;
         const newX2 = x2 * scaleX;
         const newY = y * scaleY;
         const newY2 = y2 * scaleY;
 
-        return [[[newX, newY], [newX2, newY2], drawBox], [labelFunc, [0.5 * (newX2 + newX), 0.5 * (newY2 + newY)]]];
+        return [
+            [[newX, newY], [newX2, newY2], drawBox],
+            [labelFunc, [0.5 * (newX2 + newX), 0.5 * (newY2 + newY)], inputs, outputs]
+        ];
     });
 
     const newBoxes = items.map(([b]) => b);
@@ -170,7 +177,7 @@ export function transformRenderResult(
         return [[newX1, newY1], [newX2, newY2], drawBox];
     });
 
-    const newLabels = labels.map(([label, [x, y]]): LabelEntry => [label, [x + translateX, y + translateY]]);
+    const newLabels = labels.map(([label, [x, y], inputs, outputs]): LabelEntry => [label, [x + translateX, y + translateY], inputs, outputs]);
 
     return {
         lines: newLines,
@@ -188,13 +195,13 @@ export function transformRenderResult(
  * @param renderResults Lists of items to render.
  */
 export function renderResult(ctx: CanvasRenderingContext2D, renderResults: RenderResults): void {
-    const {lines, boxes, labels} = renderResults;
+    const {lines, boxes, labels, beziers} = renderResults;
 
     // Boxes
     boxes.forEach((box, i) => {
         const [[x, y], [x2, y2], drawBox] = box;
         // This only works because theres a 1 to 1 relation between function boxes and labels.
-        const [label, [labelX, labelY]] = labels[i];
+        const [label, [labelX, labelY], inputs, outputs] = labels[i];
         const width = Math.abs(x2 - x);
         const height = Math.abs(y2 - y);
 
@@ -202,9 +209,29 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
             renderBoxEntry(ctx, box);
         }
 
-        label(labelX, labelY, width, height, ctx);
+        const labelWidth = 80;
+        const labelHeight = 40;
+
+        label(labelX, labelY, labelWidth, labelHeight, ctx);
+
+        const inputPoints = getTerminatorPositions(inputs);
+        const outputPoints = getTerminatorPositions(outputs);
+
+        inputPoints.forEach((inputPos: number) => {
+            renderBezier(ctx, [
+                [x, y + (height * inputPos)],
+                [labelX - (labelWidth / 2) - 10, labelY - (labelHeight / 2) + (labelHeight * inputPos)]
+            ]);
+        });
+        outputPoints.forEach((outputPos: number) => {
+            renderBezier(ctx, [
+                [labelX + (labelWidth / 2), labelY - (labelHeight / 2) + (labelHeight * outputPos)],
+                [x2, y + (height * outputPos)]
+            ]);
+        });
     });
 
     // Lines
-    [...lines].forEach((lineEntry: LineEntry): void => renderLineEntry(ctx, lineEntry));
+    lines.forEach((lineEntry: LineEntry): void => renderLineEntry(ctx, lineEntry));
+    beziers.forEach((lineEntry: LineEntry): void => renderBezier(ctx, lineEntry));
 }

@@ -135,9 +135,7 @@ export class FunctionEntity implements Entity {
         this.width *= scaleX;
         this.height *= scaleY;
         this.wires = this.wires.map((wire) => scaleWire(wire, scaleX, scaleY));
-        this.inputs = this.inputs.map((i: number) => i * scaleY);
-        this.outputs = this.outputs.map((o: number) => o * scaleY);
-
+        // Inputs and outputs are in unit space so don't scale them.
         return this;
     }
 
