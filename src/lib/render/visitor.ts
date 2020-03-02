@@ -66,8 +66,6 @@ export class ASTRenderer extends ASTVisitor<number, Entity> {
             );
         }
 
-        console.log(wires);
-
         return new FunctionEntity(0, 0, 1, 1, label, wires);
     }
 
