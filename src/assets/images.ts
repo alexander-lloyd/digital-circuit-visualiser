@@ -40,16 +40,16 @@ const images: ImageMap = {
     JOIN: {
         name: 'JOIN',
         image: JOIN_GATE,
-        inputs: [],
-        outputs: [],
+        inputs: [[11.5, 22.5], [11.5, 77.5]],
+        outputs: [[86, 49.5]],
         width: 100,
         height: 100
     },
     SPLIT: {
         name: 'SPLIT',
         image: SPLIT_GATE,
-        inputs: [],
-        outputs: [],
+        inputs: [[88.5, 22.5], [88.5, 77.5]],
+        outputs: [[14, 50.5]],
         width: 100,
         height: 100
     }
