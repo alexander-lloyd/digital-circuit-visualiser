@@ -59,8 +59,8 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             const topLeftX = x - centerX;
             const topLeftY = y - centerY;
             ctx.drawImage(image, topLeftX, topLeftY, image.width, image.height);
-            imageMetaData.inputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy], 10));
-            imageMetaData.outputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy], 10));
+            imageMetaData.inputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy]));
+            imageMetaData.outputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy]));
         };
     };
 }

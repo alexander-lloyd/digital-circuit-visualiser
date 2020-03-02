@@ -195,7 +195,6 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
         const [[x, y], [x2, y2], drawBox] = box;
         // This only works because theres a 1 to 1 relation between function boxes and labels.
         const [label, [labelX, labelY]] = labels[i];
-        console.log('render box: ', x, y, x2, y2, labelX, labelY);
         const width = Math.abs(x2 - x);
         const height = Math.abs(y2 - y);
 
