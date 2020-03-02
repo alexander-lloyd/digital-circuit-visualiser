@@ -1,10 +1,6 @@
-import {FunctionEntity, GroupedEntity} from '../../../lib/render/entities';
+import {FunctionEntity, GroupedEntity, Wire} from '../../../lib/render/entities';
 import {buildTextLabelFunction} from '../../../lib/render/label';
-import {
-    EntityRendererVisitor,
-    RenderResults,
-    scaleRenderResult
-} from '../../../lib/render/render';
+import {EntityRendererVisitor, RenderResults, scaleRenderResult} from '../../../lib/render/render';
 import {RENDER_UNIT_SQUARE} from '../../../assets/features';
 
 describe('render graph', () => {
@@ -12,7 +8,7 @@ describe('render graph', () => {
         it('should return a renderresult given a function', () => {
             expect.assertions(1);
             const label = buildTextLabelFunction('ABC');
-            const entity = new FunctionEntity(0, 0, 1, 1, label, []);
+            const entity = new FunctionEntity(0, 0, 1, 1, label, [], [], []);
 
             const entityVisitor = new EntityRendererVisitor();
             const visitorContext = {
@@ -23,6 +19,7 @@ describe('render graph', () => {
             const renderResult = entityVisitor.visit(entity, visitorContext);
             expect(renderResult).toMatchInlineSnapshot(`
                 Object {
+                  "beziers": Array [],
                   "boxes": Array [
                     Array [
                       Array [
@@ -53,8 +50,8 @@ describe('render graph', () => {
         it('should set box to be rendered if feature flag is set', () => {
             expect.assertions(1);
             const label = buildTextLabelFunction('ABC');
-            const wires = [];
-            const entity = new FunctionEntity(0, 0, 1, 1, label, wires);
+            const wires: Wire[] = [];
+            const entity = new FunctionEntity(0, 0, 1, 1, label, wires, [], []);
 
             const entityVisitor = new EntityRendererVisitor();
             const visitorContext = {
@@ -67,6 +64,7 @@ describe('render graph', () => {
             const renderResult = entityVisitor.visit(entity, visitorContext);
             expect(renderResult).toMatchInlineSnapshot(`
                 Object {
+                  "beziers": Array [],
                   "boxes": Array [
                     Array [
                       Array [
@@ -99,9 +97,9 @@ describe('render graph', () => {
 
             expect.assertions(1);
             const label = buildTextLabelFunction('ABC');
-            const wires = [];
-            const lentity = new FunctionEntity(-0.5, 0, 0.5, 1, label, wires);
-            const rentity = new FunctionEntity(0.5, 0, 0.5, 1, label, wires);
+            const wires: Wire[] = [];
+            const lentity = new FunctionEntity(-0.5, 0, 0.5, 1, label, wires, [], []);
+            const rentity = new FunctionEntity(0.5, 0, 0.5, 1, label, wires, [], []);
             const entity = new GroupedEntity(0, 0, 1, 1, [lentity, rentity]);
 
             const entityVisitor = new EntityRendererVisitor();
@@ -115,6 +113,7 @@ describe('render graph', () => {
             const renderResult = entityVisitor.visit(entity, visitorContext);
             expect(renderResult).toMatchInlineSnapshot(`
                 Object {
+                  "beziers": Array [],
                   "boxes": Array [
                     Array [
                       Array [
@@ -168,7 +167,8 @@ describe('scale render result', () => {
         const renderResult: RenderResults = {
             boxes: [],
             labels: [],
-            lines: []
+            lines: [],
+            beziers: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual(renderResult);
@@ -180,13 +180,15 @@ describe('scale render result', () => {
         const renderResult: RenderResults = {
             boxes: [[[0, 0], [1, 1], true]],
             labels: [[mockLabel, [0, 0]]],
-            lines: []
+            lines: [],
+            beziers: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
             boxes: [[[0, 0], [2, 2], true]],
             labels: expect.anything(),
-            lines: []
+            lines: [],
+            beziers: []
         });
     });
 
@@ -196,13 +198,15 @@ describe('scale render result', () => {
         const renderResult: RenderResults = {
             boxes: [[[1, 1], [2, 2], true]],
             labels: [[mockLabel, [0, 0]]],
-            lines: []
+            lines: [],
+            beziers: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
             boxes: [[[2, 2], [4, 4], true]],
             labels: expect.anything(),
-            lines: []
+            lines: [],
+            beziers: []
         });
     });
 
@@ -212,13 +216,15 @@ describe('scale render result', () => {
         const renderResult: RenderResults = {
             boxes: [[[-1, -1], [1, 1], true]],
             labels: [[mockLabel, [0, 0]]],
-            lines: []
+            lines: [],
+            beziers: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
             boxes: [[[-2, -5], [2, 5], true]],
             labels: [[mockLabel, [0, 0]]],
-            lines: []
+            lines: [],
+            beziers: []
         });
     });
 
@@ -228,13 +234,15 @@ describe('scale render result', () => {
         const renderResult: RenderResults = {
             boxes: [[[4, 4], [6, 6], true]],
             labels: [[mockLabel, [5, 5]]],
-            lines: []
+            lines: [],
+            beziers: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
             boxes: [[[8, 20], [12, 30], true]],
             labels: [[mockLabel, [10, 25]]],
-            lines: []
+            lines: [],
+            beziers: []
         });
     });
 });

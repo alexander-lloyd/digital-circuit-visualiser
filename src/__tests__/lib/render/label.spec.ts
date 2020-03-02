@@ -102,6 +102,6 @@ describe('image label', () => {
         const [mockImage] = imageMock.mock.instances as HTMLImageElement[];
 
         const onload = mockImage.onload as () => void;
-        // onload(); // TODO: Mock Image
+        // TODO: onload();
     });
 });

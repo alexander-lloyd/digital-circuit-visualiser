@@ -149,12 +149,10 @@ describe('ast renderer', () => {
 
         const renderer = new ASTRenderer();
 
-        expect(() =>
-            renderer.visit(ast, {
-                depthX: 1,
-                depthY: 1
-            })
-        ).toThrow(buildNotImplementedError(operator));
+        expect(() => renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        })).toThrow(buildNotImplementedError(operator));
     });
 
     it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(

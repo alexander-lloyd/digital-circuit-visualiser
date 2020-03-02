@@ -10,6 +10,10 @@ import {
     LineEntry
 } from './types';
 import {
+    scaleLineEntry,
+    translateLineEntry
+} from './transform';
+import {
     renderBoxEntry,
     renderLineEntry
 } from './draw';
@@ -38,6 +42,8 @@ export type RenderResults = {
     boxes: BoxEntry[];
     // Label functions.
     labels: LabelEntry[];
+    // Bezier curves
+    beziers: LineEntry[];
 };
 
 /**
@@ -62,7 +68,8 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
         const functionRenderResult: RenderResults = {
             lines: [...wires],
             boxes: [[[x, y], [x + width, y + height], drawBox]],
-            labels: [[label, [x + halfWidth, y + halfHeight]]]
+            labels: [[label, [x + halfWidth, y + halfHeight]]],
+            beziers: []
         };
 
         return functionRenderResult;
@@ -93,7 +100,8 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
         return {
             lines: [...llines, ...rlines],
             boxes: [...lboxes, ...rboxes],
-            labels: [...llabel, ...rlabels]
+            labels: [...llabel, ...rlabels],
+            beziers: []
         };
     }
 }
@@ -109,15 +117,10 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
  * @returns new Render Result.
  */
 export function scaleRenderResult(renderResults: RenderResults, scaleX: number, scaleY: number): RenderResults {
-    const {lines, boxes, labels} = renderResults;
+    const {lines, boxes, labels, beziers} = renderResults;
     // Lines
-    const newLines = lines.map(([[x1, y1], [x2, y2]]): LineEntry => {
-        const newX1 = x1 * scaleX;
-        const newY1 = y1 * scaleY;
-        const newX2 = x2 * scaleX;
-        const newY2 = y2 * scaleY;
-        return [[newX1, newY1], [newX2, newY2]];
-    });
+    const newLines = lines.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
+    const newBeziers = beziers.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
 
     const items: [BoxEntry, LabelEntry][] = boxes.map(([[x, y], [x2, y2], drawBox], i) => {
         const [labelFunc] = labels[i];
@@ -135,7 +138,8 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
     return {
         lines: newLines,
         boxes: newBoxes,
-        labels: newLabels
+        labels: newLabels,
+        beziers: newBeziers
     };
 }
 
@@ -152,15 +156,10 @@ export function transformRenderResult(
     translateX: number,
     translateY: number
 ): RenderResults {
-    const {lines, boxes, labels} = renderResults;
+    const {lines, boxes, labels, beziers} = renderResults;
     // Lines
-    const newLines = lines.map(([[x1, y1], [x2, y2]]): LineEntry => {
-        const x1b = x1 + translateX;
-        const y1b = y1 + translateY;
-        const x2b = x2 + translateX;
-        const y2b = y2 + translateY;
-        return [[x1b, y1b], [x2b, y2b]];
-    });
+    const newLines = lines.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
+    const newBeziers = beziers.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
 
     // Boxes
     const newBoxes = boxes.map(([[x, y], [x2, y2], drawBox]): BoxEntry => {
@@ -176,7 +175,8 @@ export function transformRenderResult(
     return {
         lines: newLines,
         boxes: newBoxes,
-        labels: newLabels
+        labels: newLabels,
+        beziers: newBeziers
     };
 }
 
