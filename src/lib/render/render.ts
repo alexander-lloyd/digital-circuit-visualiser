@@ -10,7 +10,6 @@ import {
     LineEntry
 } from './types';
 import {
-    drawCross
 } from './draw';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
@@ -207,7 +206,7 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     });
 
     // Lines
-    [...lines, ...drawCross([100, 100], 10)].forEach(([[x1, y1], [x2, y2]]): void => {
+    [...lines].forEach(([[x1, y1], [x2, y2]]): void => {
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
