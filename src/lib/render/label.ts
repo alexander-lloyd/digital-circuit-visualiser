@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
-import {renderCross} from './draw';
+import {renderBezier, renderBoxEntry, getTerminatorPositions} from './draw';
 
 import {LabelFunction} from './types';
 
@@ -39,28 +39,40 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
     const image = new Image();
     image.src = imageSrc;
 
-    const imageHeight = image.height;
-    const imageWidth = image.width;
-
     return (x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D): void => {
         image.onload = (): void => {
-            let scale = 1;
-            if (imageWidth > width || imageHeight > height) {
-                // Scale the image evenly in both x & y.
-                scale = Math.min(width / imageWidth, height / imageHeight);
-                if (scale !== 1) {
-                    image.width = imageWidth * scale;
-                    image.height = imageHeight * scale;
-                }
-            }
+            const oldHeight = image.height;
+            const oldWidth = image.width;
+            const ratio = image.width / image.height;
+            image.height = 40;
+            image.width = ratio * image.height;
+            const scale = image.height / oldHeight;
 
             const centerX = image.width / 2;
             const centerY = image.height / 2;
             const topLeftX = x - centerX;
             const topLeftY = y - centerY;
+            renderBoxEntry(ctx, [[topLeftX, topLeftY], [topLeftX + image.width, topLeftY + image.height], true]);
             ctx.drawImage(image, topLeftX, topLeftY, image.width, image.height);
-            imageMetaData.inputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy]));
-            imageMetaData.outputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy]));
+            const inputTerminatorPositions = getTerminatorPositions(imageMetaData.inputs.length);
+            const outputTerminatorPositions = getTerminatorPositions(imageMetaData.outputs.length);
+            imageMetaData.inputs.forEach(([ix, iy], i): void => {
+                const x1 = topLeftX;
+                const y1 = topLeftY + (inputTerminatorPositions[i] * image.height);
+                const x2 = topLeftX + (ix * scale);
+                const y2 = topLeftY + (iy * scale);
+
+                renderBezier(ctx, [[x1, y1], [x2, y2]]);
+            });
+
+            imageMetaData.outputs.forEach(([ix, iy], i) => {
+                const x1 = topLeftX + (ix * scale);
+                const y1 = topLeftY + (iy * scale);
+                const x2 = topLeftX + image.width;
+                const y2 = topLeftY + (outputTerminatorPositions[i] * image.height);
+
+                renderBezier(ctx, [[x1, y1], [x2, y2]]);
+            });
         };
     };
 }

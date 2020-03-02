@@ -9,7 +9,7 @@ describe('function entity', () => {
     it('should scale a function entity', () => {
         expect.assertions(4);
 
-        const entity = new FunctionEntity(5, 6, 8, 10, () => {}, []);
+        const entity = new FunctionEntity(5, 6, 8, 10, () => {}, [], [], []);
         entity.scale(0.5, 2);
         expect(entity.x).toBe(5);
         expect(entity.y).toBe(6);
@@ -20,7 +20,7 @@ describe('function entity', () => {
     it('should translate a function entity', () => {
         expect.assertions(4);
 
-        const entity = new FunctionEntity(5, 6, 8, 10, () => {}, []);
+        const entity = new FunctionEntity(5, 6, 8, 10, () => {}, [], [], []);
         entity.translate(10, -3);
         expect(entity.x).toBe(15);
         expect(entity.y).toBe(3);
@@ -33,8 +33,8 @@ describe('grouped entity', () => {
     it('should scale a grouped entity', () => {
         expect.assertions(12);
 
-        const left = new FunctionEntity(1, 2, 1, 1, () => {}, []);
-        const right = new FunctionEntity(2, 2, 1, 1, () => {}, []);
+        const left = new FunctionEntity(1, 2, 1, 1, () => {}, [], [], []);
+        const right = new FunctionEntity(2, 2, 1, 1, () => {}, [], [], []);
         const entity = new GroupedEntity(1.5, 2, 2, 1, [left, right]);
 
         entity.scale(0.5, 2);
@@ -57,8 +57,8 @@ describe('grouped entity', () => {
     it('should translate a grouped entity', () => {
         expect.assertions(12);
 
-        const left = new FunctionEntity(1, 2, 1, 1, () => {}, []);
-        const right = new FunctionEntity(2, 2, 1, 1, () => {}, []);
+        const left = new FunctionEntity(1, 2, 1, 1, () => {}, [], [], []);
+        const right = new FunctionEntity(2, 2, 1, 1, () => {}, [], [], []);
         const entity = new GroupedEntity(1.5, 2, 2, 1, [left, right]);
 
         entity.translate(2, 3);

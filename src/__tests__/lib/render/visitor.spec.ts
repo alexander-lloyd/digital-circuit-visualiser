@@ -91,7 +91,9 @@ describe('ast renderer', () => {
               "children": Array [
                 FunctionEntity {
                   "height": 1,
+                  "inputs": Array [],
                   "label": [Function],
+                  "outputs": Array [],
                   "type": "functionEntity",
                   "width": 0.5,
                   "wires": Array [],
@@ -102,7 +104,9 @@ describe('ast renderer', () => {
                   "children": Array [
                     FunctionEntity {
                       "height": 0.5,
+                      "inputs": Array [],
                       "label": [Function],
+                      "outputs": Array [],
                       "type": "functionEntity",
                       "width": 0.5,
                       "wires": Array [],
@@ -111,7 +115,9 @@ describe('ast renderer', () => {
                     },
                     FunctionEntity {
                       "height": 0.5,
+                      "inputs": Array [],
                       "label": [Function],
+                      "outputs": Array [],
                       "type": "functionEntity",
                       "width": 0.5,
                       "wires": Array [],
