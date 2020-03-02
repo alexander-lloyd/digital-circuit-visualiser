@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [2]}] */
+/* eslint no-magic-numbers: ["warn", {"ignore": [0, 1, 2]}] */
 import {
     BoxEntry,
     LineEntry,
@@ -20,6 +20,23 @@ export function drawCross([x, y]: Point, size = DEFAULT_CROSS_SIZE): LineEntry[]
         [[x - halfSize, y - halfSize], [x + halfSize, y + halfSize]],
         [[x - halfSize, y + halfSize], [x + halfSize, y - halfSize]]
     ];
+}
+
+/**
+ * Work out where on the logic gate image the wires should connect.
+ *
+ * @param terminatorCount The number of connections.
+ * @returns An array of the position along the Y axis in unit space.
+ *
+ * @example getTerminatorPositions(1) -> 0.5
+ * @example getTerminatorPositions(2) -> [0.33, 0.66]
+ */
+export function getTerminatorPositions(terminatorCount: number): number[] {
+    const unitSize = 1.0;
+    const array: number[] = new Array(terminatorCount).
+        fill(0).
+        map((_, index) => unitSize * (index + 1) / (terminatorCount + 1));
+    return array;
 }
 
 /**

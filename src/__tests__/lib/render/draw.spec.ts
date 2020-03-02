@@ -1,5 +1,20 @@
-import {drawCross, renderLineEntry, renderBoxEntry, renderCross} from '../../../lib/render/draw';
+import {drawCross, getTerminatorPositions, renderLineEntry, renderBoxEntry, renderCross} from '../../../lib/render/draw';
 import {Point, LineEntry, BoxEntry} from '../../../lib/render/types';
+
+describe('terminator count function', () => {
+    it.each([
+        [0, []],
+        [1, [0.5]],
+        [2, [1 / 3, 2 / 3]],
+        [3, [0.25, 0.5, 0.75]],
+        [4, [0.2, 0.4, 0.6, 0.8]]
+    ])('should compute position of unique square with %i inputs', (count, expected) => {
+        expect.assertions(1);
+        const positions = getTerminatorPositions(count);
+
+        expect(positions).toStrictEqual(expected);
+    });
+});
 
 describe('draw cross', () => {
     it('should draw a cross', () => {
