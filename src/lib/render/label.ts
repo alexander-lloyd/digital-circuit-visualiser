@@ -65,15 +65,15 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             imageMetaData.inputs.forEach(([ix, iy], i): void => {
                 const x1 = topLeftX;
                 const y1 = topLeftY + (inputTerminatorPositions[i] * image.height);
-                const x2 = topLeftX + ix;
-                const y2 = topLeftY + iy;
+                const x2 = topLeftX + (ix * scale);
+                const y2 = topLeftY + (iy * scale);
 
                 renderBezier(ctx, [[x1, y1], [x2, y2]]);
             });
 
             imageMetaData.outputs.forEach(([ix, iy], i) => {
-                const x1 = topLeftX + ix;
-                const y1 = topLeftY + iy;
+                const x1 = topLeftX + (ix * scale);
+                const y1 = topLeftY + (iy * scale);
                 const x2 = topLeftX + image.width;
                 const y2 = topLeftY + (outputTerminatorPositions[i] * image.height);
 
