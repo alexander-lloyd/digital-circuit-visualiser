@@ -40,6 +40,8 @@ describe('render graph', () => {
                         0.5,
                         0.5,
                       ],
+                      0,
+                      0,
                     ],
                   ],
                   "lines": Array [],
@@ -85,6 +87,8 @@ describe('render graph', () => {
                         0.5,
                         0.5,
                       ],
+                      0,
+                      0,
                     ],
                   ],
                   "lines": Array [],
@@ -145,6 +149,8 @@ describe('render graph', () => {
                         -0.25,
                         0.5,
                       ],
+                      0,
+                      0,
                     ],
                     Array [
                       [Function],
@@ -152,6 +158,8 @@ describe('render graph', () => {
                         0.75,
                         0.5,
                       ],
+                      0,
+                      0,
                     ],
                   ],
                   "lines": Array [],
@@ -179,7 +187,7 @@ describe('scale render result', () => {
         const mockLabel = (): void => {};
         const renderResult: RenderResults = {
             boxes: [[[0, 0], [1, 1], true]],
-            labels: [[mockLabel, [0, 0]]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             beziers: []
         };
@@ -197,7 +205,7 @@ describe('scale render result', () => {
         const mockLabel = (): void => {};
         const renderResult: RenderResults = {
             boxes: [[[1, 1], [2, 2], true]],
-            labels: [[mockLabel, [0, 0]]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             beziers: []
         };
@@ -215,14 +223,14 @@ describe('scale render result', () => {
         const mockLabel = (): void => {};
         const renderResult: RenderResults = {
             boxes: [[[-1, -1], [1, 1], true]],
-            labels: [[mockLabel, [0, 0]]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             beziers: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
             boxes: [[[-2, -5], [2, 5], true]],
-            labels: [[mockLabel, [0, 0]]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             beziers: []
         });
@@ -233,14 +241,14 @@ describe('scale render result', () => {
         const mockLabel = (): void => {};
         const renderResult: RenderResults = {
             boxes: [[[4, 4], [6, 6], true]],
-            labels: [[mockLabel, [5, 5]]],
+            labels: [[mockLabel, [5, 5], 0, 0]],
             lines: [],
             beziers: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
             boxes: [[[8, 20], [12, 30], true]],
-            labels: [[mockLabel, [10, 25]]],
+            labels: [[mockLabel, [10, 25], 0, 0]],
             lines: [],
             beziers: []
         });
