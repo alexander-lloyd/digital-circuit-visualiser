@@ -1,4 +1,11 @@
-import {drawCross, getTerminatorPositions, renderLineEntry, renderBoxEntry, renderCross} from '../../../lib/render/draw';
+import {
+    drawCross,
+    getTerminatorPositions,
+    renderLineEntry,
+    renderBoxEntry,
+    renderCross,
+    renderBezier
+} from '../../../lib/render/draw';
 import {Point, LineEntry, BoxEntry} from '../../../lib/render/types';
 
 describe('terminator count function', () => {
@@ -452,6 +459,86 @@ Array [
             0,
           ],
           "type": "lineTo",
+        },
+      ],
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "stroke",
+  },
+]
+`);
+    });
+});
+
+describe('draw bezier curve', () => {
+    it('should render a bezier curve', () => {
+        expect.assertions(1);
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+        const line: LineEntry = [
+            [1, 2],
+            [5, 6]
+        ];
+
+        renderBezier(ctx, line);
+        expect(ctx.__getDrawCalls()).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "props": Object {
+      "path": Array [
+        Object {
+          "props": Object {},
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "beginPath",
+        },
+        Object {
+          "props": Object {
+            "x": 1,
+            "y": 2,
+          },
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "moveTo",
+        },
+        Object {
+          "props": Object {
+            "cpx1": 21,
+            "cpx2": -15,
+            "cpy1": 2,
+            "cpy2": 6,
+            "x": 5,
+            "y": 6,
+          },
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "bezierCurveTo",
         },
       ],
     },

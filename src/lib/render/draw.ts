@@ -6,6 +6,7 @@ import {
 } from './types';
 
 const DEFAULT_CROSS_SIZE = 5;
+const BEZIER_CONSTANT = 20;
 
 /**
  * Used in Debugging.
@@ -84,3 +85,20 @@ export function renderCross(ctx: CanvasRenderingContext2D, point: Point, size = 
     lineEntries.forEach((line: LineEntry) => renderLineEntry(ctx, line));
 }
 
+/**
+ * Render a bezier curve.
+ *
+ * @param ctx Canvas Render Context.
+ * @param line Bezier line to draw.
+ */
+export function renderBezier(ctx: CanvasRenderingContext2D, [[x1, y1], [x2, y2]]: LineEntry): void {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineWidth = 2;
+    ctx.bezierCurveTo(
+        x1 + BEZIER_CONSTANT, y1,
+        x2 - BEZIER_CONSTANT, y2,
+        x2, y2
+    );
+    ctx.stroke();
+}

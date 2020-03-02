@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
-import {renderCross} from './draw';
+import {renderBezier, renderBoxEntry, renderCross, getTerminatorPositions} from './draw';
 
 import {LabelFunction} from './types';
 
@@ -58,9 +58,27 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             const centerY = image.height / 2;
             const topLeftX = x - centerX;
             const topLeftY = y - centerY;
+            renderBoxEntry(ctx, [[topLeftX, topLeftY], [topLeftX + image.width, topLeftY + image.height], true]);
             ctx.drawImage(image, topLeftX, topLeftY, image.width, image.height);
-            imageMetaData.inputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy]));
-            imageMetaData.outputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy]));
+            const inputTerminatorPositions = getTerminatorPositions(imageMetaData.inputs.length);
+            const outputTerminatorPositions = getTerminatorPositions(imageMetaData.outputs.length);
+            imageMetaData.inputs.forEach(([ix, iy], i): void => {
+                const x1 = topLeftX;
+                const y1 = topLeftY + (inputTerminatorPositions[i] * image.height);
+                const x2 = topLeftX + ix;
+                const y2 = topLeftY + iy;
+
+                renderBezier(ctx, [[x1, y1], [x2, y2]]);
+            });
+
+            imageMetaData.outputs.forEach(([ix, iy], i) => {
+                const x1 = topLeftX + ix;
+                const y1 = topLeftY + iy;
+                const x2 = topLeftX + image.width;
+                const y2 = topLeftY + (outputTerminatorPositions[i] * image.height);
+
+                renderBezier(ctx, [[x1, y1], [x2, y2]]);
+            });
         };
     };
 }
