@@ -7,27 +7,13 @@ import {
 import {
     BoxEntry,
     LabelEntry,
-    LineEntry,
-    Point
+    LineEntry
 } from './types';
+import {
+    drawCross
+} from './draw';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
-const DEFAULT_CROSS_SIZE = 5;
-
-/**
- * Used in Debugging.
- *
- * @param point The position to draw the cross.
- * @param size The size of the cross.
- * @returns Line entries to draw the x.
- */
-function drawCross([x, y]: Point, size = DEFAULT_CROSS_SIZE): LineEntry[] {
-    const halfSize = size / 2;
-    return [
-        [[x - halfSize, y - halfSize], [x + halfSize, y + halfSize]],
-        [[x - halfSize, y + halfSize], [x + halfSize, y - halfSize]]
-    ];
-}
 
 /**
  * Canvas Context.

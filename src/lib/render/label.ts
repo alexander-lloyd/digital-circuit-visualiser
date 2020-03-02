@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
+import {drawCross} from './draw';
 
 import {LabelFunction} from './types';
 
