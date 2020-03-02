@@ -9,7 +9,10 @@ import {
     LabelEntry,
     LineEntry
 } from './types';
-import {renderLineEntry} from './draw';
+import {
+    renderBoxEntry,
+    renderLineEntry
+} from './draw';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
 
@@ -188,7 +191,8 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     const {lines, boxes, labels} = renderResults;
 
     // Boxes
-    boxes.forEach(([[x, y], [x2, y2], drawBox], i) => {
+    boxes.forEach((box, i) => {
+        const [[x, y], [x2, y2], drawBox] = box;
         // This only works because theres a 1 to 1 relation between function boxes and labels.
         const [label, [labelX, labelY]] = labels[i];
         console.log('render box: ', x, y, x2, y2, labelX, labelY);
@@ -196,9 +200,7 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
         const height = Math.abs(y2 - y);
 
         if (drawBox) {
-            ctx.beginPath();
-            ctx.rect(x, y, width, height);
-            ctx.stroke();
+            renderBoxEntry(ctx, box);
         }
 
         label(labelX, labelY, width, height, ctx);

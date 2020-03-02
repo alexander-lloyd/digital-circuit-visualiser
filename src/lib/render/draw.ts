@@ -1,5 +1,6 @@
 /* eslint no-magic-numbers: ["warn", {"ignore": [2]}] */
 import {
+    BoxEntry,
     LineEntry,
     Point
 } from './types';
@@ -34,6 +35,23 @@ export function renderLineEntry(
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
+    ctx.stroke();
+}
+
+/**
+ * Render a box on the Canvas.
+ *
+ * @param ctx Canvas Render Context.
+ * @param line Box to draw.
+ */
+export function renderBoxEntry(
+    ctx: CanvasRenderingContext2D,
+    [[x, y], [x2, y2]]: BoxEntry
+): void {
+    const width = Math.abs(x2 - x);
+    const height = Math.abs(y2 - y);
+    ctx.beginPath();
+    ctx.rect(x, y, width, height);
     ctx.stroke();
 }
 
