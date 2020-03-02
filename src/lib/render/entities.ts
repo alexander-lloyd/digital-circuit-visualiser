@@ -111,7 +111,6 @@ export class FunctionEntity implements Entity {
      * @returns this.
      */
     public scale(scaleX: number, scaleY: number): this {
-        console.debug('[Function Entity]', 'scale', scaleX, scaleY);
         this.width *= scaleX;
         this.height *= scaleY;
         this.wires = this.wires.map((wire) => scaleWire(wire, scaleX, scaleY));
@@ -127,7 +126,6 @@ export class FunctionEntity implements Entity {
      * @returns this.
      */
     public translate(translateX: number, translateY: number): this {
-        console.debug('[Function Entity]', 'translate', translateX, translateY);
         this.x += translateX;
         this.y += translateY;
 
@@ -190,7 +188,6 @@ export class GroupedEntity implements Entity {
      * @returns this.
      */
     public scale(scaleX: number, scaleY: number): this {
-        console.debug('[Grouped Entity]', 'scale', scaleX, scaleY);
         this.width *= scaleX;
         this.height *= scaleY;
 
@@ -207,7 +204,6 @@ export class GroupedEntity implements Entity {
      * @returns this.
      */
     translate(translateX: number, translateY: number): this {
-        console.debug('[Grouped Entity]', 'translate', translateX, translateY);
         this.x += translateX;
         this.y += translateY;
 
