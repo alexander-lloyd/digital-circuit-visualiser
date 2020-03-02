@@ -12,7 +12,7 @@ describe('render graph', () => {
         it('should return a renderresult given a function', () => {
             expect.assertions(1);
             const label = buildTextLabelFunction('ABC');
-            const entity = new FunctionEntity(0, 0, 1, 1, label);
+            const entity = new FunctionEntity(0, 0, 1, 1, label, []);
 
             const entityVisitor = new EntityRendererVisitor();
             const visitorContext = {
@@ -53,7 +53,8 @@ describe('render graph', () => {
         it('should set box to be rendered if feature flag is set', () => {
             expect.assertions(1);
             const label = buildTextLabelFunction('ABC');
-            const entity = new FunctionEntity(0, 0, 1, 1, label);
+            const wires = [];
+            const entity = new FunctionEntity(0, 0, 1, 1, label, wires);
 
             const entityVisitor = new EntityRendererVisitor();
             const visitorContext = {
@@ -98,8 +99,9 @@ describe('render graph', () => {
 
             expect.assertions(1);
             const label = buildTextLabelFunction('ABC');
-            const lentity = new FunctionEntity(-0.5, 0, 0.5, 1, label);
-            const rentity = new FunctionEntity(0.5, 0, 0.5, 1, label);
+            const wires = [];
+            const lentity = new FunctionEntity(-0.5, 0, 0.5, 1, label, wires);
+            const rentity = new FunctionEntity(0.5, 0, 0.5, 1, label, wires);
             const entity = new GroupedEntity(0, 0, 1, 1, [lentity, rentity]);
 
             const entityVisitor = new EntityRendererVisitor();

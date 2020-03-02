@@ -1,4 +1,30 @@
-import {LabelFunction} from './label';
+import {LabelFunction, Point} from './types';
+
+export type Wire = [Point, Point];
+
+/**
+ * Scale a Wire.
+ *
+ * @param wire Wire.
+ * @param scaleX X scaling factor.
+ * @param scaleY Y scaling factor.
+ * @returns Scaled wire.
+ */
+function scaleWire([[x1, y1], [x2, y2]]: Wire, scaleX: number, scaleY: number): Wire {
+    return [[x1 * scaleX, y1 * scaleY], [x2 * scaleX, y2 * scaleY]];
+}
+
+/**
+ * Scale a Wire.
+ *
+ * @param wire Wire.
+ * @param translateX X translating factor.
+ * @param translateY Y translating factor.
+ * @returns Scaled wire.
+ */
+function translateWire([[x1, y1], [x2, y2]]: Wire, translateX: number, translateY: number): Wire {
+    return [[x1 + translateX, y1 + translateY], [x2 + translateX, y2 + translateY]];
+}
 
 /**
  * A rendered entity.
@@ -49,6 +75,7 @@ export class FunctionEntity implements Entity {
     public width: number;
     public height: number;
     public label: LabelFunction;
+    public wires: Wire[];
 
     /**
      * Constructor.
@@ -58,19 +85,22 @@ export class FunctionEntity implements Entity {
      * @param width Box width
      * @param height Box height
      * @param label Function to draw the label.
+     * @param wires Additional Wires required.
      */
     public constructor(
         x: number,
         y: number,
         width: number,
         height: number,
-        label: LabelFunction
+        label: LabelFunction,
+        wires: Wire[]
     ) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.label = label;
+        this.wires = wires;
     }
 
     /**
@@ -81,9 +111,9 @@ export class FunctionEntity implements Entity {
      * @returns this.
      */
     public scale(scaleX: number, scaleY: number): this {
-        console.debug('[Function Entity]', 'scale', scaleX, scaleY);
         this.width *= scaleX;
         this.height *= scaleY;
+        this.wires = this.wires.map((wire) => scaleWire(wire, scaleX, scaleY));
 
         return this;
     }
@@ -96,9 +126,10 @@ export class FunctionEntity implements Entity {
      * @returns this.
      */
     public translate(translateX: number, translateY: number): this {
-        console.debug('[Function Entity]', 'translate', translateX, translateY);
         this.x += translateX;
         this.y += translateY;
+
+        this.wires = this.wires.map((wire) => translateWire(wire, translateX, translateY));
 
         return this;
     }
@@ -157,7 +188,6 @@ export class GroupedEntity implements Entity {
      * @returns this.
      */
     public scale(scaleX: number, scaleY: number): this {
-        console.debug('[Grouped Entity]', 'scale', scaleX, scaleY);
         this.width *= scaleX;
         this.height *= scaleY;
 
@@ -174,7 +204,6 @@ export class GroupedEntity implements Entity {
      * @returns this.
      */
     translate(translateX: number, translateY: number): this {
-        console.debug('[Grouped Entity]', 'translate', translateX, translateY);
         this.x += translateX;
         this.y += translateY;
 

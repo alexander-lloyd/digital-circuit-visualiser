@@ -1,12 +1,5 @@
-import {
-    ASTRenderer,
-    buildNotImplementedError
-} from '../../../lib/render/visitor';
-import {
-    ConstantAST,
-    BinaryOpAST,
-    BinaryOpeators
-} from '../../../lib/parser/ast';
+import {ASTRenderer, buildNotImplementedError} from '../../../lib/render/visitor';
+import {ConstantAST, BinaryOpAST, BinaryOpeators} from '../../../lib/parser/ast';
 import {GroupedEntity} from 'lib/render/entities';
 
 describe('ast renderer', () => {
@@ -26,11 +19,7 @@ describe('ast renderer', () => {
     it('should group tensor functions', () => {
         expect.assertions(12);
 
-        const ast = new BinaryOpAST(
-            'tensor',
-            new ConstantAST('AND'),
-            new ConstantAST('OR')
-        );
+        const ast = new BinaryOpAST('tensor', new ConstantAST('AND'), new ConstantAST('OR'));
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, 1) as GroupedEntity;
 
@@ -54,11 +43,7 @@ describe('ast renderer', () => {
     it('should group compose functions', () => {
         expect.assertions(12);
 
-        const ast = new BinaryOpAST(
-            'compose',
-            new ConstantAST('AND'),
-            new ConstantAST('OR')
-        );
+        const ast = new BinaryOpAST('compose', new ConstantAST('AND'), new ConstantAST('OR'));
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, 1) as GroupedEntity;
 
@@ -85,11 +70,7 @@ describe('ast renderer', () => {
         const ast = new BinaryOpAST(
             'compose',
             new ConstantAST('ABC'),
-            new BinaryOpAST(
-                'tensor',
-                new ConstantAST('DEF'),
-                new ConstantAST('GHI')
-            )
+            new BinaryOpAST('tensor', new ConstantAST('DEF'), new ConstantAST('GHI'))
         );
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, 1) as GroupedEntity;
@@ -101,6 +82,7 @@ describe('ast renderer', () => {
                   "label": [Function],
                   "type": "functionEntity",
                   "width": 0.5,
+                  "wires": Array [],
                   "x": 0,
                   "y": 0,
                 },
@@ -111,6 +93,7 @@ describe('ast renderer', () => {
                       "label": [Function],
                       "type": "functionEntity",
                       "width": 0.5,
+                      "wires": Array [],
                       "x": 0.5,
                       "y": 0,
                     },
@@ -119,6 +102,7 @@ describe('ast renderer', () => {
                       "label": [Function],
                       "type": "functionEntity",
                       "width": 0.5,
+                      "wires": Array [],
                       "x": 0.5,
                       "y": 0.25,
                     },
@@ -143,11 +127,7 @@ describe('ast renderer', () => {
         expect.assertions(1);
         const operator = 'operator does not exist' as BinaryOpeators;
         expect.assertions(1);
-        const ast = new BinaryOpAST(
-            operator,
-            new ConstantAST('ABC'),
-            new ConstantAST('DEF')
-        );
+        const ast = new BinaryOpAST(operator, new ConstantAST('ABC'), new ConstantAST('DEF'));
 
         const renderer = new ASTRenderer();
 

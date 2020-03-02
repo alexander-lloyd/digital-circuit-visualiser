@@ -1,12 +1,8 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
+import {renderCross} from './draw';
 
-export type LabelFunction = (
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    ctx: CanvasRenderingContext2D) => void;
+import {LabelFunction} from './types';
 
 const DEFAULT_FONT = 'Arial';
 const DEFAULT_FONT_SIZE = 120;
@@ -40,23 +36,31 @@ export function buildTextLabelFunction(label: string): LabelFunction {
  */
 export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunction {
     const imageSrc = imageMetaData.image;
+    const image = new Image();
+    image.src = imageSrc;
+
+    const imageHeight = image.height;
+    const imageWidth = image.width;
 
     return (x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D): void => {
-        const image = new Image();
         image.onload = (): void => {
-            const imageHeight = image.height;
-            const imageWidth = image.width;
-
+            let scale = 1;
             if (imageWidth > width || imageHeight > height) {
                 // Scale the image evenly in both x & y.
-                const scale = Math.min(width / imageWidth, height / imageHeight);
-                image.width = imageWidth * scale;
-                image.height = imageHeight * scale;
+                scale = Math.min(width / imageWidth, height / imageHeight);
+                if (scale !== 1) {
+                    image.width = imageWidth * scale;
+                    image.height = imageHeight * scale;
+                }
             }
 
-            ctx.drawImage(image, x - (image.width / 2), y - (image.height / 2), image.width, image.height);
+            const centerX = image.width / 2;
+            const centerY = image.height / 2;
+            const topLeftX = x - centerX;
+            const topLeftY = y - centerY;
+            ctx.drawImage(image, topLeftX, topLeftY, image.width, image.height);
+            imageMetaData.inputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy], 10));
+            imageMetaData.outputs.map(([ix, iy]) => renderCross(ctx, [topLeftX + ix, topLeftY + iy], 10));
         };
-
-        image.src = imageSrc;
     };
 }

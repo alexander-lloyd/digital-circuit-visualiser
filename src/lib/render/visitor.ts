@@ -1,14 +1,17 @@
 /* eslint no-magic-numbers: ["warn", {"ignore": [-0.5, 0, 0.5, 1, 2]}] */
 import {
     buildTextImageFunction,
-    buildTextLabelFunction,
-    LabelFunction
+    buildTextLabelFunction
 } from './label';
 import {
     Entity,
     FunctionEntity,
-    GroupedEntity
+    GroupedEntity,
+    Wire
 } from './entities';
+import {
+    LabelFunction
+} from './types';
 import {
     ASTVisitor,
     BinaryOpAST,
@@ -49,14 +52,21 @@ export class ASTRenderer extends ASTVisitor<number, Entity> {
         let label: LabelFunction;
         const {name} = ast;
         const imageMetaData = images[name];
+        const wires: Wire[] = [];
 
         if (imageMetaData === undefined) {
             label = buildTextLabelFunction(name);
         } else {
+            const {height, width, inputs, outputs} = imageMetaData;
             label = buildTextImageFunction(imageMetaData);
+            wires.push(
+                // TODO: Remove hard coded Origin.
+                ...inputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]]),
+                ...outputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]])
+            );
         }
 
-        return new FunctionEntity(0, 0, 1, 1, label);
+        return new FunctionEntity(0, 0, 1, 1, label, wires);
     }
 
     /**
