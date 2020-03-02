@@ -24,7 +24,7 @@ const images: ImageMap = {
     AND: {
         name: 'AND Gate',
         image: AND_GATE,
-        inputs: [[25, 52.5], [25, 22.5]],
+        inputs: [[25, 22.5], [25, 52.5]],
         outputs: [[174, 37.5]],
         width: 200,
         height: 75
@@ -32,7 +32,7 @@ const images: ImageMap = {
     OR: {
         name: 'OR Gate',
         image: OR_GATE,
-        inputs: [[25, 52.5], [25, 22.5]],
+        inputs: [[25, 22.5], [25, 52.5]],
         outputs: [[175, 37.5]],
         width: 200,
         height: 75
@@ -48,8 +48,8 @@ const images: ImageMap = {
     SPLIT: {
         name: 'SPLIT',
         image: SPLIT_GATE,
-        inputs: [[88.5, 22.5], [88.5, 77.5]],
-        outputs: [[14, 50.5]],
+        inputs: [[14, 50.5]],
+        outputs: [[88.5, 22.5], [88.5, 77.5]],
         width: 100,
         height: 100
     }
