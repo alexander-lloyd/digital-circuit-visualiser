@@ -24,16 +24,16 @@ const images: ImageMap = {
     AND: {
         name: 'AND Gate',
         image: AND_GATE,
-        inputs: [[25, 50], [25, 25]],
-        outputs: [[175, 38]],
+        inputs: [[25, 52.5], [25, 22.5]],
+        outputs: [[174, 37.5]],
         width: 200,
         height: 75
     },
     OR: {
         name: 'OR Gate',
         image: OR_GATE,
-        inputs: [[25, 50], [25, 25]],
-        outputs: [[175, 38]],
+        inputs: [[25, 52.5], [25, 22.5]],
+        outputs: [[175, 37.5]],
         width: 200,
         height: 75
     },
