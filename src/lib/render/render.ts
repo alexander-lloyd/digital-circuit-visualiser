@@ -9,8 +9,7 @@ import {
     LabelEntry,
     LineEntry
 } from './types';
-import {
-} from './draw';
+import {renderLineEntry} from './draw';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
 
@@ -206,10 +205,5 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
     });
 
     // Lines
-    [...lines].forEach(([[x1, y1], [x2, y2]]): void => {
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-    });
+    [...lines].forEach((lineEntry: LineEntry): void => renderLineEntry(ctx, lineEntry));
 }
