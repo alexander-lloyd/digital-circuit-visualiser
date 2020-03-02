@@ -8,7 +8,10 @@ describe('ast renderer', () => {
 
         const ast = new ConstantAST('AND');
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, 1);
+        const entity = renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        });
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -21,7 +24,10 @@ describe('ast renderer', () => {
 
         const ast = new BinaryOpAST('tensor', new ConstantAST('AND'), new ConstantAST('OR'));
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, 1) as GroupedEntity;
+        const entity = renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        }) as GroupedEntity;
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -45,7 +51,10 @@ describe('ast renderer', () => {
 
         const ast = new BinaryOpAST('compose', new ConstantAST('AND'), new ConstantAST('OR'));
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, 1) as GroupedEntity;
+        const entity = renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        }) as GroupedEntity;
 
         expect(entity.x).toBe(0);
         expect(entity.y).toBe(0);
@@ -73,7 +82,10 @@ describe('ast renderer', () => {
             new BinaryOpAST('tensor', new ConstantAST('DEF'), new ConstantAST('GHI'))
         );
         const renderer = new ASTRenderer();
-        const entity = renderer.visit(ast, 1) as GroupedEntity;
+        const entity = renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        }) as GroupedEntity;
         expect(entity).toMatchInlineSnapshot(`
             GroupedEntity {
               "children": Array [
@@ -104,7 +116,7 @@ describe('ast renderer', () => {
                       "width": 0.5,
                       "wires": Array [],
                       "x": 0.5,
-                      "y": 0.25,
+                      "y": 0.5,
                     },
                   ],
                   "height": 1,
@@ -131,7 +143,10 @@ describe('ast renderer', () => {
 
         const renderer = new ASTRenderer();
 
-        expect(() => renderer.visit(ast, 1)).toThrow(buildNotImplementedError(operator));
+        expect(() => renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        })).toThrow(buildNotImplementedError(operator));
     });
 
     it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(

@@ -65,7 +65,10 @@ function drawDiagram(
         ctx.scale(scale, scale);
         ctx.translate(dragPositionX, dragPositionY);
         const astRenderer = new ASTRenderer();
-        const entityTree = astRenderer.visit(ast, 1);
+        const entityTree = astRenderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        });
 
         const entityRenderer = new EntityRendererVisitor();
         const entityRendererConfig = {
