@@ -125,8 +125,8 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
                 const rightI = rightInputs[i];
 
                 return [
-                    [lwidth * 0.9, height * leftO],
-                    [lwidth + (rwidth * 0.1), height * rightI]
+                    [left.x + (lwidth * 0.9), left.y + (lheight * leftO)],
+                    [right.x + (rwidth * 0.1), right.y + (rheight * rightI)]
                 ];
             }));
         }
