@@ -60,21 +60,14 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
         let label: LabelFunction;
         const {name} = ast;
         const imageMetaData = images[name];
-        const wires: Wire[] = [];
         let inputPositions: number[] = [];
         let outputPositions: number[] = [];
 
         if (imageMetaData === undefined) {
             label = buildTextLabelFunction(name);
         } else {
-            const {height, width, inputs, outputs} = imageMetaData;
+            const {inputs, outputs} = imageMetaData;
             label = buildTextImageFunction(imageMetaData);
-            wires.push(
-                // TODO: Remove hard coded Origin.
-                ...inputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]]),
-                ...outputs.map(([x, y]): Wire => [[0, 0], [x / width, y / height]])
-            );
-
             inputPositions = getTerminatorPositions(inputs.length);
             outputPositions = getTerminatorPositions(outputs.length);
         }
@@ -118,7 +111,7 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
             throw new NotImplementedError(buildNotImplementedError(operator));
         }
 
-        return new GroupedEntity(0, 0, 1, 1, [left, right]);
+        return new GroupedEntity(operator, 0, 0, 1, 1, [left, right]);
     }
 
     /**

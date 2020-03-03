@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [0.5, 1, 2]}] */
+/* eslint no-magic-numbers: ["warn", {"ignore": [0.1, 0.5, 0.9, 1, 2]}] */
 import {
     EntityVisitor,
     FunctionEntity,
@@ -46,6 +46,8 @@ export type RenderResults = {
     labels: LabelEntry[];
     // Bezier curves
     beziers: LineEntry[];
+    // Size
+    size: [number, number];
 };
 
 /**
@@ -71,7 +73,8 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
             lines: [...wires],
             boxes: [[[x, y], [x + width, y + height], drawBox]],
             labels: [[label, [x + halfWidth, y + halfHeight], inputs.length, outputs.length]],
-            beziers: []
+            beziers: [],
+            size: [width, height]
         };
 
         return functionRenderResult;
@@ -85,27 +88,55 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
      * @returns All the individual canvas elements to draw.
      */
     visitGrouped(entity: GroupedEntity, context: EntityRendererVisitorContext): RenderResults {
-        const {children} = entity;
+        const {children, operator} = entity;
         const [left, right] = children;
 
         const {
             lines: llines,
             boxes: lboxes,
             labels: llabel,
-            beziers: lbeziers
+            beziers: lbeziers,
+            size: [lwidth, lheight]
         } = left.visit(this, context);
         const {
             lines: rlines,
             boxes: rboxes,
             labels: rlabels,
-            beziers: rbeziers
+            beziers: rbeziers,
+            size: [rwidth, rheight]
         } = right.visit(this, context);
+
+        let [width, height] = [lwidth, lheight];
+        const gbeziers: LineEntry[] = [];
+
+
+        if (operator === 'tensor') {
+            height += rheight;
+        } else if (operator === 'compose') {
+            width += rwidth;
+            // Get lefts outputs.
+            const leftOutputs = left.outputs;
+            const rightInputs = right.inputs;
+            if (leftOutputs.length !== rightInputs.length) {
+                console.warn('Inputs !== Outputs in COMPOSE');
+            }
+
+            gbeziers.push(...leftOutputs.map((leftO, i): LineEntry => {
+                const rightI = rightInputs[i];
+
+                return [
+                    [left.x + (lwidth * 0.9), left.y + (lheight * leftO)],
+                    [right.x + (rwidth * 0.1), right.y + (rheight * rightI)]
+                ];
+            }));
+        }
 
         return {
             lines: [...llines, ...rlines],
             boxes: [...lboxes, ...rboxes],
             labels: [...llabel, ...rlabels],
-            beziers: [...lbeziers, ...rbeziers]
+            beziers: [...gbeziers, ...lbeziers, ...rbeziers],
+            size: [width, height]
         };
     }
 }
@@ -121,7 +152,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
  * @returns new Render Result.
  */
 export function scaleRenderResult(renderResults: RenderResults, scaleX: number, scaleY: number): RenderResults {
-    const {lines, boxes, labels, beziers} = renderResults;
+    const {lines, boxes, labels, beziers, size: [width, height]} = renderResults;
     // Lines
     const newLines = lines.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
     const newBeziers = beziers.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
@@ -146,7 +177,8 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
         lines: newLines,
         boxes: newBoxes,
         labels: newLabels,
-        beziers: newBeziers
+        beziers: newBeziers,
+        size: [width * scaleX, height * scaleY]
     };
 }
 
@@ -163,7 +195,7 @@ export function transformRenderResult(
     translateX: number,
     translateY: number
 ): RenderResults {
-    const {lines, boxes, labels, beziers} = renderResults;
+    const {lines, boxes, labels, beziers, size} = renderResults;
     // Lines
     const newLines = lines.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
     const newBeziers = beziers.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
@@ -177,13 +209,19 @@ export function transformRenderResult(
         return [[newX1, newY1], [newX2, newY2], drawBox];
     });
 
-    const newLabels = labels.map(([label, [x, y], inputs, outputs]): LabelEntry => [label, [x + translateX, y + translateY], inputs, outputs]);
+    const newLabels = labels.map(([label, [x, y], inputs, outputs]): LabelEntry => [
+        label,
+        [x + translateX, y + translateY],
+        inputs,
+        outputs
+    ]);
 
     return {
         lines: newLines,
         boxes: newBoxes,
         labels: newLabels,
-        beziers: newBeziers
+        beziers: newBeziers,
+        size
     };
 }
 
@@ -204,6 +242,8 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
         const [label, [labelX, labelY], inputs, outputs] = labels[i];
         const width = Math.abs(x2 - x);
         const height = Math.abs(y2 - y);
+        // 10% away from edge of box so we can draw lines to connect gates.
+        const relatveSeperationFromBox = 0.1;
 
         if (drawBox) {
             renderBoxEntry(ctx, box);
@@ -219,14 +259,14 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
 
         inputPoints.forEach((inputPos: number) => {
             renderBezier(ctx, [
-                [x, y + (height * inputPos)],
-                [labelX - (labelWidth / 2) - 10, labelY - (labelHeight / 2) + (labelHeight * inputPos)]
+                [x + (width * relatveSeperationFromBox), y + (height * inputPos)],
+                [labelX - (labelWidth / 2), labelY - (labelHeight / 2) + (labelHeight * inputPos)]
             ]);
         });
         outputPoints.forEach((outputPos: number) => {
             renderBezier(ctx, [
                 [labelX + (labelWidth / 2), labelY - (labelHeight / 2) + (labelHeight * outputPos)],
-                [x2, y + (height * outputPos)]
+                [x2 - (width * relatveSeperationFromBox), y + (height * outputPos)]
             ]);
         });
     });
