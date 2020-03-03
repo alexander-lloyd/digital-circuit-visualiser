@@ -39,6 +39,14 @@ export function HelpContentComponent(): JSX.Element {
             </p>
             <pre><code>AND . OR</code></pre>
             <p>
+                An example of a join:
+            </p>
+            <pre><code>(AND * OR) . JOIN</code></pre>
+            <p>
+                An example of a split:
+            </p>
+            <pre><code>AND . SPLIT</code></pre>
+            <p>
                 You can also use let statements (similar to OCaml).
             </p>
             <pre><code>let variable = AND in variable</code></pre>
