@@ -177,7 +177,12 @@ export function transformRenderResult(
         return [[newX1, newY1], [newX2, newY2], drawBox];
     });
 
-    const newLabels = labels.map(([label, [x, y], inputs, outputs]): LabelEntry => [label, [x + translateX, y + translateY], inputs, outputs]);
+    const newLabels = labels.map(([label, [x, y], inputs, outputs]): LabelEntry => [
+        label,
+        [x + translateX, y + translateY],
+        inputs,
+        outputs
+    ]);
 
     return {
         lines: newLines,
