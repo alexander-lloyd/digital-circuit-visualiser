@@ -135,7 +135,8 @@ export class FunctionEntity implements Entity {
         this.width *= scaleX;
         this.height *= scaleY;
         this.wires = this.wires.map((wire) => scaleWire(wire, scaleX, scaleY));
-        // Inputs and outputs are in unit space so don't scale them.
+        this.inputs = this.inputs.map((i: number) => i * scaleY);
+        this.outputs = this.outputs.map((i: number) => i * scaleY);
         return this;
     }
 
@@ -174,6 +175,7 @@ export class FunctionEntity implements Entity {
  */
 export class GroupedEntity implements Entity {
     public readonly type = 'groupedEntity';
+    public operator: string;
     public x: number;
     public y: number;
     public width: number;
@@ -183,6 +185,7 @@ export class GroupedEntity implements Entity {
     /**
      * Constructor.
      *
+     * @param operator The operator. Appied to the group.
      * @param x Top Left x
      * @param y Top Left y
      * @param width Box width
@@ -190,12 +193,14 @@ export class GroupedEntity implements Entity {
      * @param children Children Entities.
      */
     public constructor(
+        operator: string,
         x: number,
         y: number,
         width: number,
         height: number,
         children: [Entity, Entity]
     ) {
+        this.operator = operator;
         this.x = x;
         this.y = y;
         this.width = width;

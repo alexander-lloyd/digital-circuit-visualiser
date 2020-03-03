@@ -107,18 +107,35 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
         } = right.visit(this, context);
 
         let [width, height] = [lwidth, lheight];
+        const gbeziers: LineEntry[] = [];
+
 
         if (operator === 'tensor') {
             height += rheight;
         } else if (operator === 'compose') {
             width += rwidth;
+            // Get lefts outputs.
+            const leftOutputs = left.outputs;
+            const rightInputs = right.inputs;
+            if (leftOutputs.length !== rightInputs.length) {
+                console.warn('Inputs !== Outputs in COMPOSE');
+            }
+
+            gbeziers.push(...leftOutputs.map((leftO, i): LineEntry => {
+                const rightI = rightInputs[i];
+
+                return [
+                    [lwidth * 0.9, height * leftO],
+                    [lwidth + (rwidth * 0.1), height * rightI]
+                ];
+            }));
         }
 
         return {
             lines: [...llines, ...rlines],
             boxes: [...lboxes, ...rboxes],
             labels: [...llabel, ...rlabels],
-            beziers: [...lbeziers, ...rbeziers],
+            beziers: [...gbeziers, ...lbeziers, ...rbeziers],
             size: [width, height]
         };
     }

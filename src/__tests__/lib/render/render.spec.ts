@@ -45,6 +45,10 @@ describe('render graph', () => {
                     ],
                   ],
                   "lines": Array [],
+                  "size": Array [
+                    1,
+                    1,
+                  ],
                 }
             `);
         });
@@ -92,6 +96,10 @@ describe('render graph', () => {
                     ],
                   ],
                   "lines": Array [],
+                  "size": Array [
+                    1,
+                    1,
+                  ],
                 }
             `);
         });
@@ -104,7 +112,7 @@ describe('render graph', () => {
             const wires: Wire[] = [];
             const lentity = new FunctionEntity(-0.5, 0, 0.5, 1, label, wires, [], []);
             const rentity = new FunctionEntity(0.5, 0, 0.5, 1, label, wires, [], []);
-            const entity = new GroupedEntity(0, 0, 1, 1, [lentity, rentity]);
+            const entity = new GroupedEntity('compose', 0, 0, 1, 1, [lentity, rentity]);
 
             const entityVisitor = new EntityRendererVisitor();
             const visitorContext = {
@@ -116,55 +124,59 @@ describe('render graph', () => {
 
             const renderResult = entityVisitor.visit(entity, visitorContext);
             expect(renderResult).toMatchInlineSnapshot(`
-                Object {
-                  "beziers": Array [],
-                  "boxes": Array [
-                    Array [
-                      Array [
-                        -0.5,
-                        0,
-                      ],
-                      Array [
-                        0,
-                        1,
-                      ],
-                      true,
-                    ],
-                    Array [
-                      Array [
-                        0.5,
-                        0,
-                      ],
-                      Array [
-                        1,
-                        1,
-                      ],
-                      true,
-                    ],
-                  ],
-                  "labels": Array [
-                    Array [
-                      [Function],
-                      Array [
-                        -0.25,
-                        0.5,
-                      ],
-                      0,
-                      0,
-                    ],
-                    Array [
-                      [Function],
-                      Array [
-                        0.75,
-                        0.5,
-                      ],
-                      0,
-                      0,
-                    ],
-                  ],
-                  "lines": Array [],
-                }
-            `);
+Object {
+  "beziers": Array [],
+  "boxes": Array [
+    Array [
+      Array [
+        -0.5,
+        0,
+      ],
+      Array [
+        0,
+        1,
+      ],
+      true,
+    ],
+    Array [
+      Array [
+        0.5,
+        0,
+      ],
+      Array [
+        1,
+        1,
+      ],
+      true,
+    ],
+  ],
+  "labels": Array [
+    Array [
+      [Function],
+      Array [
+        -0.25,
+        0.5,
+      ],
+      0,
+      0,
+    ],
+    Array [
+      [Function],
+      Array [
+        0.75,
+        0.5,
+      ],
+      0,
+      0,
+    ],
+  ],
+  "lines": Array [],
+  "size": Array [
+    1,
+    1,
+  ],
+}
+`);
         });
     });
 });
@@ -176,10 +188,17 @@ describe('scale render result', () => {
             boxes: [],
             labels: [],
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [1, 1]
         };
 
-        expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual(renderResult);
+        expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
+            boxes: [],
+            labels: [],
+            lines: [],
+            beziers: [],
+            size: [2, 2]
+        });
     });
 
     it('should scale a box around the origin', () => {
@@ -189,14 +208,16 @@ describe('scale render result', () => {
             boxes: [[[0, 0], [1, 1], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [5, 5]
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
             boxes: [[[0, 0], [2, 2], true]],
             labels: expect.anything(),
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [10, 10]
         });
     });
 
@@ -207,14 +228,16 @@ describe('scale render result', () => {
             boxes: [[[1, 1], [2, 2], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [1, 1]
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
             boxes: [[[2, 2], [4, 4], true]],
             labels: expect.anything(),
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [2, 2]
         });
     });
 
@@ -225,14 +248,16 @@ describe('scale render result', () => {
             boxes: [[[-1, -1], [1, 1], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [1, 1]
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
             boxes: [[[-2, -5], [2, 5], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [2, 5]
         });
     });
 
@@ -243,14 +268,16 @@ describe('scale render result', () => {
             boxes: [[[4, 4], [6, 6], true]],
             labels: [[mockLabel, [5, 5], 0, 0]],
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [1, 1]
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
             boxes: [[[8, 20], [12, 30], true]],
             labels: [[mockLabel, [10, 25], 0, 0]],
             lines: [],
-            beziers: []
+            beziers: [],
+            size: [2, 5]
         });
     });
 });

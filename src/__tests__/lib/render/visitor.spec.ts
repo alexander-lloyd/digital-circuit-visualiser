@@ -126,6 +126,7 @@ describe('ast renderer', () => {
                     },
                   ],
                   "height": 1,
+                  "operator": "tensor",
                   "type": "groupedEntity",
                   "width": 0.5,
                   "x": 0.5,
@@ -133,6 +134,7 @@ describe('ast renderer', () => {
                 },
               ],
               "height": 1,
+              "operator": "compose",
               "type": "groupedEntity",
               "width": 1,
               "x": 0,
@@ -149,10 +151,12 @@ describe('ast renderer', () => {
 
         const renderer = new ASTRenderer();
 
-        expect(() => renderer.visit(ast, {
-            depthX: 1,
-            depthY: 1
-        })).toThrow(buildNotImplementedError(operator));
+        expect(() =>
+            renderer.visit(ast, {
+                depthX: 1,
+                depthY: 1
+            })
+        ).toThrow(buildNotImplementedError(operator));
     });
 
     it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(

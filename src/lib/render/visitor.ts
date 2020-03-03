@@ -118,7 +118,7 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
             throw new NotImplementedError(buildNotImplementedError(operator));
         }
 
-        return new GroupedEntity(0, 0, 1, 1, [left, right]);
+        return new GroupedEntity(operator, 0, 0, 1, 1, [left, right]);
     }
 
     /**
