@@ -28,5 +28,10 @@ export const EXAMPLES: Examples = {
         name: 'Split Output',
         description: 'Split output into two outputs.',
         source: 'let x = AND * AND in OR. SPLIT . x'
+    },
+    FOUR_INPUT_AND: {
+        name: 'Four Input AND',
+        description: 'Four Input AND',
+        source: '(AND * AND) . AND'
     }
 };
