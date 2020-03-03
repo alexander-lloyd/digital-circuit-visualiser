@@ -33,5 +33,10 @@ export const EXAMPLES: Examples = {
         name: 'Four Input AND',
         description: 'Four Input AND',
         source: '(AND * AND) . AND'
+    },
+    COMPLEX_EXAMPLE: {
+        name: 'Complex Example',
+        description: 'Complex Example',
+        source: '(AND * ((AND * AND . NOT) . JOIN)) . JOIN'
     }
 };
