@@ -46,6 +46,8 @@ export type RenderResults = {
     labels: LabelEntry[];
     // Bezier curves
     beziers: LineEntry[];
+    // Size
+    size: [number, number];
 };
 
 /**
@@ -71,7 +73,8 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
             lines: [...wires],
             boxes: [[[x, y], [x + width, y + height], drawBox]],
             labels: [[label, [x + halfWidth, y + halfHeight], inputs.length, outputs.length]],
-            beziers: []
+            beziers: [],
+            size: [width, height]
         };
 
         return functionRenderResult;
@@ -85,27 +88,38 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
      * @returns All the individual canvas elements to draw.
      */
     visitGrouped(entity: GroupedEntity, context: EntityRendererVisitorContext): RenderResults {
-        const {children} = entity;
+        const {children, operator} = entity;
         const [left, right] = children;
 
         const {
             lines: llines,
             boxes: lboxes,
             labels: llabel,
-            beziers: lbeziers
+            beziers: lbeziers,
+            size: [lwidth, lheight]
         } = left.visit(this, context);
         const {
             lines: rlines,
             boxes: rboxes,
             labels: rlabels,
-            beziers: rbeziers
+            beziers: rbeziers,
+            size: [rwidth, rheight]
         } = right.visit(this, context);
+
+        let [width, height] = [lwidth, lheight];
+
+        if (operator === 'tensor') {
+            height += rheight;
+        } else if (operator === 'compose') {
+            width += rwidth;
+        }
 
         return {
             lines: [...llines, ...rlines],
             boxes: [...lboxes, ...rboxes],
             labels: [...llabel, ...rlabels],
-            beziers: [...lbeziers, ...rbeziers]
+            beziers: [...lbeziers, ...rbeziers],
+            size: [width, height]
         };
     }
 }
@@ -121,7 +135,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
  * @returns new Render Result.
  */
 export function scaleRenderResult(renderResults: RenderResults, scaleX: number, scaleY: number): RenderResults {
-    const {lines, boxes, labels, beziers} = renderResults;
+    const {lines, boxes, labels, beziers, size: [width, height]} = renderResults;
     // Lines
     const newLines = lines.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
     const newBeziers = beziers.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
@@ -146,7 +160,8 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
         lines: newLines,
         boxes: newBoxes,
         labels: newLabels,
-        beziers: newBeziers
+        beziers: newBeziers,
+        size: [width * scaleX, height * scaleY]
     };
 }
 
@@ -163,7 +178,7 @@ export function transformRenderResult(
     translateX: number,
     translateY: number
 ): RenderResults {
-    const {lines, boxes, labels, beziers} = renderResults;
+    const {lines, boxes, labels, beziers, size} = renderResults;
     // Lines
     const newLines = lines.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
     const newBeziers = beziers.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
@@ -188,7 +203,8 @@ export function transformRenderResult(
         lines: newLines,
         boxes: newBoxes,
         labels: newLabels,
-        beziers: newBeziers
+        beziers: newBeziers,
+        size
     };
 }
 
