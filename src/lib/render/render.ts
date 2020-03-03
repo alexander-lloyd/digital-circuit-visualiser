@@ -202,7 +202,6 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
         const [[x, y], [x2, y2], drawBox] = box;
         // This only works because theres a 1 to 1 relation between function boxes and labels.
         const [label, [labelX, labelY], inputs, outputs] = labels[i];
-        const width = Math.abs(x2 - x);
         const height = Math.abs(y2 - y);
 
         if (drawBox) {
@@ -220,7 +219,7 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
         inputPoints.forEach((inputPos: number) => {
             renderBezier(ctx, [
                 [x, y + (height * inputPos)],
-                [labelX - (labelWidth / 2) - 10, labelY - (labelHeight / 2) + (labelHeight * inputPos)]
+                [labelX - (labelWidth / 2), labelY - (labelHeight / 2) + (labelHeight * inputPos)]
             ]);
         });
         outputPoints.forEach((outputPos: number) => {

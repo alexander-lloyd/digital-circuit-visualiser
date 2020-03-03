@@ -47,17 +47,19 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             image.height = 40;
             image.width = ratio * image.height;
             const scale = image.height / oldHeight;
+            const imageWidth = 80;
 
             const centerX = image.width / 2;
             const centerY = image.height / 2;
             const topLeftX = x - centerX;
             const topLeftY = y - centerY;
-            renderBoxEntry(ctx, [[topLeftX, topLeftY], [topLeftX + image.width, topLeftY + image.height], true]);
+            const boxTopLeftX = x - (imageWidth / 2);
+            renderBoxEntry(ctx, [[boxTopLeftX, topLeftY], [boxTopLeftX + imageWidth, topLeftY + image.height], true]);
             ctx.drawImage(image, topLeftX, topLeftY, image.width, image.height);
             const inputTerminatorPositions = getTerminatorPositions(imageMetaData.inputs.length);
             const outputTerminatorPositions = getTerminatorPositions(imageMetaData.outputs.length);
             imageMetaData.inputs.forEach(([ix, iy], i): void => {
-                const x1 = topLeftX;
+                const x1 = boxTopLeftX;
                 const y1 = topLeftY + (inputTerminatorPositions[i] * image.height);
                 const x2 = topLeftX + (ix * scale);
                 const y2 = topLeftY + (iy * scale);
@@ -68,7 +70,7 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             imageMetaData.outputs.forEach(([ix, iy], i) => {
                 const x1 = topLeftX + (ix * scale);
                 const y1 = topLeftY + (iy * scale);
-                const x2 = topLeftX + image.width;
+                const x2 = boxTopLeftX + imageWidth;
                 const y2 = topLeftY + (outputTerminatorPositions[i] * image.height);
 
                 renderBezier(ctx, [[x1, y1], [x2, y2]]);
