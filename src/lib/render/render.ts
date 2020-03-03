@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [0.5, 1, 2]}] */
+/* eslint no-magic-numbers: ["warn", {"ignore": [0.1, 0.5, 0.9, 1, 2]}] */
 import {
     EntityVisitor,
     FunctionEntity,
