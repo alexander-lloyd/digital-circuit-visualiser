@@ -54,7 +54,7 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             const topLeftX = x - centerX;
             const topLeftY = y - centerY;
             const boxTopLeftX = x - (imageWidth / 2);
-            renderBoxEntry(ctx, [[boxTopLeftX, topLeftY], [boxTopLeftX + imageWidth, topLeftY + image.height], true]);
+            // TODO: renderBoxEntry(ctx, [[boxTopLeftX, topLeftY], [boxTopLeftX + imageWidth, topLeftY + image.height], true]);
             ctx.drawImage(image, topLeftX, topLeftY, image.width, image.height);
             const inputTerminatorPositions = getTerminatorPositions(imageMetaData.inputs.length);
             const outputTerminatorPositions = getTerminatorPositions(imageMetaData.outputs.length);
