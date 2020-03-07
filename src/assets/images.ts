@@ -6,6 +6,7 @@ import JOIN_GATE from './images/JOIN-Gate.svg';
 import SPLIT_GATE from './images/SPLIT-Gate.svg';
 import NOT_GATE from './images/NOT-Gate.svg';
 import NOR_GATE from './images/NOR-GATE.svg';
+import NAND_GATE from './images/NAND-Gate.svg';
 
 type Point = [number, number];
 
@@ -66,6 +67,14 @@ const images: ImageMap = {
     NOR: {
         name: 'NOR',
         image: NOR_GATE,
+        inputs: [[70, 51], [70, 130]],
+        outputs: [[350, 90]],
+        width: 533.33,
+        height: 192
+    },
+    NAND: {
+        name: 'NAND',
+        image: NAND_GATE,
         inputs: [[70, 51], [70, 130]],
         outputs: [[350, 90]],
         width: 533.33,
