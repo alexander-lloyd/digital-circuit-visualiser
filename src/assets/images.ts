@@ -7,6 +7,7 @@ import SPLIT_GATE from './images/SPLIT-Gate.svg';
 import NOT_GATE from './images/NOT-Gate.svg';
 import NOR_GATE from './images/NOR-GATE.svg';
 import NAND_GATE from './images/NAND-Gate.svg';
+import XOR_GATE from './images/XOR-Gate.svg';
 
 type Point = [number, number];
 
@@ -79,6 +80,14 @@ const images: ImageMap = {
         outputs: [[350, 90]],
         width: 533.33,
         height: 192
+    },
+    XOR: {
+        name: 'XOR',
+        image: XOR_GATE,
+        inputs: [[10, 15], [10, 35]],
+        outputs: [[100, 25]],
+        width: 100,
+        height: 50
     }
 };
 
