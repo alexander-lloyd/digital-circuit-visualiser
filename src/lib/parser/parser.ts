@@ -364,7 +364,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     );
   }
 
-  function peg$parsestatement(): any {
+  function peg$parsestatement(): AST.AST {
     let s0, s1, s2, s3;
 
     s0 = peg$currPos;
@@ -393,7 +393,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parseexpression(): AST.ExpressionAST {
+  function peg$parseexpression(): AST.AST {
     let s0, s1, s2, s3, s4, s5;
 
     s0 = peg$parseletdeclaration();
@@ -517,7 +517,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parseterm(): any {
+  function peg$parseterm(): AST.AST {
     let s0, s1, s2, s3, s4, s5;
 
     s0 = peg$currPos;
@@ -561,7 +561,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parseterm2(): any {
+  function peg$parseterm2(): AST.AST {
     let s0, s1, s2, s3;
 
     s0 = peg$currPos;
@@ -593,7 +593,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  function peg$parsefactor(): any {
+  function peg$parsefactor(): AST.AST {
     let s0, s1, s2, s3, s4, s5;
 
     s0 = peg$parseconstant();

@@ -20,11 +20,14 @@ const parser = pegjs.generate(grammar, {
         customHeader: eslintDisabledRules + AST_IMPORT_STATEMENT
     },
     returnTypes: {
-        application: 'AST.ApplicationAST',
+        statement: 'AST.AST',
+        expression: 'AST.AST',
+        letdeclaraion: 'AST.LetAST',
+        term: 'AST.AST',
+        term2: 'AST.AST',
+        factor: 'AST.AST',
         constant: 'AST.ConstantAST',
-        expression: 'AST.ExpressionAST',
-        identifier: 'AST.IdentifierAST',
-        letdeclaraion: 'AST.LetDeclarationAST'
+        identifier: 'AST.IdentifierAST'
     }
 }).toString();
 

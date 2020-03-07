@@ -7,7 +7,6 @@ import {
     UnaryOpAST,
     isBinaryOp,
     isConstant,
-    isExpression,
     isIdentifier,
     isLet,
     isUnaryOp
@@ -29,11 +28,7 @@ describe('ast', () => {
         [isConstant, new ConstantAST('')],
         [isUnaryOp, new UnaryOpAST('feedback', new ConstantAST(''))],
         [isBinaryOp, new BinaryOpAST('compose', new ConstantAST(''), new ConstantAST(''))],
-        [isLet, new LetAST(new IdentifierAST(''), new ConstantAST(''), new ConstantAST(''))],
-        [isExpression, new IdentifierAST('abc')],
-        [isExpression, new ConstantAST('ABC')],
-        [isExpression, new UnaryOpAST('feedback', new IdentifierAST('abc'))],
-        [isExpression, new BinaryOpAST('compose', new ConstantAST(''), new ConstantAST(''))]
+        [isLet, new LetAST(new IdentifierAST(''), new ConstantAST(''), new ConstantAST(''))]
     ])('%s(%s) -> true', (isFunc: (ast: AST) => boolean, ast: AST) => {
         expect(isFunc(ast)).toBe(true);
     });

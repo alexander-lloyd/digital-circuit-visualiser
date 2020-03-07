@@ -3,7 +3,6 @@ import {
     ASTVisitor,
     BinaryOpAST,
     ConstantAST,
-    ExpressionAST,
     IdentifierAST,
     LetAST,
     UnaryOpAST
@@ -74,8 +73,8 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
      * @returns AST Node.
      */
     public visitBinaryOperator(ast: BinaryOpAST, context: ASTOptimisingTransformerContext): AST {
-        const left = ast.left.visit(this, context) as ExpressionAST;
-        const right = ast.right.visit(this, context) as ExpressionAST;
+        const left = ast.left.visit(this, context);
+        const right = ast.right.visit(this, context);
 
         if (left === ast.left && right === ast.right) {
             return ast;
@@ -113,7 +112,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         const {operator, child} = ast;
         const newChild = child.visit(this, context);
         if (newChild !== child) {
-            return new UnaryOpAST(operator, newChild as ExpressionAST);
+            return new UnaryOpAST(operator, newChild);
         }
         return ast;
     }

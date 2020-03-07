@@ -96,7 +96,7 @@ export type UnaryOperators = 'feedback';
 export class UnaryOpAST implements AST {
     public readonly type = 'unary';
     private readonly _operator: UnaryOperators;
-    private readonly _child: ExpressionAST;
+    private readonly _child: AST;
 
     /**
      * Constructor
@@ -104,7 +104,7 @@ export class UnaryOpAST implements AST {
      * @param operator Unary operator. E.g. 'feedback'.
      * @param child Child AST Node.
      */
-    public constructor(operator: UnaryOperators, child: ExpressionAST) {
+    public constructor(operator: UnaryOperators, child: AST) {
         this._operator = operator;
         this._child = child;
     }
@@ -123,7 +123,7 @@ export class UnaryOpAST implements AST {
      *
      * @returns The child node.
      */
-    public get child(): ExpressionAST {
+    public get child(): AST {
         return this._child;
     }
 
@@ -150,8 +150,8 @@ export type BinaryOpeators = 'tensor' | 'compose';
 export class BinaryOpAST implements AST {
     public readonly type = 'binary';
     private readonly _operator: BinaryOpeators;
-    private readonly _left: ExpressionAST;
-    private readonly _right: ExpressionAST;
+    private readonly _left: AST;
+    private readonly _right: AST;
 
     /**
      * Constructor.
@@ -160,7 +160,7 @@ export class BinaryOpAST implements AST {
      * @param left Left side of binary operator.
      * @param right Right side of binary operator.
      */
-    public constructor(operator: BinaryOpeators, left: ExpressionAST, right: ExpressionAST) {
+    public constructor(operator: BinaryOpeators, left: AST, right: AST) {
         this._operator = operator;
         this._left = left;
         this._right = right;
@@ -180,7 +180,7 @@ export class BinaryOpAST implements AST {
      *
      * @returns The left side.
      */
-    public get left(): ExpressionAST {
+    public get left(): AST {
         return this._left;
     }
 
@@ -189,7 +189,7 @@ export class BinaryOpAST implements AST {
      *
      * @returns The right side.
      */
-    public get right(): ExpressionAST {
+    public get right(): AST {
         return this._right;
     }
 
@@ -205,13 +205,6 @@ export class BinaryOpAST implements AST {
     }
 }
 
-export type ExpressionAST =
-  | BinaryOpAST
-  | ConstantAST
-  | IdentifierAST
-  | LetAST
-  | UnaryOpAST;
-
 /**
  * Let AST Node.
  * E.g. let name = expression in body
@@ -219,8 +212,8 @@ export type ExpressionAST =
 export class LetAST implements AST {
     public readonly type = 'let';
     _name: IdentifierAST;
-    _expression: ExpressionAST;
-    _body: ExpressionAST;
+    _expression: AST;
+    _body: AST;
 
     /**
      * Constructor.
@@ -229,7 +222,7 @@ export class LetAST implements AST {
      * @param expression Expression.
      * @param body Let binding body.
      */
-    public constructor(name: IdentifierAST, expression: ExpressionAST, body: ExpressionAST) {
+    public constructor(name: IdentifierAST, expression: AST, body: AST) {
         this._name = name;
         this._expression = expression;
         this._body = body;
@@ -249,7 +242,7 @@ export class LetAST implements AST {
      *
      * @returns The expression node.
      */
-    public get expression(): ExpressionAST {
+    public get expression(): AST {
         return this._expression;
     }
 
@@ -258,7 +251,7 @@ export class LetAST implements AST {
      *
      * @returns The body expression.
      */
-    public get body(): ExpressionAST {
+    public get body(): AST {
         return this._body;
     }
 
@@ -313,16 +306,6 @@ export function isUnaryOp(ast: AST): ast is UnaryOpAST {
  */
 export function isBinaryOp(ast: AST): ast is BinaryOpAST {
     return ast.type === 'binary';
-}
-
-/**
- * Is this AST node an Expression node?
- *
- * @param ast AST Node.
- * @returns True if AST node is an expression node.
- */
-export function isExpression(ast: AST): ast is ExpressionAST {
-    return isUnaryOp(ast) || isBinaryOp(ast) || isConstant(ast) || isIdentifier(ast);
 }
 
 /**
