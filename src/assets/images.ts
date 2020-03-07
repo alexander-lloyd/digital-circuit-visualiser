@@ -4,6 +4,11 @@ import AND_GATE from './images/AND-Gate.svg';
 import OR_GATE from './images/OR-Gate.svg';
 import JOIN_GATE from './images/JOIN-Gate.svg';
 import SPLIT_GATE from './images/SPLIT-Gate.svg';
+import NOT_GATE from './images/NOT-Gate.svg';
+import NOR_GATE from './images/NOR-Gate.svg';
+import NAND_GATE from './images/NAND-Gate.svg';
+import XOR_GATE from './images/XOR-Gate.svg';
+import XNOR_GATE from './images/XNOR-Gate.svg';
 
 type Point = [number, number];
 
@@ -52,6 +57,46 @@ const images: ImageMap = {
         outputs: [[88.5, 22.5], [88.5, 77.5]],
         width: 100,
         height: 100
+    },
+    NOT: {
+        name: 'NOT',
+        image: NOT_GATE,
+        inputs: [[70, 90]],
+        outputs: [[350, 90]],
+        width: 533.33,
+        height: 192
+    },
+    NOR: {
+        name: 'NOR',
+        image: NOR_GATE,
+        inputs: [[70, 51], [70, 130]],
+        outputs: [[350, 90]],
+        width: 533.33,
+        height: 192
+    },
+    NAND: {
+        name: 'NAND',
+        image: NAND_GATE,
+        inputs: [[70, 51], [70, 130]],
+        outputs: [[350, 90]],
+        width: 533.33,
+        height: 192
+    },
+    XOR: {
+        name: 'XOR',
+        image: XOR_GATE,
+        inputs: [[10, 15], [10, 35]],
+        outputs: [[100, 25]],
+        width: 100,
+        height: 50
+    },
+    XNOR: {
+        name: 'XNOR',
+        image: XNOR_GATE,
+        inputs: [[10, 15], [10, 35]],
+        outputs: [[100, 25]],
+        width: 100,
+        height: 50
     }
 };
 
