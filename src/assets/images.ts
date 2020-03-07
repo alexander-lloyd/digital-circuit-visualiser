@@ -4,6 +4,7 @@ import AND_GATE from './images/AND-Gate.svg';
 import OR_GATE from './images/OR-Gate.svg';
 import JOIN_GATE from './images/JOIN-Gate.svg';
 import SPLIT_GATE from './images/SPLIT-Gate.svg';
+import NOT_GATE from './images/NOT-Gate.svg';
 
 type Point = [number, number];
 
@@ -52,6 +53,14 @@ const images: ImageMap = {
         outputs: [[88.5, 22.5], [88.5, 77.5]],
         width: 100,
         height: 100
+    },
+    NOT: {
+        name: 'NOT',
+        image: NOT_GATE,
+        inputs: [[70, 90]],
+        outputs: [[350, 90]],
+        width: 533.33,
+        height: 192
     }
 };
 
