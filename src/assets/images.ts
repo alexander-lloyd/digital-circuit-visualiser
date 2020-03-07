@@ -5,7 +5,7 @@ import OR_GATE from './images/OR-Gate.svg';
 import JOIN_GATE from './images/JOIN-Gate.svg';
 import SPLIT_GATE from './images/SPLIT-Gate.svg';
 import NOT_GATE from './images/NOT-Gate.svg';
-import NOR_GATE from './images/NOR-GATE.svg';
+import NOR_GATE from './images/NOR-Gate.svg';
 import NAND_GATE from './images/NAND-Gate.svg';
 import XOR_GATE from './images/XOR-Gate.svg';
 import XNOR_GATE from './images/XNOR-Gate.svg';
