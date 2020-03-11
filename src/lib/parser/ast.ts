@@ -1,8 +1,20 @@
+type FilePosition = {
+    offset: number;
+    line: number;
+    column: number;
+};
+
+export type FileRange = {
+    start: FilePosition;
+    end: FilePosition;
+};
+
 /**
  * Base interface for all AST Nodes.
  */
 export interface AST {
     type: string;
+    location: FileRange;
 
     /**
      * Visit the right method in the ASTVisitor.
@@ -18,14 +30,17 @@ export interface AST {
 export class IdentifierAST implements AST {
     public readonly type = 'identifier';
     private readonly _name: string;
+    public readonly location: FileRange;
 
     /**
      * Constructor.
      *
      * @param name Identifier name.
+     * @param location File location of token.
      */
-    public constructor(name: string) {
+    public constructor(name: string, location: FileRange) {
         this._name = name;
+        this.location = location;
     }
 
     /**
@@ -57,14 +72,17 @@ export class IdentifierAST implements AST {
 export class ConstantAST implements AST {
     public readonly type = 'constant';
     private readonly _name: string;
+    public readonly location: FileRange;
 
     /**
      * Constructor.
      *
      * @param name Constant name.
+     * @param location File location of token.
      */
-    public constructor(name: string) {
+    public constructor(name: string, location: FileRange) {
         this._name = name;
+        this.location = location;
     }
 
     /**
@@ -97,16 +115,19 @@ export class UnaryOpAST implements AST {
     public readonly type = 'unary';
     private readonly _operator: UnaryOperators;
     private readonly _child: AST;
+    public readonly location: FileRange;
 
     /**
      * Constructor
      *
      * @param operator Unary operator. E.g. 'feedback'.
      * @param child Child AST Node.
+     * @param location File location of token.
      */
-    public constructor(operator: UnaryOperators, child: AST) {
+    public constructor(operator: UnaryOperators, child: AST, location: FileRange) {
         this._operator = operator;
         this._child = child;
+        this.location = location;
     }
 
     /**
@@ -152,6 +173,7 @@ export class BinaryOpAST implements AST {
     private readonly _operator: BinaryOpeators;
     private readonly _left: AST;
     private readonly _right: AST;
+    public readonly location: FileRange;
 
     /**
      * Constructor.
@@ -159,11 +181,13 @@ export class BinaryOpAST implements AST {
      * @param operator The operator.
      * @param left Left side of binary operator.
      * @param right Right side of binary operator.
+     * @param location File location of token.
      */
-    public constructor(operator: BinaryOpeators, left: AST, right: AST) {
+    public constructor(operator: BinaryOpeators, left: AST, right: AST, location: FileRange) {
         this._operator = operator;
         this._left = left;
         this._right = right;
+        this.location = location;
     }
 
     /**
@@ -214,6 +238,7 @@ export class LetAST implements AST {
     _name: IdentifierAST;
     _expression: AST;
     _body: AST;
+    public readonly location: FileRange;
 
     /**
      * Constructor.
@@ -221,11 +246,13 @@ export class LetAST implements AST {
      * @param name Let binding variable name.
      * @param expression Expression.
      * @param body Let binding body.
+     * @param location File location of token.
      */
-    public constructor(name: IdentifierAST, expression: AST, body: AST) {
+    public constructor(name: IdentifierAST, expression: AST, body: AST, location: FileRange) {
         this._name = name;
         this._expression = expression;
         this._body = body;
+        this.location = location;
     }
 
     /**

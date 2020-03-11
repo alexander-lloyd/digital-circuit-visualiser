@@ -174,16 +174,16 @@ function peg$parse(input: string, options?: IParseOptions) {
       return e;
     };
   const peg$c1 = function(left: any, operator: any, right: any): any {
-      return new AST.BinaryOpAST('tensor', left, right);
+      return new AST.BinaryOpAST('tensor', left, right, location());
     };
   const peg$c2 = function(name: any, expression: any, body: any): any {
-      return new AST.LetAST(name, expression, body);
+      return new AST.LetAST(name, expression, body, location());
     };
   const peg$c3 = function(left: any, operator: any, right: any): any {
-      return new AST.BinaryOpAST('compose', left, right);
+      return new AST.BinaryOpAST('compose', left, right, location());
     };
   const peg$c4 = function(child: any): any {
-      return new AST.UnaryOpAST('feedback', child);
+      return new AST.UnaryOpAST('feedback', child, location());
     };
   const peg$c5 = function(expression: any): any {
         return expression;
@@ -192,7 +192,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c7 = peg$classExpectation([["A", "Z"]], false, false);
   const peg$c8 = function(head: any, tail: any): any {
       const name = [head, ...tail].join('');
-      return new AST.ConstantAST(name);
+      return new AST.ConstantAST(name, location());
     };
   const peg$c9 = /^[a-z]/;
   const peg$c10 = peg$classExpectation([["a", "z"]], false, false);
@@ -200,7 +200,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c12 = peg$classExpectation([["A", "Z"], ["a", "z"], ["0", "9"]], false, false);
   const peg$c13 = function(head: any, tail: any): any {
       const name = [head, ...tail].join('');
-      return new AST.IdentifierAST(name);
+      return new AST.IdentifierAST(name, location());
     };
   const peg$c14 = "=";
   const peg$c15 = peg$literalExpectation("=", false);

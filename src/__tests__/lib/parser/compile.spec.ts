@@ -8,6 +8,7 @@ import {
     IdentifierAST,
     BinaryOpAST,
     ConstantAST,
+    FileRange,
     isBinaryOp,
     isConstant
 } from '../../../lib/parser/index';
@@ -15,14 +16,28 @@ import {
 describe('optimising ast transformer', () => {
     it('should optimise a let statement', () => {
         expect.assertions(5);
+        const location: FileRange = {
+            start: {
+                column: 1,
+                line: 1,
+                offset: 1
+            },
+            end: {
+                column: 1,
+                line: 1,
+                offset: 1
+            }
+        };
         const ast = new LetAST(
-            new IdentifierAST('x'),
+            new IdentifierAST('x', location),
             new BinaryOpAST(
                 'tensor',
-                new ConstantAST('AND'),
-                new ConstantAST('OR')
+                new ConstantAST('AND', location),
+                new ConstantAST('OR', location),
+                location
             ),
-            new IdentifierAST('x')
+            new IdentifierAST('x', location),
+            location
         );
 
         const transformer = new ASTOptimisingTransformer();
@@ -42,31 +57,57 @@ describe('optimising ast transformer', () => {
 
     it('should throw an error if variable is not defined in simple expression', () => {
         expect.assertions(1);
-        const ast = new IdentifierAST('x');
+        const location: FileRange = {
+            start: {
+                column: 1,
+                line: 1,
+                offset: 1
+            },
+            end: {
+                column: 1,
+                line: 1,
+                offset: 1
+            }
+        };
+        const ast = new IdentifierAST('x', location);
 
         const transformer = new ASTOptimisingTransformer();
         const context: ASTOptimisingTransformerContext = {
             identifiers: new Map()
         };
-        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('x'));
+        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('x', location));
     });
 
     it('should throw an error if variable is not defined in complex expression', () => {
         expect.assertions(1);
+        const location: FileRange = {
+            start: {
+                column: 1,
+                line: 1,
+                offset: 1
+            },
+            end: {
+                column: 1,
+                line: 1,
+                offset: 1
+            }
+        };
         const ast = new LetAST(
-            new IdentifierAST('x'),
+            new IdentifierAST('x', location),
             new BinaryOpAST(
                 'tensor',
-                new ConstantAST('AND'),
-                new ConstantAST('OR')
+                new ConstantAST('AND', location),
+                new ConstantAST('OR', location),
+                location
             ),
-            new IdentifierAST('y')
+            new IdentifierAST('y', location),
+            location
         );
 
         const transformer = new ASTOptimisingTransformer();
         const context: ASTOptimisingTransformerContext = {
             identifiers: new Map()
         };
-        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('y'));
+        expect(() => transformer.visit(ast, context)).toThrow(buildNameErrorMessage('y', location));
     });
 });
