@@ -3,6 +3,7 @@ import {
     ASTVisitor,
     BinaryOpAST,
     ConstantAST,
+    FileRange,
     IdentifierAST,
     LetAST,
     UnaryOpAST
@@ -22,10 +23,12 @@ export class NameError extends Error {}
  * Build error message.
  *
  * @param name variable name to include in message.
+ * @param location Location of error.
  * @returns Error message.
  */
-export function buildNameErrorMessage(name: string): string {
-    return `ASTOptimisingTransformer.visitIdentifier got unexpected variable '${name}'`;
+export function buildNameErrorMessage(name: string, location: FileRange): string {
+    const {line, column} = location.start;
+    return `Got unexpected variable '${name}' at line ${line}:${column}`;
 }
 
 /**
@@ -49,7 +52,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         const newAST = identifiers.get(name);
 
         if (newAST === undefined) {
-            throw new NameError(buildNameErrorMessage(name));
+            throw new NameError(buildNameErrorMessage(name, ast.location));
         }
 
         return newAST;
@@ -80,7 +83,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
             return ast;
         }
 
-        return new BinaryOpAST(ast.operator, left, right);
+        return new BinaryOpAST(ast.operator, left, right, ast.location);
     }
 
     /**
@@ -112,7 +115,7 @@ export class ASTOptimisingTransformer extends ASTVisitor<ASTOptimisingTransforme
         const {operator, child} = ast;
         const newChild = child.visit(this, context);
         if (newChild !== child) {
-            return new UnaryOpAST(operator, newChild);
+            return new UnaryOpAST(operator, newChild, ast.location);
         }
         return ast;
     }
