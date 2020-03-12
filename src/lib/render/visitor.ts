@@ -7,12 +7,12 @@ import {getTerminatorPositions} from './draw';
 import {
     Entity,
     FunctionEntity,
-    GroupedEntity,
-    Wire
+    GroupedEntity
 } from './entities';
 import {
     LabelFunction,
-    Point
+    Point,
+    Wire
 } from './types';
 import {
     ASTVisitor,

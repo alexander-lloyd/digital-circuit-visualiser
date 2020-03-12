@@ -1,6 +1,12 @@
-import {LabelFunction, Point} from './types';
-
-export type Wire = [Point, Point];
+import {
+    LabelFunction,
+    Point,
+    Wire
+} from './types';
+import {
+    scaleWire,
+    translateWire
+} from './transform';
 
 /**
  * Flat Map implementation.
@@ -11,30 +17,6 @@ export type Wire = [Point, Point];
  */
 function flatMap<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => U[]): U[] {
     return Array.prototype.concat(...array.map(callbackfn));
-}
-
-/**
- * Scale a Wire.
- *
- * @param wire Wire.
- * @param scaleX X scaling factor.
- * @param scaleY Y scaling factor.
- * @returns Scaled wire.
- */
-function scaleWire([[x1, y1], [x2, y2]]: Wire, scaleX: number, scaleY: number): Wire {
-    return [[x1 * scaleX, y1 * scaleY], [x2 * scaleX, y2 * scaleY]];
-}
-
-/**
- * Scale a Wire.
- *
- * @param wire Wire.
- * @param translateX X translating factor.
- * @param translateY Y translating factor.
- * @returns Scaled wire.
- */
-function translateWire([[x1, y1], [x2, y2]]: Wire, translateX: number, translateY: number): Wire {
-    return [[x1 + translateX, y1 + translateY], [x2 + translateX, y2 + translateY]];
 }
 
 /**
