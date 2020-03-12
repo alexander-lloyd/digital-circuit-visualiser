@@ -8,7 +8,7 @@ import {
 
 describe('scale line entry', () => {
     it('should scale a line entry', () => {
-        expect.assertions(2);
+        expect.assertions(1);
         const line: LineEntry = [[0, 0], [2, 2]];
         expect(scaleLineEntry(line, 4, 5)).toStrictEqual([[0, 0], [8, 10]]);
     });
