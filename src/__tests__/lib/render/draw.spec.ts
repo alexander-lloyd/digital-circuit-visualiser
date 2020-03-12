@@ -523,8 +523,8 @@ Array [
         },
         Object {
           "props": Object {
-            "cpx1": 21,
-            "cpx2": -15,
+            "cpx1": 51,
+            "cpx2": -45,
             "cpy1": 2,
             "cpy2": 6,
             "x": 5,

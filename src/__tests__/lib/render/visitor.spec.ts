@@ -129,6 +129,7 @@ describe('ast renderer', () => {
                   "operator": "tensor",
                   "type": "groupedEntity",
                   "width": 0.5,
+                  "wires": Array [],
                   "x": 0.5,
                   "y": 0,
                 },
@@ -137,6 +138,7 @@ describe('ast renderer', () => {
               "operator": "compose",
               "type": "groupedEntity",
               "width": 1,
+              "wires": Array [],
               "x": 0,
               "y": 0,
             }
