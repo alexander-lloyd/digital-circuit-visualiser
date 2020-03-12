@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
-import {renderBezier, renderBoxEntry, getTerminatorPositions} from './draw';
+import {renderBezier, getTerminatorPositions} from './draw';
 
 import {LabelFunction} from './types';
 

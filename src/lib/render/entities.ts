@@ -46,8 +46,9 @@ export interface Entity {
     y: number;
     width: number;
     height: number;
-    inputs: number[];
-    outputs: number[];
+    wires: Wire[];
+    inputs: Point[];
+    outputs: Point[];
 
     /**
      * Scale an entity.
@@ -89,8 +90,8 @@ export class FunctionEntity implements Entity {
     public height: number;
     public label: LabelFunction;
     public wires: Wire[];
-    public inputs: number[];
-    public outputs: number[];
+    public inputs: Point[];
+    public outputs: Point[];
 
     /**
      * Constructor.
@@ -111,8 +112,8 @@ export class FunctionEntity implements Entity {
         height: number,
         label: LabelFunction,
         wires: Wire[],
-        inputs: number[],
-        outputs: number[]
+        inputs: Point[],
+        outputs: Point[]
     ) {
         this.x = x;
         this.y = y;
@@ -134,9 +135,9 @@ export class FunctionEntity implements Entity {
     public scale(scaleX: number, scaleY: number): this {
         this.width *= scaleX;
         this.height *= scaleY;
-        this.wires = this.wires.map((wire) => scaleWire(wire, scaleX, scaleY));
-        this.inputs = this.inputs.map((i: number) => i * scaleY);
-        this.outputs = this.outputs.map((i: number) => i * scaleY);
+        this.wires = this.wires.map((wire: Wire) => scaleWire(wire, scaleX, scaleY));
+        this.inputs = this.inputs.map(([x, y]: Point) => [x * scaleX, y * scaleY]);
+        this.outputs = this.outputs.map(([x, y]: Point) => [x * scaleX, y * scaleY]);
         return this;
     }
 
@@ -151,8 +152,8 @@ export class FunctionEntity implements Entity {
         this.x += translateX;
         this.y += translateY;
         this.wires = this.wires.map((wire) => translateWire(wire, translateX, translateY));
-        this.inputs = this.inputs.map((i: number) => i + translateY);
-        this.outputs = this.outputs.map((o: number) => o + translateY);
+        this.inputs = this.inputs.map(([x, y]: Point) => [x + translateX, y + translateY]);
+        this.outputs = this.outputs.map(([x, y]: Point) => [x + translateX, y + translateY]);
 
         return this;
     }
@@ -181,6 +182,7 @@ export class GroupedEntity implements Entity {
     public width: number;
     public height: number;
     public children: [Entity, Entity];
+    public wires: Wire[];
 
     /**
      * Constructor.
@@ -191,6 +193,7 @@ export class GroupedEntity implements Entity {
      * @param width Box width
      * @param height Box height
      * @param children Children Entities.
+     * @param wires Additional wires.
      */
     public constructor(
         operator: string,
@@ -198,7 +201,8 @@ export class GroupedEntity implements Entity {
         y: number,
         width: number,
         height: number,
-        children: [Entity, Entity]
+        children: [Entity, Entity],
+        wires: Wire[]
     ) {
         this.operator = operator;
         this.x = x;
@@ -206,6 +210,7 @@ export class GroupedEntity implements Entity {
         this.width = width;
         this.height = height;
         this.children = children;
+        this.wires = wires;
     }
 
     /**
@@ -213,7 +218,7 @@ export class GroupedEntity implements Entity {
      *
      * @returns All the inputs.
      */
-    public get inputs(): number[] {
+    public get inputs(): Point[] {
         return flatMap(this.children, (e: Entity) => e.inputs);
     }
 
@@ -222,7 +227,7 @@ export class GroupedEntity implements Entity {
      *
      * @returns All the outputs.
      */
-    public get outputs(): number[] {
+    public get outputs(): Point[] {
         return flatMap(this.children, (e: Entity) => e.outputs);
     }
 
@@ -236,6 +241,7 @@ export class GroupedEntity implements Entity {
     public scale(scaleX: number, scaleY: number): this {
         this.width *= scaleX;
         this.height *= scaleY;
+        this.wires = this.wires.map((wire: Wire) => scaleWire(wire, scaleX, scaleY));
 
         this.children.forEach((e: Entity) => e.scale(scaleX, scaleY));
 
@@ -252,6 +258,7 @@ export class GroupedEntity implements Entity {
     translate(translateX: number, translateY: number): this {
         this.x += translateX;
         this.y += translateY;
+        this.wires = this.wires.map((w: Wire) => translateWire(w, translateX, translateY));
 
         this.children.forEach((e: Entity) => e.translate(translateX, translateY));
 

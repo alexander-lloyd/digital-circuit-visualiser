@@ -11,7 +11,8 @@ import {
     Wire
 } from './entities';
 import {
-    LabelFunction
+    LabelFunction,
+    Point
 } from './types';
 import {
     ASTVisitor,
@@ -60,16 +61,18 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
         let label: LabelFunction;
         const {name} = ast;
         const imageMetaData = images[name];
-        let inputPositions: number[] = [];
-        let outputPositions: number[] = [];
+        let inputPositions: Point[] = [];
+        let outputPositions: Point[] = [];
 
         if (imageMetaData === undefined) {
             label = buildTextLabelFunction(name);
         } else {
             const {inputs, outputs} = imageMetaData;
             label = buildTextImageFunction(imageMetaData);
-            inputPositions = getTerminatorPositions(inputs.length);
-            outputPositions = getTerminatorPositions(outputs.length);
+            inputPositions = getTerminatorPositions(inputs.length).
+                map((i: number) => [0.1, i]);
+            outputPositions = getTerminatorPositions(outputs.length).
+                map((o: number) => [0.9, o]);
         }
 
         return new FunctionEntity(0, 0, 1, 1, label, [], inputPositions, outputPositions);

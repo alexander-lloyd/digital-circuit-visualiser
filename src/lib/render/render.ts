@@ -121,12 +121,15 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
                 console.warn('Inputs !== Outputs in COMPOSE');
             }
 
-            gbeziers.push(...leftOutputs.map((leftO, i): LineEntry => {
-                const rightI = rightInputs[i];
-
+            gbeziers.push(...leftOutputs.map(([leftX, leftY], i): LineEntry => {
+                const [rightX, rightY] = rightInputs[i];
+                const x1 = left.x + leftX;
+                const y1 = left.y + leftY;
+                const x2 = right.x + (rightX * 0.1);
+                const y2 = right.y + rightY;
                 return [
-                    [left.x + (lwidth * 0.9), left.y + (lheight * leftO)],
-                    [right.x + (rwidth * 0.1), right.y + (rheight * rightI)]
+                    [x1, y1],
+                    [x2, y2]
                 ];
             }));
         }
