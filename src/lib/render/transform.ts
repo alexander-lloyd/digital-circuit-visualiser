@@ -34,27 +34,3 @@ export function translateLineEntry([[x1, y1], [x2, y2]]: LineEntry, translateX: 
     const y2b = y2 + translateY;
     return [[x1b, y1b], [x2b, y2b]];
 }
-
-/**
- * Scale a Wire.
- *
- * @param wire Wire.
- * @param scaleX X scaling factor.
- * @param scaleY Y scaling factor.
- * @returns Scaled wire.
- */
-export function scaleWire([[x1, y1], [x2, y2]]: Wire, scaleX: number, scaleY: number): Wire {
-    return [[x1 * scaleX, y1 * scaleY], [x2 * scaleX, y2 * scaleY]];
-}
-
-/**
- * Scale a Wire.
- *
- * @param wire Wire.
- * @param translateX X translating factor.
- * @param translateY Y translating factor.
- * @returns Scaled wire.
- */
-export function translateWire([[x1, y1], [x2, y2]]: Wire, translateX: number, translateY: number): Wire {
-    return [[x1 + translateX, y1 + translateY], [x2 + translateX, y2 + translateY]];
-}
