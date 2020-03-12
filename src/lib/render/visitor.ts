@@ -17,7 +17,8 @@ import {
 import {
     ASTVisitor,
     BinaryOpAST,
-    ConstantAST
+    ConstantAST,
+    UnaryOpAST
 } from '../parser/index';
 import {
     images
@@ -114,7 +115,40 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
             throw new NotImplementedError(buildNotImplementedError(operator));
         }
 
-        return new GroupedEntity(operator, 0, 0, 1, 1, [left, right]);
+        return new GroupedEntity(operator, 0, 0, 1, 1, [left, right], []);
+    }
+
+    /**
+     * Visit Unary Operator. Currently the only supported operator is 'feedback'.
+     *
+     * @param ast UnaryOp AST Node.
+     * @param config Contains the depth of the AST nodes.
+     * @returns Entity
+     */
+    public visitUnaryOperator(ast: UnaryOpAST, config: ASTRendererConfig): Entity {
+        const {operator} = ast;
+        const childEntity = ast.child.visit(this, config);
+        const {inputs, outputs} = childEntity;
+
+        if (operator === 'feedback') {
+            if (inputs.length > 0 && outputs.length > 0) {
+                const [input] = childEntity.inputs;
+                const [output] = childEntity.outputs;
+                const wireTopY = 0.1;
+
+                const wires: Wire[] = [
+                    [input, [input[0], wireTopY]],
+                    [[input[0], wireTopY], [output[0], wireTopY]],
+                    [[output[0], wireTopY], output]
+                ];
+
+                childEntity.wires.push(...wires);
+            }
+        } else {
+            throw new NotImplementedError(buildNotImplementedError(operator));
+        }
+
+        return childEntity;
     }
 
     /**
@@ -128,13 +162,6 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
      * Visit let.
      */
     public visitLet(): never {
-        throw new Error('ASTRenderer.visitIdentifier is not implemened');
-    }
-
-    /**
-     * Visit Unary Operator.
-     */
-    public visitUnaryOperator(): never {
         throw new Error('ASTRenderer.visitIdentifier is not implemened');
     }
 }

@@ -70,10 +70,10 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
         const halfHeight = height / 2;
 
         const functionRenderResult: RenderResults = {
-            lines: [...wires],
+            lines: [],
             boxes: [[[x, y], [x + width, y + height], drawBox]],
             labels: [[label, [x + halfWidth, y + halfHeight], inputs.length, outputs.length]],
-            beziers: [],
+            beziers: [...wires],
             size: [width, height]
         };
 
