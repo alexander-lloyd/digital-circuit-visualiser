@@ -6,7 +6,7 @@ import {
 } from './types';
 
 const DEFAULT_CROSS_SIZE = 5;
-const BEZIER_CONSTANT = 20;
+const BEZIER_CONSTANT = 50;
 
 /**
  * Used in Debugging.
