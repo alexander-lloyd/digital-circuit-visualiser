@@ -79,7 +79,8 @@ function drawDiagram(
         const scalingValue = Math.min(canvasHeight, canvasWidth);
 
         result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
-        result = transformRenderResult(result, 30, 30);
+        const START_POSITION = 30;
+        result = transformRenderResult(result, START_POSITION, START_POSITION);
 
         renderResult(ctx, result);
     });

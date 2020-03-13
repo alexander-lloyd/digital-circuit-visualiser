@@ -92,7 +92,11 @@ export function renderCross(ctx: CanvasRenderingContext2D, point: Point, size = 
  * @param line Bezier line to draw.
  * @param bezierConstant Bezier Constant
  */
-export function renderBezier(ctx: CanvasRenderingContext2D, [[x1, y1], [x2, y2]]: LineEntry, bezierConstant=BEZIER_CONSTANT): void {
+export function renderBezier(
+    ctx: CanvasRenderingContext2D,
+    [[x1, y1], [x2, y2]]: LineEntry,
+    bezierConstant = BEZIER_CONSTANT
+): void {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineWidth = 2;

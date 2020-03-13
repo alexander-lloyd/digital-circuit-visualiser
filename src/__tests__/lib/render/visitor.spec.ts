@@ -6,7 +6,20 @@ describe('ast renderer', () => {
     it('should create a function entity', () => {
         expect.assertions(4);
 
-        const ast = new ConstantAST('AND');
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new ConstantAST('AND', location);
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
             depthX: 1,
@@ -22,7 +35,20 @@ describe('ast renderer', () => {
     it('should group tensor functions', () => {
         expect.assertions(12);
 
-        const ast = new BinaryOpAST('tensor', new ConstantAST('AND'), new ConstantAST('OR'));
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new BinaryOpAST('tensor', new ConstantAST('AND', location), new ConstantAST('OR', location), location);
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
             depthX: 1,
@@ -49,7 +75,20 @@ describe('ast renderer', () => {
     it('should group compose functions', () => {
         expect.assertions(12);
 
-        const ast = new BinaryOpAST('compose', new ConstantAST('AND'), new ConstantAST('OR'));
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new BinaryOpAST('compose', new ConstantAST('AND', location), new ConstantAST('OR', location), location);
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
             depthX: 1,
@@ -76,10 +115,24 @@ describe('ast renderer', () => {
     it('should handle nested expressions', () => {
         expect.assertions(1);
 
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
         const ast = new BinaryOpAST(
             'compose',
-            new ConstantAST('ABC'),
-            new BinaryOpAST('tensor', new ConstantAST('DEF'), new ConstantAST('GHI'))
+            new ConstantAST('ABC', location),
+            new BinaryOpAST('tensor', new ConstantAST('DEF', location), new ConstantAST('GHI', location), location),
+            location
         );
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
@@ -147,18 +200,28 @@ describe('ast renderer', () => {
 
     it('should throw error with unexpected operator', () => {
         expect.assertions(1);
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
         const operator = 'operator does not exist' as BinaryOpeators;
         expect.assertions(1);
-        const ast = new BinaryOpAST(operator, new ConstantAST('ABC'), new ConstantAST('DEF'));
+        const ast = new BinaryOpAST(operator, new ConstantAST('ABC', location), new ConstantAST('DEF', location), location);
 
         const renderer = new ASTRenderer();
 
-        expect(() =>
-            renderer.visit(ast, {
-                depthX: 1,
-                depthY: 1
-            })
-        ).toThrow(buildNotImplementedError(operator));
+        expect(() => renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        })).toThrow(buildNotImplementedError(operator));
     });
 
     it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(
