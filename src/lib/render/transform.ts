@@ -130,7 +130,7 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
  * @param translateY Y translation. Positive will move downwards.
  * @returns New Render Result.
  */
-export function transformRenderResult(
+export function translateRenderResult(
     renderResults: RenderResults,
     translateX: number,
     translateY: number

@@ -3,7 +3,7 @@ import {
 } from './types';
 import {
     scaleRenderResult,
-    transformRenderResult
+    translateRenderResult,
 } from './transform';
 import {
     EntityRendererVisitor,
@@ -21,5 +21,5 @@ export {
     RenderResults,
     renderResult,
     scaleRenderResult,
-    transformRenderResult
+    translateRenderResult
 };
