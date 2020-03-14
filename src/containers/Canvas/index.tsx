@@ -11,7 +11,7 @@ import {
     EntityRendererVisitor,
     renderResult,
     scaleRenderResult,
-    transformRenderResult
+    translateRenderResult
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
 
@@ -57,6 +57,7 @@ function drawDiagram(
 ): void {
     requestAnimationFrame(() => {
         // Clear canvas
+        ctx.fillStyle = 'white';
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         // Reset the position and scaling.
         ctx.setTransform();
@@ -64,6 +65,7 @@ function drawDiagram(
         const [dragPositionX, dragPositionY] = offsetPosition;
         ctx.scale(scale, scale);
         ctx.translate(dragPositionX, dragPositionY);
+
         const astRenderer = new ASTRenderer();
         const entityTree = astRenderer.visit(ast, {
             depthX: 1,
@@ -79,7 +81,8 @@ function drawDiagram(
         const scalingValue = Math.min(canvasHeight, canvasWidth);
 
         result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
-        result = transformRenderResult(result, 30, 30);
+        const START_POSITION = 30;
+        result = translateRenderResult(result, START_POSITION, START_POSITION);
 
         renderResult(ctx, result);
     });

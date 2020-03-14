@@ -4,7 +4,8 @@ import {
     renderLineEntry,
     renderBoxEntry,
     renderCross,
-    renderBezier
+    renderBezier,
+    renderCurve
 } from '../../../lib/render/draw';
 import {Point, LineEntry, BoxEntry} from '../../../lib/render/types';
 
@@ -477,8 +478,8 @@ Array [
     });
 });
 
-describe('draw bezier curve', () => {
-    it('should render a bezier curve', () => {
+describe('draw curve', () => {
+    it('should render a curve', () => {
         expect.assertions(1);
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -488,7 +489,7 @@ describe('draw bezier curve', () => {
             [5, 6]
         ];
 
-        renderBezier(ctx, line);
+        renderCurve(ctx, line);
         expect(ctx.__getDrawCalls()).toMatchInlineSnapshot(`
 Array [
   Object {
@@ -523,12 +524,88 @@ Array [
         },
         Object {
           "props": Object {
-            "cpx1": 21,
-            "cpx2": -15,
+            "cpx1": 51,
+            "cpx2": -45,
             "cpy1": 2,
             "cpy2": 6,
             "x": 5,
             "y": 6,
+          },
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "bezierCurveTo",
+        },
+      ],
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "stroke",
+  },
+]
+`);
+    });
+});
+
+describe('draw bezier curve', () => {
+    it('should render a curve', () => {
+        expect.assertions(1);
+
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+        renderBezier(ctx, [1, 2], [3, 4], [5, 6], [7, 8]);
+        expect(ctx.__getDrawCalls()).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "props": Object {
+      "path": Array [
+        Object {
+          "props": Object {},
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "beginPath",
+        },
+        Object {
+          "props": Object {
+            "x": 1,
+            "y": 2,
+          },
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "moveTo",
+        },
+        Object {
+          "props": Object {
+            "cpx1": 5,
+            "cpx2": 7,
+            "cpy1": 6,
+            "cpy2": 8,
+            "x": 3,
+            "y": 4,
           },
           "transform": Array [
             1,

@@ -35,7 +35,7 @@ describe('grouped entity', () => {
 
         const left = new FunctionEntity(1, 2, 1, 1, () => {}, [], [], []);
         const right = new FunctionEntity(2, 2, 1, 1, () => {}, [], [], []);
-        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right]);
+        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right], []);
 
         entity.scale(0.5, 2);
         expect(entity.x).toBe(1.5);
@@ -59,7 +59,7 @@ describe('grouped entity', () => {
 
         const left = new FunctionEntity(1, 2, 1, 1, () => {}, [], [], []);
         const right = new FunctionEntity(2, 2, 1, 1, () => {}, [], [], []);
-        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right]);
+        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right], []);
 
         entity.translate(2, 3);
         expect(entity.x).toBe(3.5);
@@ -90,7 +90,7 @@ describe('is function entity', () => {
         expect.assertions(1);
         const left = new FunctionEntity(1, 2, 1, 1, () => {}, [], [], []);
         const right = new FunctionEntity(2, 2, 1, 1, () => {}, [], [], []);
-        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right]);
+        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right], []);
         expect(isFunctionEntity(entity)).toBe(false);
     });
 });
@@ -106,7 +106,7 @@ describe('is grouped entity', () => {
         expect.assertions(1);
         const left = new FunctionEntity(1, 2, 1, 1, () => {}, [], [], []);
         const right = new FunctionEntity(2, 2, 1, 1, () => {}, [], [], []);
-        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right]);
+        const entity = new GroupedEntity('compose', 1.5, 2, 2, 1, [left, right], []);
         expect(isGroupedEntity(entity)).toBe(true);
     });
 });

@@ -7,16 +7,18 @@ import {getTerminatorPositions} from './draw';
 import {
     Entity,
     FunctionEntity,
-    GroupedEntity,
-    Wire
+    GroupedEntity
 } from './entities';
 import {
-    LabelFunction
+    LabelFunction,
+    Point,
+    Wire
 } from './types';
 import {
     ASTVisitor,
     BinaryOpAST,
-    ConstantAST
+    ConstantAST,
+    UnaryOpAST
 } from '../parser/index';
 import {
     images
@@ -60,16 +62,18 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
         let label: LabelFunction;
         const {name} = ast;
         const imageMetaData = images[name];
-        let inputPositions: number[] = [];
-        let outputPositions: number[] = [];
+        let inputPositions: Point[] = [];
+        let outputPositions: Point[] = [];
 
         if (imageMetaData === undefined) {
             label = buildTextLabelFunction(name);
         } else {
             const {inputs, outputs} = imageMetaData;
             label = buildTextImageFunction(imageMetaData);
-            inputPositions = getTerminatorPositions(inputs.length);
-            outputPositions = getTerminatorPositions(outputs.length);
+            inputPositions = getTerminatorPositions(inputs.length).
+                map((i: number) => [0.1, i]);
+            outputPositions = getTerminatorPositions(outputs.length).
+                map((o: number) => [0.9, o]);
         }
 
         return new FunctionEntity(0, 0, 1, 1, label, [], inputPositions, outputPositions);
@@ -111,7 +115,52 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
             throw new NotImplementedError(buildNotImplementedError(operator));
         }
 
-        return new GroupedEntity(operator, 0, 0, 1, 1, [left, right]);
+        return new GroupedEntity(operator, 0, 0, 1, 1, [left, right], []);
+    }
+
+    /**
+     * Visit Unary Operator. Currently the only supported operator is 'feedback'.
+     *
+     * @param ast UnaryOp AST Node.
+     * @param config Contains the depth of the AST nodes.
+     * @returns Entity
+     */
+    public visitUnaryOperator(ast: UnaryOpAST, config: ASTRendererConfig): Entity {
+        const {operator} = ast;
+        const childEntity = ast.child.visit(this, config);
+        const {inputs, outputs} = childEntity;
+
+        if (operator === 'feedback') {
+            if (inputs.length > 0 && outputs.length > 0) {
+                const [[ix, iy]] = childEntity.inputs;
+                const [[ox, oy]] = childEntity.outputs;
+                const wireTopY = 0.1;
+                const bezierControl = 0.2;
+                const bezierTopXOffset = 0.2;
+
+                const wires: Wire[] = [
+                    [[ix, iy], [ix + bezierTopXOffset, wireTopY], [ix - bezierControl, iy], [ix, wireTopY]],
+                    [
+                        [ix + bezierTopXOffset, wireTopY],
+                        [ox - bezierTopXOffset, wireTopY],
+                        [ix + bezierTopXOffset, wireTopY],
+                        [ox - bezierTopXOffset, wireTopY]
+                    ],
+                    [
+                        [ox - bezierTopXOffset, wireTopY],
+                        [ox, oy],
+                        [ox - bezierTopXOffset + bezierControl, wireTopY],
+                        [ox + bezierControl, oy]
+                    ]
+                ];
+
+                childEntity.wires.push(...wires);
+            }
+        } else {
+            throw new NotImplementedError(buildNotImplementedError(operator));
+        }
+
+        return childEntity;
     }
 
     /**
@@ -125,13 +174,6 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
      * Visit let.
      */
     public visitLet(): never {
-        throw new Error('ASTRenderer.visitIdentifier is not implemened');
-    }
-
-    /**
-     * Visit Unary Operator.
-     */
-    public visitUnaryOperator(): never {
         throw new Error('ASTRenderer.visitIdentifier is not implemened');
     }
 }

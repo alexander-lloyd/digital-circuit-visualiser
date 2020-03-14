@@ -1,12 +1,25 @@
 import {ASTRenderer, buildNotImplementedError} from '../../../lib/render/visitor';
-import {ConstantAST, BinaryOpAST, BinaryOpeators} from '../../../lib/parser/ast';
+import {ConstantAST, BinaryOpAST, BinaryOpeators, UnaryOpAST, UnaryOperators} from '../../../lib/parser/ast';
 import {GroupedEntity} from 'lib/render/entities';
 
 describe('ast renderer', () => {
     it('should create a function entity', () => {
         expect.assertions(4);
 
-        const ast = new ConstantAST('AND');
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new ConstantAST('AND', location);
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
             depthX: 1,
@@ -22,7 +35,20 @@ describe('ast renderer', () => {
     it('should group tensor functions', () => {
         expect.assertions(12);
 
-        const ast = new BinaryOpAST('tensor', new ConstantAST('AND'), new ConstantAST('OR'));
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new BinaryOpAST('tensor', new ConstantAST('AND', location), new ConstantAST('OR', location), location);
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
             depthX: 1,
@@ -49,7 +75,20 @@ describe('ast renderer', () => {
     it('should group compose functions', () => {
         expect.assertions(12);
 
-        const ast = new BinaryOpAST('compose', new ConstantAST('AND'), new ConstantAST('OR'));
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new BinaryOpAST('compose', new ConstantAST('AND', location), new ConstantAST('OR', location), location);
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
             depthX: 1,
@@ -76,10 +115,24 @@ describe('ast renderer', () => {
     it('should handle nested expressions', () => {
         expect.assertions(1);
 
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
         const ast = new BinaryOpAST(
             'compose',
-            new ConstantAST('ABC'),
-            new BinaryOpAST('tensor', new ConstantAST('DEF'), new ConstantAST('GHI'))
+            new ConstantAST('ABC', location),
+            new BinaryOpAST('tensor', new ConstantAST('DEF', location), new ConstantAST('GHI', location), location),
+            location
         );
         const renderer = new ASTRenderer();
         const entity = renderer.visit(ast, {
@@ -129,6 +182,7 @@ describe('ast renderer', () => {
                   "operator": "tensor",
                   "type": "groupedEntity",
                   "width": 0.5,
+                  "wires": Array [],
                   "x": 0.5,
                   "y": 0,
                 },
@@ -137,6 +191,7 @@ describe('ast renderer', () => {
               "operator": "compose",
               "type": "groupedEntity",
               "width": 1,
+              "wires": Array [],
               "x": 0,
               "y": 0,
             }
@@ -145,18 +200,28 @@ describe('ast renderer', () => {
 
     it('should throw error with unexpected operator', () => {
         expect.assertions(1);
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
         const operator = 'operator does not exist' as BinaryOpeators;
         expect.assertions(1);
-        const ast = new BinaryOpAST(operator, new ConstantAST('ABC'), new ConstantAST('DEF'));
+        const ast = new BinaryOpAST(operator, new ConstantAST('ABC', location), new ConstantAST('DEF', location), location);
 
         const renderer = new ASTRenderer();
 
-        expect(() =>
-            renderer.visit(ast, {
-                depthX: 1,
-                depthY: 1
-            })
-        ).toThrow(buildNotImplementedError(operator));
+        expect(() => renderer.visit(ast, {
+            depthX: 1,
+            depthY: 1
+        })).toThrow(buildNotImplementedError(operator));
     });
 
     it.each([['visitIdentifier'], ['visitLet'], ['visitUnaryOperator']])(
@@ -169,4 +234,138 @@ describe('ast renderer', () => {
             expect(() => method()).toThrow(expect.anything());
         }
     );
+});
+
+describe('visit unary operator', () => {
+    it('should create a feedback operator', () => {
+        expect.assertions(1);
+
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new UnaryOpAST('feedback', new ConstantAST('AND', location), location);
+        const renderer = new ASTRenderer();
+        const entities = renderer.visit(ast, {
+            depthX: 0,
+            depthY: 0
+        });
+
+        expect(entities).toMatchInlineSnapshot(`
+FunctionEntity {
+  "height": 1,
+  "inputs": Array [
+    Array [
+      0.1,
+      0.3333333333333333,
+    ],
+    Array [
+      0.1,
+      0.6666666666666666,
+    ],
+  ],
+  "label": [Function],
+  "outputs": Array [
+    Array [
+      0.9,
+      0.5,
+    ],
+  ],
+  "type": "functionEntity",
+  "width": 1,
+  "wires": Array [
+    Array [
+      Array [
+        0.1,
+        0.3333333333333333,
+      ],
+      Array [
+        0.30000000000000004,
+        0.1,
+      ],
+      Array [
+        -0.1,
+        0.3333333333333333,
+      ],
+      Array [
+        0.1,
+        0.1,
+      ],
+    ],
+    Array [
+      Array [
+        0.30000000000000004,
+        0.1,
+      ],
+      Array [
+        0.7,
+        0.1,
+      ],
+      Array [
+        0.30000000000000004,
+        0.1,
+      ],
+      Array [
+        0.7,
+        0.1,
+      ],
+    ],
+    Array [
+      Array [
+        0.7,
+        0.1,
+      ],
+      Array [
+        0.9,
+        0.5,
+      ],
+      Array [
+        0.8999999999999999,
+        0.1,
+      ],
+      Array [
+        1.1,
+        0.5,
+      ],
+    ],
+  ],
+  "x": 0,
+  "y": 0,
+}
+`);
+    });
+
+    it('should throw exception if unknown operator', () => {
+        expect.assertions(1);
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const operator = 'unknown unary operator' as UnaryOperators;
+
+        const ast = new UnaryOpAST(operator, new ConstantAST('AND', location), location);
+        const renderer = new ASTRenderer();
+        expect(() => renderer.visit(ast, {
+            depthX: 0,
+            depthY: 0
+        })).toThrow(buildNotImplementedError(operator));
+    });
 });
