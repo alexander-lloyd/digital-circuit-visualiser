@@ -12,9 +12,9 @@ export type BoxEntry = [Point, Point, boolean];
 // Label function, center point, number of inputs, number of outputs
 export type LabelEntry = [LabelFunction, Point, number, number];
 
-export type Wire = [Point, Point];
-
 export type Bezier = [Point, Point, Point, Point];
+
+export type Wire = Bezier;
 
 export type RenderResults = {
     // Start [x,y], End [x,y]

@@ -132,15 +132,24 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
 
         if (operator === 'feedback') {
             if (inputs.length > 0 && outputs.length > 0) {
-                const [input] = childEntity.inputs;
-                const [output] = childEntity.outputs;
+                const [[ix, iy]] = childEntity.inputs;
+                const [[ox, oy]] = childEntity.outputs;
                 const wireTopY = 0.1;
+                const bezierControl = 0.3;
 
                 const wires: Wire[] = [
-                    [input, [input[0] + 0.2, wireTopY]],
-                    [[input[0] + 0.2, wireTopY], [output[0] - 0.2, wireTopY]],
-                    [[output[0] - 0.2, wireTopY], output]
+                    [[ix, iy], [ix + 0.2, wireTopY], [ix - bezierControl, iy], [ix, wireTopY]],
+                    [[ix + 0.2, wireTopY], [ox - 0.2, wireTopY], [ix + 0.2, wireTopY], [ox - 0.2, wireTopY]],
+                    [[ox - 0.2, wireTopY], [ox, oy], [ox - 0.2 + bezierControl, wireTopY], [ox + bezierControl, oy]]
                 ];
+
+
+                // const wires: Wire[] = [
+                //     [input, [input[0] + 0.2, wireTopY], [input[0]], []],
+
+                //     [[input[0] + 0.2, wireTopY], [output[0] - 0.2, wireTopY]],
+                //     [[output[0] - 0.2, wireTopY], output]
+                // ];
 
                 childEntity.wires.push(...wires);
             }

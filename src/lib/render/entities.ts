@@ -5,7 +5,9 @@ import {
 } from './types';
 import {
     scaleLineEntry,
-    translateLineEntry
+    translateLineEntry,
+    scaleBezierCurve,
+    translateBezierCurve
 } from './transform';
 
 /**
@@ -117,7 +119,7 @@ export class FunctionEntity implements Entity {
     public scale(scaleX: number, scaleY: number): this {
         this.width *= scaleX;
         this.height *= scaleY;
-        this.wires = this.wires.map((wire: Wire) => scaleLineEntry(wire, scaleX, scaleY));
+        this.wires = this.wires.map((wire: Wire) => scaleBezierCurve(wire, scaleX, scaleY));
         this.inputs = this.inputs.map(([x, y]: Point) => [x * scaleX, y * scaleY]);
         this.outputs = this.outputs.map(([x, y]: Point) => [x * scaleX, y * scaleY]);
         return this;
@@ -133,7 +135,7 @@ export class FunctionEntity implements Entity {
     public translate(translateX: number, translateY: number): this {
         this.x += translateX;
         this.y += translateY;
-        this.wires = this.wires.map((wire) => translateLineEntry(wire, translateX, translateY));
+        this.wires = this.wires.map((wire) => translateBezierCurve(wire, translateX, translateY));
         this.inputs = this.inputs.map(([x, y]: Point) => [x + translateX, y + translateY]);
         this.outputs = this.outputs.map(([x, y]: Point) => [x + translateX, y + translateY]);
 
@@ -223,7 +225,7 @@ export class GroupedEntity implements Entity {
     public scale(scaleX: number, scaleY: number): this {
         this.width *= scaleX;
         this.height *= scaleY;
-        this.wires = this.wires.map((wire: Wire) => scaleLineEntry(wire, scaleX, scaleY));
+        this.wires = this.wires.map((wire: Wire) => scaleBezierCurve(wire, scaleX, scaleY));
 
         this.children.forEach((e: Entity) => e.scale(scaleX, scaleY));
 
@@ -240,7 +242,7 @@ export class GroupedEntity implements Entity {
     translate(translateX: number, translateY: number): this {
         this.x += translateX;
         this.y += translateY;
-        this.wires = this.wires.map((w: Wire) => translateLineEntry(w, translateX, translateY));
+        this.wires = this.wires.map((w: Wire) => translateBezierCurve(w, translateX, translateY));
 
         this.children.forEach((e: Entity) => e.translate(translateX, translateY));
 
