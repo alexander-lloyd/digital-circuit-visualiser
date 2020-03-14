@@ -129,5 +129,4 @@ export function renderCurve(
         [x1 + curveness, y1],
         [x2 - curveness, y2]
     );
-    ctx.stroke();
 }

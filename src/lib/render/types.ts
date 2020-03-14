@@ -14,6 +14,8 @@ export type LabelEntry = [LabelFunction, Point, number, number];
 
 export type Wire = [Point, Point];
 
+export type Bezier = [Point, Point, Point, Point];
+
 export type RenderResults = {
     // Start [x,y], End [x,y]
     lines: LineEntry[];
@@ -25,4 +27,6 @@ export type RenderResults = {
     curves: LineEntry[];
     // Size
     size: [number, number];
+
+    beziers: Bezier[];
 };

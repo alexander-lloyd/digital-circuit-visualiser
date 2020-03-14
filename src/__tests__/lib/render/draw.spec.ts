@@ -553,67 +553,6 @@ Array [
     ],
     "type": "stroke",
   },
-  Object {
-    "props": Object {
-      "path": Array [
-        Object {
-          "props": Object {},
-          "transform": Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ],
-          "type": "beginPath",
-        },
-        Object {
-          "props": Object {
-            "x": 1,
-            "y": 2,
-          },
-          "transform": Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ],
-          "type": "moveTo",
-        },
-        Object {
-          "props": Object {
-            "cpx1": 51,
-            "cpx2": -45,
-            "cpy1": 2,
-            "cpy2": 6,
-            "x": 5,
-            "y": 6,
-          },
-          "transform": Array [
-            1,
-            0,
-            0,
-            1,
-            0,
-            0,
-          ],
-          "type": "bezierCurveTo",
-        },
-      ],
-    },
-    "transform": Array [
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ],
-    "type": "stroke",
-  },
 ]
 `);
     });
