@@ -105,7 +105,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
             const leftOutputs = left.outputs;
             const rightInputs = right.inputs;
             if (leftOutputs.length !== rightInputs.length) {
-                console.warn('Inputs !== Outputs in COMPOSE');
+                throw new Error('Input count does not match output count');
             }
 
             gcurves.push(...leftOutputs.map(([leftX, leftY], i): LineEntry => {

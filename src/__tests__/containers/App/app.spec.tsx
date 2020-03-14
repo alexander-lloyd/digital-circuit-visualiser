@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 
-import {App} from '../../containers/App/App';
+import {App} from '../../../containers/App/App';
 
 describe('app Component', () => {
     it('should render without errors', () => {
