@@ -7,7 +7,8 @@ import {
 import {
     BoxEntry,
     LabelEntry,
-    LineEntry
+    LineEntry,
+    RenderResults
 } from './types';
 import {
     scaleLineEntry,
@@ -36,19 +37,6 @@ export interface CanvasContext {
 export interface EntityRendererVisitorContext {
     featureFlags: {[featureId: string]: boolean};
 }
-
-export type RenderResults = {
-    // Start [x,y], End [x,y]
-    lines: LineEntry[];
-    // Start [x,y], width, height
-    boxes: BoxEntry[];
-    // Label functions.
-    labels: LabelEntry[];
-    // Bezier curves
-    beziers: LineEntry[];
-    // Size
-    size: [number, number];
-};
 
 /**
  * Renderer the entities to the Canvas.

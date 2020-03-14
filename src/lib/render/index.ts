@@ -1,7 +1,9 @@
 import {
+    RenderResults
+} from './types';
+import {
     EntityRendererVisitor,
     EntityRendererVisitorContext,
-    RenderResults,
     renderResult,
     scaleRenderResult,
     transformRenderResult

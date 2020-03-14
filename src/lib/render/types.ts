@@ -13,3 +13,16 @@ export type BoxEntry = [Point, Point, boolean];
 export type LabelEntry = [LabelFunction, Point, number, number];
 
 export type Wire = [Point, Point];
+
+export type RenderResults = {
+    // Start [x,y], End [x,y]
+    lines: LineEntry[];
+    // Start [x,y], width, height
+    boxes: BoxEntry[];
+    // Label functions.
+    labels: LabelEntry[];
+    // Bezier curves
+    beziers: LineEntry[];
+    // Size
+    size: [number, number];
+};
