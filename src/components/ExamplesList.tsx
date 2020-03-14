@@ -43,7 +43,8 @@ export function ExamplesList({setSourceCode, examples}: DispatchProps & Componen
         <div className="field has-addons">
             <div className="control is-expanded">
                 <div className="select is-fullwidth">
-                    <select defaultValue="DEFAULT"
+                    <select data-testid="examples"
+                            defaultValue="DEFAULT"
                             name="examples"
                             onChange={onExampleSelected}>
                         <option disabled
