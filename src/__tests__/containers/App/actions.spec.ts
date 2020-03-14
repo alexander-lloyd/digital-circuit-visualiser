@@ -111,7 +111,7 @@ describe('app actions', () => {
 });
 
 describe('app action creaters', () => {
-    it('should mock', () => {
+    it('should dipatch source code request and success', () => {
         expect.assertions(3);
         jest.resetAllMocks();
 
@@ -148,6 +148,47 @@ describe('app action creaters', () => {
         expect(dispatchMock).toHaveBeenNthCalledWith(2, {
             type: types.SET_SOURCE_SUCCESS,
             ast
+        });
+    });
+
+    it('should dipatch source code request and failure when exception is thrown', () => {
+        expect.assertions(3);
+        jest.resetAllMocks();
+
+        const location = {
+            start: {
+                column: 1,
+                line: 1,
+                offset: 1
+            },
+            end: {
+                column: 1,
+                line: 1,
+                offset: 1
+            }
+        };
+
+        const ast = new ConstantAST('AND', location);
+        const reason = 'Syntax Error';
+        (compile as jest.Mock).mockImplementation(() => {throw new SyntaxError(reason)});
+
+        const dispatchMock = jest.fn();
+        const source = 'NoT Valid';
+
+        const action = actions.setSourceCode(dispatchMock);
+
+        action(source);
+
+        expect(dispatchMock).toHaveBeenNthCalledWith(1, {
+            type: types.SET_SOURCE_REQUEST,
+            source
+        });
+
+        expect(compile).toHaveBeenCalledWith(source);
+
+        expect(dispatchMock).toHaveBeenNthCalledWith(2, {
+            type: types.SET_SOURCE_FAILURE,
+            reason
         });
     });
 });
