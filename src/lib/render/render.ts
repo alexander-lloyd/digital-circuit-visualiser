@@ -5,18 +5,10 @@ import {
     GroupedEntity
 } from './entities';
 import {
-    BoxEntry,
-    LabelEntry,
     LineEntry,
     RenderResults,
     Bezier
 } from './types';
-import {
-    scaleLineEntry,
-    translateLineEntry,
-    scaleBezierCurve,
-    translateBezierCurve
-} from './transform';
 import {
     renderBoxEntry,
     renderLineEntry,
