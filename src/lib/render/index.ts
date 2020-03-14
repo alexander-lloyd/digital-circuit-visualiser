@@ -2,11 +2,13 @@ import {
     RenderResults
 } from './types';
 import {
-    EntityRendererVisitor,
-    EntityRendererVisitorContext,
-    renderResult,
     scaleRenderResult,
     transformRenderResult
+} from './transform';
+import {
+    EntityRendererVisitor,
+    EntityRendererVisitorContext,
+    renderResult
 } from './render';
 import {
     ASTRenderer

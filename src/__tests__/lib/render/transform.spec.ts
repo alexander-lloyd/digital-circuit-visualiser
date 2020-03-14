@@ -2,10 +2,12 @@ import {
     scaleLineEntry,
     translateLineEntry,
     scaleBezierCurve,
-    translateBezierCurve
+    translateBezierCurve,
+    scaleRenderResult,
+    transformRenderResult
 } from '../../../lib/render/transform';
 import {
-    LineEntry, Bezier
+    LineEntry, Bezier, RenderResults
 } from '../../../lib/render/types';
 
 describe('scale line entry', () => {
@@ -49,5 +51,116 @@ describe('translate bezier curve', () => {
         expect.assertions(1);
         const bezier: Bezier = [[0, 0], [2, 2], [1, 2], [0, 0]];
         expect(translateBezierCurve(bezier, 4, 5)).toStrictEqual([[4, 5], [6, 7], [5, 7], [4, 5]]);
+    });
+});
+
+describe('scale render result', () => {
+    it('should return an empty renderer result when given an empty one', () => {
+        expect.assertions(1);
+        const renderResult: RenderResults = {
+            beziers: [],
+            boxes: [],
+            labels: [],
+            lines: [],
+            curves: [],
+            size: [1, 1]
+        };
+
+        expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
+            beziers: [],
+            boxes: [],
+            labels: [],
+            lines: [],
+            curves: [],
+            size: [2, 2]
+        });
+    });
+
+    it('should scale a box around the origin', () => {
+        expect.assertions(1);
+        const mockLabel = (): void => {};
+        const renderResult: RenderResults = {
+            beziers: [],
+            boxes: [[[0, 0], [1, 1], true]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [5, 5]
+        };
+
+        expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
+            beziers: [],
+            boxes: [[[0, 0], [2, 2], true]],
+            labels: expect.anything(),
+            lines: [],
+            curves: [],
+            size: [10, 10]
+        });
+    });
+
+    it('should scale a box off the origin', () => {
+        expect.assertions(1);
+        const mockLabel = (): void => {};
+        const renderResult: RenderResults = {
+            beziers: [],
+            boxes: [[[1, 1], [2, 2], true]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [1, 1]
+        };
+
+        expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
+            beziers: [],
+            boxes: [[[2, 2], [4, 4], true]],
+            labels: expect.anything(),
+            lines: [],
+            curves: [],
+            size: [2, 2]
+        });
+    });
+
+    it('should scale a label on the origin', () => {
+        expect.assertions(1);
+        const mockLabel = (): void => {};
+        const renderResult: RenderResults = {
+            beziers: [],
+            boxes: [[[-1, -1], [1, 1], true]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [1, 1]
+        };
+
+        expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
+            beziers: [],
+            boxes: [[[-2, -5], [2, 5], true]],
+            labels: [[mockLabel, [0, 0], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [2, 5]
+        });
+    });
+
+    it('should scale a label off the origin', () => {
+        expect.assertions(1);
+        const mockLabel = (): void => {};
+        const renderResult: RenderResults = {
+            beziers: [],
+            boxes: [[[4, 4], [6, 6], true]],
+            labels: [[mockLabel, [5, 5], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [1, 1]
+        };
+
+        expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
+            beziers: [],
+            boxes: [[[8, 20], [12, 30], true]],
+            labels: [[mockLabel, [10, 25], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [2, 5]
+        });
     });
 });
