@@ -114,6 +114,7 @@ interface CanvasState {
  */
 interface CanvasDispatchProps {
     resetZoom: typeof actions.resetZoom;
+    throwRenderError: typeof actions.setSourceCodeFailure;
     zoomIn: typeof actions.zoomIn;
     zoomOut: typeof actions.zoomOut;
 }
@@ -136,6 +137,7 @@ function Canvas(props: CanvasProps): JSX.Element {
         downloadLoading,
         featureFlags,
         resetZoom,
+        throwRenderError,
         zoomIn,
         zoomOut
     } = props;
@@ -158,9 +160,12 @@ function Canvas(props: CanvasProps): JSX.Element {
         if (ctx === null) {
             return;
         }
-
-        drawDiagram(ast, ctx, canvas.width, canvas.height, scale, canvasPosition, featureFlags);
-    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height, canvasPosition, featureFlags]);
+        try {
+            drawDiagram(ast, ctx, canvas.width, canvas.height, scale, canvasPosition, featureFlags);
+        } catch (e) {
+            throwRenderError(e.toString());
+        }
+    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height, canvasPosition, featureFlags, throwRenderError]);
 
     /** Wrapper around download canvas function */
     const downloadCanvas = (): void => {
@@ -272,7 +277,8 @@ function mapStateToProps(state: GlobalState): CanvasState {
 const mapDispatchToProps: CanvasDispatchProps = {
     resetZoom: actions.resetZoom,
     zoomIn: actions.zoomIn,
-    zoomOut: actions.zoomOut
+    zoomOut: actions.zoomOut,
+    throwRenderError: actions.setSourceCodeFailure
 };
 
 export default connect(
