@@ -4,7 +4,7 @@ import {
     scaleBezierCurve,
     translateBezierCurve,
     scaleRenderResult,
-    transformRenderResult
+    translateRenderResult
 } from '../../../lib/render/transform';
 import {
     LineEntry, Bezier, RenderResults
@@ -161,6 +161,50 @@ describe('scale render result', () => {
             lines: [],
             curves: [],
             size: [2, 5]
+        });
+    });
+
+    it('should scale lines, curves and bexiers in render result', () => {
+        expect.assertions(1);
+        const renderResult: RenderResults = {
+            beziers: [[[1, 2], [3, 4], [5, 6], [7, 8]]],
+            boxes: [],
+            labels: [],
+            lines: [[[1, 2], [3, 4]]],
+            curves: [[[1, 2], [3, 4]]],
+            size: [1, 1]
+        };
+
+        expect(scaleRenderResult(renderResult, 1, 2)).toStrictEqual({
+            beziers: [[[1, 4], [3, 8], [5, 12], [7, 16]]],
+            boxes: [],
+            labels: [],
+            lines: [[[1, 4], [3, 8]]],
+            curves: [[[1, 4], [3, 8]]],
+            size: [1, 2]
+        });
+    });
+});
+
+describe('transform render result', () => {
+    it('should transform a render result', () => {
+        expect.assertions(1);
+        const renderResult: RenderResults = {
+            beziers: [[[1, 2], [3, 4], [5, 6], [7, 8]]],
+            boxes: [],
+            labels: [],
+            lines: [[[1, 2], [3, 4]]],
+            curves: [[[1, 2], [3, 4]]],
+            size: [1, 1]
+        };
+
+        expect(translateRenderResult(renderResult, 1, 2)).toStrictEqual({
+            beziers: [[[2, 4], [4, 6], [6, 8], [8, 10]]],
+            boxes: [],
+            labels: [],
+            lines: [[[2, 4], [4, 6]]],
+            curves: [[[2, 4], [4, 6]]],
+            size: [1, 1]
         });
     });
 });
