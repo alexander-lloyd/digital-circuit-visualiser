@@ -55,37 +55,34 @@ function drawDiagram(
     offsetPosition: [number, number],
     featureFlags: { [featureId: string]: boolean}
 ): void {
-    requestAnimationFrame(() => {
-        // Clear canvas
-        ctx.fillStyle = 'white';
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        // Reset the position and scaling.
-        ctx.setTransform();
-        ctx.save();
-        const [dragPositionX, dragPositionY] = offsetPosition;
-        ctx.scale(scale, scale);
-        ctx.translate(dragPositionX, dragPositionY);
-
-        const astRenderer = new ASTRenderer();
-        const entityTree = astRenderer.visit(ast, {
-            depthX: 1,
-            depthY: 1
-        });
-
-        const entityRenderer = new EntityRendererVisitor();
-        const entityRendererConfig = {
-            featureFlags
-        };
-        let result = entityRenderer.visit(entityTree, entityRendererConfig);
-
-        const scalingValue = Math.min(canvasHeight, canvasWidth);
-
-        result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
-        const START_POSITION = 30;
-        result = translateRenderResult(result, START_POSITION, START_POSITION);
-
-        renderResult(ctx, result);
+    const astRenderer = new ASTRenderer();
+    const entityTree = astRenderer.visit(ast, {
+        depthX: 1,
+        depthY: 1
     });
+
+    const entityRenderer = new EntityRendererVisitor();
+    const entityRendererConfig = {
+        featureFlags
+    };
+    let result = entityRenderer.visit(entityTree, entityRendererConfig);
+
+    const scalingValue = Math.min(canvasHeight, canvasWidth);
+    result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
+    const START_POSITION = 30;
+    result = translateRenderResult(result, START_POSITION, START_POSITION);
+
+    // Clear canvas
+    ctx.fillStyle = 'white';
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    // Reset the position and scaling.
+    ctx.setTransform();
+    ctx.save();
+    const [dragPositionX, dragPositionY] = offsetPosition;
+    ctx.scale(scale, scale);
+    ctx.translate(dragPositionX, dragPositionY);
+
+    renderResult(ctx, result);
 }
 
 /**
