@@ -213,6 +213,20 @@ function Canvas(props: CanvasProps): JSX.Element {
         }
     }
 
+    /**
+     * Handle mouse scroll.
+     *
+     * @param event Mouse wheel event.
+     */
+    function canvasOnMouseWheel({deltaY}: React.WheelEvent): void {
+        const delta = Math.sign(deltaY);
+        if (delta > 0) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
+    }
+
     return (
         <div className="fullheight">
             <CanvasButtonGroup isDownloadLoading={downloadLoading}
@@ -228,16 +242,7 @@ function Canvas(props: CanvasProps): JSX.Element {
                 <canvas onMouseDown={canvasOnMouseDown}
                         onMouseMove={canvasOnMouseMove}
                         onMouseUp={canvasOnMouseUp}
-                        onWheel={
-                    ({deltaY}: React.WheelEvent): void => {
-                        const delta = Math.sign(deltaY);
-                        if (delta > 0) {
-                            zoomIn();
-                        } else {
-                            zoomOut();
-                        }
-                    }
-                }
+                        onWheel={canvasOnMouseWheel}
                         ref={canvasRef} />
             </div>
             <a hidden
