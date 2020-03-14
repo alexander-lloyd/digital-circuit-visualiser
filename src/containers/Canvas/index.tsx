@@ -11,7 +11,7 @@ import {
     EntityRendererVisitor,
     renderResult,
     scaleRenderResult,
-    transformRenderResult
+    translateRenderResult
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
 
@@ -81,7 +81,8 @@ function drawDiagram(
         const scalingValue = Math.min(canvasHeight, canvasWidth);
 
         result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
-        result = transformRenderResult(result, 30, 30);
+        const START_POSITION = 30;
+        result = translateRenderResult(result, START_POSITION, START_POSITION);
 
         renderResult(ctx, result);
     });

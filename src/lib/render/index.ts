@@ -1,10 +1,14 @@
 import {
+    RenderResults
+} from './types';
+import {
+    scaleRenderResult,
+    translateRenderResult,
+} from './transform';
+import {
     EntityRendererVisitor,
     EntityRendererVisitorContext,
-    RenderResults,
-    renderResult,
-    scaleRenderResult,
-    transformRenderResult
+    renderResult
 } from './render';
 import {
     ASTRenderer
@@ -17,5 +21,5 @@ export {
     RenderResults,
     renderResult,
     scaleRenderResult,
-    transformRenderResult
+    translateRenderResult
 };

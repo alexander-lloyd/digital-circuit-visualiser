@@ -6,7 +6,7 @@ import {
 } from './types';
 
 const DEFAULT_CROSS_SIZE = 5;
-const BEZIER_CONSTANT = 20;
+const DEFAULT_CURVENESS = 50;
 
 /**
  * Used in Debugging.
@@ -90,15 +90,43 @@ export function renderCross(ctx: CanvasRenderingContext2D, point: Point, size = 
  *
  * @param ctx Canvas Render Context.
  * @param line Bezier line to draw.
+ * @param bezierConstant Bezier Constant
  */
-export function renderBezier(ctx: CanvasRenderingContext2D, [[x1, y1], [x2, y2]]: LineEntry): void {
+export function renderBezier(
+    ctx: CanvasRenderingContext2D,
+    [x1, y1]: Point,
+    [x2, y2]: Point,
+    [cp1x, cp1y]: Point,
+    [cp2x, cp2y]: Point
+): void {
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineWidth = 2;
     ctx.bezierCurveTo(
-        x1 + BEZIER_CONSTANT, y1,
-        x2 - BEZIER_CONSTANT, y2,
+        cp1x, cp1y,
+        cp2x, cp2y,
         x2, y2
     );
     ctx.stroke();
+}
+
+/**
+ * Render a curve curve.
+ *
+ * @param ctx Canvas Render Context.
+ * @param line Curve to draw.
+ * @param curveness Curveness Constant
+ */
+export function renderCurve(
+    ctx: CanvasRenderingContext2D,
+    [[x1, y1], [x2, y2]]: LineEntry,
+    curveness = DEFAULT_CURVENESS
+): void {
+    renderBezier(
+        ctx,
+        [x1, y1],
+        [x2, y2],
+        [x1 + curveness, y1],
+        [x2 - curveness, y2]
+    );
 }
