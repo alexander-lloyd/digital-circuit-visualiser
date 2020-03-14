@@ -16,8 +16,8 @@ import {
 import {
     renderBoxEntry,
     renderLineEntry,
-    renderBezier,
-    getTerminatorPositions
+    getTerminatorPositions,
+    renderCurve
 } from './draw';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
@@ -261,13 +261,13 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
         const outputPoints = getTerminatorPositions(outputs);
 
         inputPoints.forEach((inputPos: number) => {
-            renderBezier(ctx, [
+            renderCurve(ctx, [
                 [x + (width * relatveSeperationFromBox), y + (height * inputPos)],
                 [labelX - (labelWidth / 2), labelY - (labelHeight / 2) + (labelHeight * inputPos)]
             ]);
         });
         outputPoints.forEach((outputPos: number) => {
-            renderBezier(ctx, [
+            renderCurve(ctx, [
                 [labelX + (labelWidth / 2), labelY - (labelHeight / 2) + (labelHeight * outputPos)],
                 [x2 - (width * relatveSeperationFromBox), y + (height * outputPos)]
             ]);
@@ -276,5 +276,5 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
 
     // Lines
     lines.forEach((lineEntry: LineEntry): void => renderLineEntry(ctx, lineEntry));
-    beziers.forEach((lineEntry: LineEntry): void => renderBezier(ctx, lineEntry));
+    beziers.forEach((lineEntry: LineEntry): void => renderCurve(ctx, lineEntry));
 }

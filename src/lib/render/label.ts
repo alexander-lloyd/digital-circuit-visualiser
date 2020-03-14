@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
-import {renderBezier, getTerminatorPositions} from './draw';
+import {renderBezier, getTerminatorPositions, renderCurve, renderCross} from './draw';
 
 import {LabelFunction} from './types';
 
@@ -64,7 +64,7 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
                 const x2 = topLeftX + (ix * scale);
                 const y2 = topLeftY + (iy * scale);
 
-                renderBezier(ctx, [[x1, y1], [x2, y2]]);
+                renderCurve(ctx, [[x1, y1], [x2, y2]]);
             });
 
             imageMetaData.outputs.forEach(([ix, iy], i) => {
@@ -73,7 +73,7 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
                 const x2 = boxTopLeftX + imageWidth;
                 const y2 = topLeftY + (outputTerminatorPositions[i] * image.height);
 
-                renderBezier(ctx, [[x1, y1], [x2, y2]]);
+                renderCurve(ctx, [[x1, y1], [x2, y2]]);
             });
         };
     };

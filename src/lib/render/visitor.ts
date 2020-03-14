@@ -139,7 +139,7 @@ export class ASTRenderer extends ASTVisitor<ASTRendererConfig, Entity> {
                 const wires: Wire[] = [
                     [input, [input[0] + 0.2, wireTopY]],
                     [[input[0] + 0.2, wireTopY], [output[0] - 0.2, wireTopY]],
-                    [[output[0]- 0.2, wireTopY], output]
+                    [[output[0] - 0.2, wireTopY], output]
                 ];
 
                 childEntity.wires.push(...wires);
