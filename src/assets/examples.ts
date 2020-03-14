@@ -4,7 +4,7 @@ export type ExampleMetaData = {
     source: string;
 };
 
-type Examples = {
+export type Examples = {
     [id: string]: ExampleMetaData;
 };
 
