@@ -168,9 +168,10 @@ describe('app action creaters', () => {
             }
         };
 
-        const ast = new ConstantAST('AND', location);
         const reason = 'Syntax Error';
-        (compile as jest.Mock).mockImplementation(() => {throw new SyntaxError(reason)});
+        (compile as jest.Mock).mockImplementation(() => {
+            throw new SyntaxError(reason);
+        });
 
         const dispatchMock = jest.fn();
         const source = 'NoT Valid';
