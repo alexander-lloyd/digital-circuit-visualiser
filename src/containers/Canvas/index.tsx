@@ -208,7 +208,8 @@ function Canvas(props: CanvasProps): JSX.Element {
      * Reset the canvas perspective.
      */
     function onResetPerspective(): void {
-        if (canvasPosition[0] !== 0 || canvasPosition[1] !== 0) {
+        const [canvasX, canvasY] = canvasPosition;
+        if (canvasX !== 0 || canvasY !== 0) {
             setCanvasPosition([0, 0]);
         }
     }
