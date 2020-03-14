@@ -61,7 +61,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
             lines: [],
             boxes: [[[x, y], [x + width, y + height], drawBox]],
             labels: [[label, [x + halfWidth, y + halfHeight], inputs.length, outputs.length]],
-            beziers: [...wires],
+            curves: [...wires],
             size: [width, height]
         };
 
@@ -83,19 +83,19 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
             lines: llines,
             boxes: lboxes,
             labels: llabel,
-            beziers: lbeziers,
+            curves: lcurves,
             size: [lwidth, lheight]
         } = left.visit(this, context);
         const {
             lines: rlines,
             boxes: rboxes,
             labels: rlabels,
-            beziers: rbeziers,
+            curves: rcurves,
             size: [rwidth, rheight]
         } = right.visit(this, context);
 
         let [width, height] = [lwidth, lheight];
-        const gbeziers: LineEntry[] = [];
+        const gcurves: LineEntry[] = [];
 
 
         if (operator === 'tensor') {
@@ -109,7 +109,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
                 console.warn('Inputs !== Outputs in COMPOSE');
             }
 
-            gbeziers.push(...leftOutputs.map(([leftX, leftY], i): LineEntry => {
+            gcurves.push(...leftOutputs.map(([leftX, leftY], i): LineEntry => {
                 const [rightX, rightY] = rightInputs[i];
                 const x1 = left.x + leftX;
                 const y1 = left.y + leftY;
@@ -126,7 +126,7 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
             lines: [...llines, ...rlines],
             boxes: [...lboxes, ...rboxes],
             labels: [...llabel, ...rlabels],
-            beziers: [...gbeziers, ...lbeziers, ...rbeziers],
+            curves: [...gcurves, ...lcurves, ...rcurves],
             size: [width, height]
         };
     }
@@ -143,10 +143,10 @@ export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorCo
  * @returns new Render Result.
  */
 export function scaleRenderResult(renderResults: RenderResults, scaleX: number, scaleY: number): RenderResults {
-    const {lines, boxes, labels, beziers, size: [width, height]} = renderResults;
+    const {lines, boxes, labels, curves, size: [width, height]} = renderResults;
     // Lines
     const newLines = lines.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
-    const newBeziers = beziers.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
+    const newCurves = curves.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
 
     const items: [BoxEntry, LabelEntry][] = boxes.map(([[x, y], [x2, y2], drawBox], i) => {
         const [labelFunc, , inputs, outputs] = labels[i];
@@ -168,7 +168,7 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
         lines: newLines,
         boxes: newBoxes,
         labels: newLabels,
-        beziers: newBeziers,
+        curves: newCurves,
         size: [width * scaleX, height * scaleY]
     };
 }
@@ -186,10 +186,10 @@ export function transformRenderResult(
     translateX: number,
     translateY: number
 ): RenderResults {
-    const {lines, boxes, labels, beziers, size} = renderResults;
+    const {lines, boxes, labels, curves, size} = renderResults;
     // Lines
     const newLines = lines.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
-    const newBeziers = beziers.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
+    const newCurves = curves.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
 
     // Boxes
     const newBoxes = boxes.map(([[x, y], [x2, y2], drawBox]): BoxEntry => {
@@ -211,7 +211,7 @@ export function transformRenderResult(
         lines: newLines,
         boxes: newBoxes,
         labels: newLabels,
-        beziers: newBeziers,
+        curves: newCurves,
         size
     };
 }
@@ -224,7 +224,7 @@ export function transformRenderResult(
  * @param renderResults Lists of items to render.
  */
 export function renderResult(ctx: CanvasRenderingContext2D, renderResults: RenderResults): void {
-    const {lines, boxes, labels, beziers} = renderResults;
+    const {lines, boxes, labels, curves} = renderResults;
 
     // Boxes
     boxes.forEach((box, i) => {
@@ -264,5 +264,5 @@ export function renderResult(ctx: CanvasRenderingContext2D, renderResults: Rende
 
     // Lines
     lines.forEach((lineEntry: LineEntry): void => renderLineEntry(ctx, lineEntry));
-    beziers.forEach((lineEntry: LineEntry): void => renderCurve(ctx, lineEntry));
+    curves.forEach((lineEntry: LineEntry): void => renderCurve(ctx, lineEntry));
 }

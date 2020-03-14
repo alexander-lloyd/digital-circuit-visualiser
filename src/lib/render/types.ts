@@ -22,7 +22,7 @@ export type RenderResults = {
     // Label functions.
     labels: LabelEntry[];
     // Bezier curves
-    beziers: LineEntry[];
+    curves: LineEntry[];
     // Size
     size: [number, number];
 };

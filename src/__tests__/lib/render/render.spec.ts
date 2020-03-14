@@ -19,7 +19,6 @@ describe('render graph', () => {
             const renderResult = entityVisitor.visit(entity, visitorContext);
             expect(renderResult).toMatchInlineSnapshot(`
                 Object {
-                  "beziers": Array [],
                   "boxes": Array [
                     Array [
                       Array [
@@ -33,6 +32,7 @@ describe('render graph', () => {
                       false,
                     ],
                   ],
+                  "curves": Array [],
                   "labels": Array [
                     Array [
                       [Function],
@@ -70,7 +70,6 @@ describe('render graph', () => {
             const renderResult = entityVisitor.visit(entity, visitorContext);
             expect(renderResult).toMatchInlineSnapshot(`
                 Object {
-                  "beziers": Array [],
                   "boxes": Array [
                     Array [
                       Array [
@@ -84,6 +83,7 @@ describe('render graph', () => {
                       true,
                     ],
                   ],
+                  "curves": Array [],
                   "labels": Array [
                     Array [
                       [Function],
@@ -124,59 +124,59 @@ describe('render graph', () => {
 
             const renderResult = entityVisitor.visit(entity, visitorContext);
             expect(renderResult).toMatchInlineSnapshot(`
-Object {
-  "beziers": Array [],
-  "boxes": Array [
-    Array [
-      Array [
-        -0.5,
-        0,
-      ],
-      Array [
-        0,
-        1,
-      ],
-      true,
-    ],
-    Array [
-      Array [
-        0.5,
-        0,
-      ],
-      Array [
-        1,
-        1,
-      ],
-      true,
-    ],
-  ],
-  "labels": Array [
-    Array [
-      [Function],
-      Array [
-        -0.25,
-        0.5,
-      ],
-      0,
-      0,
-    ],
-    Array [
-      [Function],
-      Array [
-        0.75,
-        0.5,
-      ],
-      0,
-      0,
-    ],
-  ],
-  "lines": Array [],
-  "size": Array [
-    1,
-    1,
-  ],
-}
-`);
+                Object {
+                  "boxes": Array [
+                    Array [
+                      Array [
+                        -0.5,
+                        0,
+                      ],
+                      Array [
+                        0,
+                        1,
+                      ],
+                      true,
+                    ],
+                    Array [
+                      Array [
+                        0.5,
+                        0,
+                      ],
+                      Array [
+                        1,
+                        1,
+                      ],
+                      true,
+                    ],
+                  ],
+                  "curves": Array [],
+                  "labels": Array [
+                    Array [
+                      [Function],
+                      Array [
+                        -0.25,
+                        0.5,
+                      ],
+                      0,
+                      0,
+                    ],
+                    Array [
+                      [Function],
+                      Array [
+                        0.75,
+                        0.5,
+                      ],
+                      0,
+                      0,
+                    ],
+                  ],
+                  "lines": Array [],
+                  "size": Array [
+                    1,
+                    1,
+                  ],
+                }
+            `);
         });
     });
 });
@@ -188,7 +188,7 @@ describe('scale render result', () => {
             boxes: [],
             labels: [],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [1, 1]
         };
 
@@ -196,7 +196,7 @@ describe('scale render result', () => {
             boxes: [],
             labels: [],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [2, 2]
         });
     });
@@ -208,7 +208,7 @@ describe('scale render result', () => {
             boxes: [[[0, 0], [1, 1], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [5, 5]
         };
 
@@ -216,7 +216,7 @@ describe('scale render result', () => {
             boxes: [[[0, 0], [2, 2], true]],
             labels: expect.anything(),
             lines: [],
-            beziers: [],
+            curves: [],
             size: [10, 10]
         });
     });
@@ -228,7 +228,7 @@ describe('scale render result', () => {
             boxes: [[[1, 1], [2, 2], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [1, 1]
         };
 
@@ -236,7 +236,7 @@ describe('scale render result', () => {
             boxes: [[[2, 2], [4, 4], true]],
             labels: expect.anything(),
             lines: [],
-            beziers: [],
+            curves: [],
             size: [2, 2]
         });
     });
@@ -248,7 +248,7 @@ describe('scale render result', () => {
             boxes: [[[-1, -1], [1, 1], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [1, 1]
         };
 
@@ -256,7 +256,7 @@ describe('scale render result', () => {
             boxes: [[[-2, -5], [2, 5], true]],
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [2, 5]
         });
     });
@@ -268,7 +268,7 @@ describe('scale render result', () => {
             boxes: [[[4, 4], [6, 6], true]],
             labels: [[mockLabel, [5, 5], 0, 0]],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [1, 1]
         };
 
@@ -276,7 +276,7 @@ describe('scale render result', () => {
             boxes: [[[8, 20], [12, 30], true]],
             labels: [[mockLabel, [10, 25], 0, 0]],
             lines: [],
-            beziers: [],
+            curves: [],
             size: [2, 5]
         });
     });
