@@ -1,5 +1,5 @@
 import {ASTRenderer, buildNotImplementedError} from '../../../lib/render/visitor';
-import {ConstantAST, BinaryOpAST, BinaryOpeators} from '../../../lib/parser/ast';
+import {ConstantAST, BinaryOpAST, BinaryOpeators, UnaryOpAST, UnaryOperators} from '../../../lib/parser/ast';
 import {GroupedEntity} from 'lib/render/entities';
 
 describe('ast renderer', () => {
@@ -234,4 +234,114 @@ describe('ast renderer', () => {
             expect(() => method()).toThrow(expect.anything());
         }
     );
+});
+
+describe('visit unary operator', () => {
+    it('should create a feedback operator', () => {
+        expect.assertions(1);
+
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const ast = new UnaryOpAST('feedback', new ConstantAST('AND', location), location);
+        const renderer = new ASTRenderer();
+        const entities = renderer.visit(ast, {
+            depthX: 0,
+            depthY: 0
+        });
+
+        expect(entities).toMatchInlineSnapshot(`
+FunctionEntity {
+  "height": 1,
+  "inputs": Array [
+    Array [
+      0.1,
+      0.3333333333333333,
+    ],
+    Array [
+      0.1,
+      0.6666666666666666,
+    ],
+  ],
+  "label": [Function],
+  "outputs": Array [
+    Array [
+      0.9,
+      0.5,
+    ],
+  ],
+  "type": "functionEntity",
+  "width": 1,
+  "wires": Array [
+    Array [
+      Array [
+        0.1,
+        0.3333333333333333,
+      ],
+      Array [
+        0.30000000000000004,
+        0.1,
+      ],
+    ],
+    Array [
+      Array [
+        0.30000000000000004,
+        0.1,
+      ],
+      Array [
+        0.7,
+        0.1,
+      ],
+    ],
+    Array [
+      Array [
+        0.7,
+        0.1,
+      ],
+      Array [
+        0.9,
+        0.5,
+      ],
+    ],
+  ],
+  "x": 0,
+  "y": 0,
+}
+`);
+    });
+
+    it('should throw exception if unknown operator', () => {
+        expect.assertions(1);
+        const location = {
+            start: {
+                offset: 0,
+                line: 0,
+                column: 0
+            },
+            end: {
+                offset: 0,
+                line: 0,
+                column: 0
+            }
+        };
+
+        const operator = 'unknown unary operator' as UnaryOperators;
+
+        const ast = new UnaryOpAST(operator, new ConstantAST('AND', location), location);
+        const renderer = new ASTRenderer();
+        expect(() => renderer.visit(ast, {
+            depthX: 0,
+            depthY: 0
+        })).toThrow(buildNotImplementedError(operator));
+    });
 });
