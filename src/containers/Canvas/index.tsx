@@ -57,6 +57,7 @@ function drawDiagram(
 ): void {
     requestAnimationFrame(() => {
         // Clear canvas
+        ctx.fillStyle = 'white';
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         // Reset the position and scaling.
         ctx.setTransform();
@@ -64,6 +65,7 @@ function drawDiagram(
         const [dragPositionX, dragPositionY] = offsetPosition;
         ctx.scale(scale, scale);
         ctx.translate(dragPositionX, dragPositionY);
+
         const astRenderer = new ASTRenderer();
         const entityTree = astRenderer.visit(ast, {
             depthX: 1,
