@@ -207,4 +207,26 @@ describe('transform render result', () => {
             size: [1, 1]
         });
     });
+
+    it('should transform a box and label', () => {
+        expect.assertions(1);
+        const labelMock = jest.fn();
+        const renderResult: RenderResults = {
+            beziers: [],
+            boxes: [[[0, 0], [1, 1], true]],
+            labels: [[labelMock, [0.5, 0.5], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [1, 1]
+        };
+
+        expect(translateRenderResult(renderResult, 2, 2)).toStrictEqual({
+            beziers: [],
+            boxes: [[[2, 2], [3, 3], true]],
+            labels: [[labelMock, [2.5, 2.5], 0, 0]],
+            lines: [],
+            curves: [],
+            size: [1, 1]
+        });
+    });
 });
