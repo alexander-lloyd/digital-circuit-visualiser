@@ -19,7 +19,7 @@ interface HeaderProps {
  * @param props Header Properties.
  * @returns Header Component.
  */
-function Header({showModal}: HeaderProps): JSX.Element {
+export function Header({showModal}: HeaderProps): JSX.Element {
     return (
         <div className="navbar is-link is-fixed-top">
             <div className="navbar-brand">
@@ -32,6 +32,7 @@ function Header({showModal}: HeaderProps): JSX.Element {
                 <div className="navbar-item">
                     <div className="buttons">
                         <a className="button is-success"
+                           data-testid="header-open-modal"
                            onClick={showModal}>
                             <span className="icon is-small">
                                 <FontAwesomeIcon icon={faQuestionCircle} />
@@ -49,7 +50,7 @@ function Header({showModal}: HeaderProps): JSX.Element {
  *
  * @returns Component Props.
  */
-function mapStateToProps(): {} {
+export function mapStateToProps(): {} {
     return {};
 }
 
@@ -59,7 +60,7 @@ function mapStateToProps(): {} {
  * @param dispatch Action dispatcher.
  * @returns Props.
  */
-function mapDispatchToProps(dispatch: DispatchFunction): HeaderProps {
+export function mapDispatchToProps(dispatch: DispatchFunction): HeaderProps {
     const {modalShowAction} = actions;
     return {
         showModal: (): void => dispatch(modalShowAction())

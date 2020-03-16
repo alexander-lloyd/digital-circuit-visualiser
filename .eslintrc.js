@@ -28,7 +28,7 @@ module.exports = {
   ],
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-    "@typescript-eslint/indent": ["error", 4, { "ignoredNodes": ["JSXElement *", "JSXElement"]}],
+    "@typescript-eslint/indent": ["error", 4, { "ignoredNodes": ["JSXElement *", "JSXElement"] }],
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/no-extra-parens": ["error", "all", {
       ignoreJSX: 'multi-line',
@@ -49,7 +49,7 @@ module.exports = {
     // Use @typescript-eslint version instead.
     "indent": "off",
     "init-declarations": "off",
-    "jsdoc/no-bad-blocks" : "error",
+    "jsdoc/no-bad-blocks": "error",
     "jsdoc/no-types": 0,
     "jsdoc/require-jsdoc": ["error", {
       "require": {
@@ -143,6 +143,7 @@ module.exports = {
       ],
       "rules": {
         "@typescript-eslint/no-empty-function": "off",
+        "react/jsx-closing-tag-location": "off",
         "jsdoc/require-jsdoc": "off",
         "no-magic-numbers": "off"
       }

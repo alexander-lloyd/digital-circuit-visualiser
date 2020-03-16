@@ -41,7 +41,6 @@ export const initialState: GlobalState = {
  */
 export function reducer(state = initialState, action: AppActions): GlobalState {
     const {scale: oldScale} = state;
-    console.log(`[GLOBAL] ${action.type}`, action);
 
     switch (action.type) {
     case MODAL_HIDE: {

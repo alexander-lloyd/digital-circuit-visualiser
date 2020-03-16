@@ -8,6 +8,8 @@ import './Sidebar.scss';
 import * as actions from '../containers/App/actions';
 import {GlobalState, DispatchFunction} from '../containers/App/types';
 
+import {EXAMPLES} from '../assets/examples';
+
 const exampleCode = 'let x = AND tensor OR;';
 
 /**
@@ -69,7 +71,7 @@ function Sidebar(props: ComponentProps): JSX.Element {
             <p className="menu-label is-size-5">Flags</p>
             <FeatureFlags />
             <p className="menu-label is-size-5">Examples</p>
-            <ExamplesList />
+            <ExamplesList examples={EXAMPLES} />
         </aside>
     );
 }

@@ -1,8 +1,8 @@
 /* eslint no-magic-numbers: ["warn", {"ignore": [1]}] */
-import React, {useRef} from 'react';
+import React, {ChangeEvent} from 'react';
 import {connect} from 'react-redux';
 
-import {EXAMPLES} from '../assets/examples';
+import {Examples} from '../assets/examples';
 import * as actions from '../containers/App/actions';
 import {DispatchFunction} from '../containers/App/types';
 
@@ -14,25 +14,28 @@ interface DispatchProps {
 }
 
 /**
+ * Component Props.
+ */
+interface ComponentProps {
+    examples: Examples;
+}
+
+/**
  * Examples List Component.
  *
  * @returns Example List Component.
  */
-function ExamplesList({setSourceCode}: DispatchProps): JSX.Element {
-    const selectRef = useRef<HTMLSelectElement>(null);
-    const exampleList = Object.entries(EXAMPLES);
+export function ExamplesList({setSourceCode, examples}: DispatchProps & ComponentProps): JSX.Element {
+    const exampleList = Object.entries(examples);
 
     /**
      * Handle when an element is selected in the Examples List.
+     *
+     * @param event ChangeEvent.
      */
-    function onExampleSelected(): void {
-        const element = selectRef.current;
-        if (!element) {
-            return;
-        }
-
-        const index = element.selectedIndex - 1;
-        const [, metadata] = exampleList[index];
+    function onExampleSelected(event: ChangeEvent): void {
+        const {value} = event.target as HTMLSelectElement;
+        const metadata = examples[value];
         const {source} = metadata;
         setSourceCode(source);
     }
@@ -41,10 +44,10 @@ function ExamplesList({setSourceCode}: DispatchProps): JSX.Element {
         <div className="field has-addons">
             <div className="control is-expanded">
                 <div className="select is-fullwidth">
-                    <select defaultValue="DEFAULT"
+                    <select data-testid="examples"
+                            defaultValue="DEFAULT"
                             name="examples"
-                            onChange={onExampleSelected}
-                            ref={selectRef}>
+                            onChange={onExampleSelected}>
                         <option disabled
                                 value="DEFAULT">
                             Select an Example
@@ -69,7 +72,7 @@ function ExamplesList({setSourceCode}: DispatchProps): JSX.Element {
  *
  * @returns Empty State.
  */
-function mapStateToProps(): {} {
+export function mapStateToProps(): {} {
     return {};
 }
 
@@ -79,7 +82,7 @@ function mapStateToProps(): {} {
  * @param dispatch Action dispatcher.
  * @returns Props.
  */
-function mapDispatchToProps(dispatch: DispatchFunction): DispatchProps {
+export function mapDispatchToProps(dispatch: DispatchFunction): DispatchProps {
     return {
         setSourceCode: actions.setSourceCode(dispatch)
     };
