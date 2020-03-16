@@ -35,7 +35,6 @@ export function ExamplesList({setSourceCode, examples}: DispatchProps & Componen
      */
     function onExampleSelected(event: ChangeEvent): void {
         const {value} = event.target as HTMLSelectElement;
-        console.log(value);
         const metadata = examples[value];
         const {source} = metadata;
         setSourceCode(source);

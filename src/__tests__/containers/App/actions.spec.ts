@@ -155,19 +155,6 @@ describe('app action creaters', () => {
         expect.assertions(3);
         jest.resetAllMocks();
 
-        const location = {
-            start: {
-                column: 1,
-                line: 1,
-                offset: 1
-            },
-            end: {
-                column: 1,
-                line: 1,
-                offset: 1
-            }
-        };
-
         const reason = 'Syntax Error';
         (compile as jest.Mock).mockImplementation(() => {
             throw new SyntaxError(reason);

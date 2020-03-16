@@ -4,8 +4,6 @@ import {
     Wire
 } from './types';
 import {
-    scaleLineEntry,
-    translateLineEntry,
     scaleBezierCurve,
     translateBezierCurve
 } from './transform';
