@@ -72,7 +72,7 @@ export function ExamplesList({setSourceCode, examples}: DispatchProps & Componen
  *
  * @returns Empty State.
  */
-function mapStateToProps(): {} {
+export function mapStateToProps(): {} {
     return {};
 }
 
@@ -82,7 +82,7 @@ function mapStateToProps(): {} {
  * @param dispatch Action dispatcher.
  * @returns Props.
  */
-function mapDispatchToProps(dispatch: DispatchFunction): DispatchProps {
+export function mapDispatchToProps(dispatch: DispatchFunction): DispatchProps {
     return {
         setSourceCode: actions.setSourceCode(dispatch)
     };
