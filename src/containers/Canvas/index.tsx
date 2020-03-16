@@ -55,37 +55,34 @@ function drawDiagram(
     offsetPosition: [number, number],
     featureFlags: { [featureId: string]: boolean}
 ): void {
-    requestAnimationFrame(() => {
-        // Clear canvas
-        ctx.fillStyle = 'white';
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        // Reset the position and scaling.
-        ctx.setTransform();
-        ctx.save();
-        const [dragPositionX, dragPositionY] = offsetPosition;
-        ctx.scale(scale, scale);
-        ctx.translate(dragPositionX, dragPositionY);
-
-        const astRenderer = new ASTRenderer();
-        const entityTree = astRenderer.visit(ast, {
-            depthX: 1,
-            depthY: 1
-        });
-
-        const entityRenderer = new EntityRendererVisitor();
-        const entityRendererConfig = {
-            featureFlags
-        };
-        let result = entityRenderer.visit(entityTree, entityRendererConfig);
-
-        const scalingValue = Math.min(canvasHeight, canvasWidth);
-
-        result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
-        const START_POSITION = 30;
-        result = translateRenderResult(result, START_POSITION, START_POSITION);
-
-        renderResult(ctx, result);
+    const astRenderer = new ASTRenderer();
+    const entityTree = astRenderer.visit(ast, {
+        depthX: 1,
+        depthY: 1
     });
+
+    const entityRenderer = new EntityRendererVisitor();
+    const entityRendererConfig = {
+        featureFlags
+    };
+    let result = entityRenderer.visit(entityTree, entityRendererConfig);
+
+    const scalingValue = Math.min(canvasHeight, canvasWidth);
+    result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
+    const START_POSITION = 30;
+    result = translateRenderResult(result, START_POSITION, START_POSITION);
+
+    // Clear canvas
+    ctx.fillStyle = 'white';
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    // Reset the position and scaling.
+    ctx.setTransform();
+    ctx.save();
+    const [dragPositionX, dragPositionY] = offsetPosition;
+    ctx.scale(scale, scale);
+    ctx.translate(dragPositionX, dragPositionY);
+
+    renderResult(ctx, result);
 }
 
 /**
@@ -117,6 +114,7 @@ interface CanvasState {
  */
 interface CanvasDispatchProps {
     resetZoom: typeof actions.resetZoom;
+    throwRenderError: typeof actions.setSourceCodeFailure;
     zoomIn: typeof actions.zoomIn;
     zoomOut: typeof actions.zoomOut;
 }
@@ -139,6 +137,7 @@ function Canvas(props: CanvasProps): JSX.Element {
         downloadLoading,
         featureFlags,
         resetZoom,
+        throwRenderError,
         zoomIn,
         zoomOut
     } = props;
@@ -161,9 +160,12 @@ function Canvas(props: CanvasProps): JSX.Element {
         if (ctx === null) {
             return;
         }
-
-        drawDiagram(ast, ctx, canvas.width, canvas.height, scale, canvasPosition, featureFlags);
-    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height, canvasPosition, featureFlags]);
+        try {
+            drawDiagram(ast, ctx, canvas.width, canvas.height, scale, canvasPosition, featureFlags);
+        } catch (e) {
+            throwRenderError(e.toString());
+        }
+    }, [ast, canvasRef, scale, resetZoom, sizes.width, sizes.height, canvasPosition, featureFlags, throwRenderError]);
 
     /** Wrapper around download canvas function */
     const downloadCanvas = (): void => {
@@ -211,8 +213,23 @@ function Canvas(props: CanvasProps): JSX.Element {
      * Reset the canvas perspective.
      */
     function onResetPerspective(): void {
-        if (canvasPosition[0] !== 0 || canvasPosition[1] !== 0) {
+        const [canvasX, canvasY] = canvasPosition;
+        if (canvasX !== 0 || canvasY !== 0) {
             setCanvasPosition([0, 0]);
+        }
+    }
+
+    /**
+     * Handle mouse scroll.
+     *
+     * @param event Mouse wheel event.
+     */
+    function canvasOnMouseWheel({deltaY}: React.WheelEvent): void {
+        const delta = Math.sign(deltaY);
+        if (delta > 0) {
+            zoomIn();
+        } else {
+            zoomOut();
         }
     }
 
@@ -231,16 +248,7 @@ function Canvas(props: CanvasProps): JSX.Element {
                 <canvas onMouseDown={canvasOnMouseDown}
                         onMouseMove={canvasOnMouseMove}
                         onMouseUp={canvasOnMouseUp}
-                        onWheel={
-                    ({deltaY}: React.WheelEvent): void => {
-                        const delta = Math.sign(deltaY);
-                        if (delta > 0) {
-                            zoomIn();
-                        } else {
-                            zoomOut();
-                        }
-                    }
-                }
+                        onWheel={canvasOnMouseWheel}
                         ref={canvasRef} />
             </div>
             <a hidden
@@ -269,7 +277,8 @@ function mapStateToProps(state: GlobalState): CanvasState {
 const mapDispatchToProps: CanvasDispatchProps = {
     resetZoom: actions.resetZoom,
     zoomIn: actions.zoomIn,
-    zoomOut: actions.zoomOut
+    zoomOut: actions.zoomOut,
+    throwRenderError: actions.setSourceCodeFailure
 };
 
 export default connect(

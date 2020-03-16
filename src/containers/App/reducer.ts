@@ -20,7 +20,7 @@ import {
 } from '../Canvas/constants';
 
 
-const initialState: GlobalState = {
+export const initialState: GlobalState = {
     download: {
         loading: false
     },
