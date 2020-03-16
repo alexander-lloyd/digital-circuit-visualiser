@@ -23,7 +23,7 @@ describe('modal component', () => {
         expect(renderResult).not.toBeNull();
         expect(getByTestId('modal-child')).toBeInTheDocument();
         expect(getByText('Modal Title Text')).toBeInTheDocument();
-        expect(getByTestId('modal').classList.length).toBe(2);
+        expect(getByTestId('modal').classList).toHaveLength(2);
     });
 
 
@@ -42,7 +42,7 @@ describe('modal component', () => {
         const {getByTestId} = renderResult;
 
         expect(renderResult).not.toBeNull();
-        expect(getByTestId('modal').classList.length).toBe(1);
+        expect(getByTestId('modal').classList).toHaveLength(1);
     });
 
     it('should close the modal if close button is pressed', () => {
