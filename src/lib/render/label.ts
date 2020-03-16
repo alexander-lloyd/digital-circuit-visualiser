@@ -17,6 +17,7 @@ const DEFAULT_FONT_SIZE = 120;
 export function buildTextLabelFunction(label: string): LabelFunction {
     return (x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D): void => {
         let fontSize = DEFAULT_FONT_SIZE;
+        ctx.fillStyle = 'black';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.font = `${fontSize}px ${DEFAULT_FONT}`;
