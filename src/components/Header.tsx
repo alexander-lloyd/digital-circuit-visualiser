@@ -25,7 +25,7 @@ export function Header({showModal}: HeaderProps): JSX.Element {
             <div className="navbar-brand">
                 <a className="navbar-item"
                    href="#">
-                    <h1 className="title has-text-white">Hypernet Visualisation</h1>
+                    <h1 className="title has-text-white">Digital Circuit Visualiser</h1>
                 </a>
             </div>
             <div className="navbar-end">
