@@ -30,6 +30,8 @@ export function ExamplesList({setSourceCode, examples}: DispatchProps & Componen
 
     /**
      * Handle when an element is selected in the Examples List.
+     *
+     * @param event ChangeEvent.
      */
     function onExampleSelected(event: ChangeEvent): void {
         const {value} = event.target as HTMLSelectElement;
