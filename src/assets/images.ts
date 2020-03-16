@@ -61,8 +61,8 @@ const images: ImageMap = {
     NOT: {
         name: 'NOT',
         image: NOT_GATE,
-        inputs: [[70, 90]],
-        outputs: [[350, 90]],
+        inputs: [[0, 95]],
+        outputs: [[320, 95]],
         width: 533.33,
         height: 192
     },

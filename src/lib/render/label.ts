@@ -1,6 +1,6 @@
 /* eslint no-magic-numbers: ["warn", {ignore: [1, 2]}] */
 import {ImageMetaData} from '../../assets/images';
-import {getTerminatorPositions, renderCurve} from './draw';
+import {getTerminatorPositions, renderLineEntry} from './draw';
 
 import {LabelFunction} from './types';
 
@@ -55,7 +55,6 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
             const topLeftX = x - centerX;
             const topLeftY = y - centerY;
             const boxTopLeftX = x - (imageWidth / 2);
-            // TODO: renderBoxEntry(ctx, [[boxTopLeftX, topLeftY], [boxTopLeftX + imageWidth, topLeftY + image.height], true]);
             ctx.drawImage(image, topLeftX, topLeftY, image.width, image.height);
             const inputTerminatorPositions = getTerminatorPositions(imageMetaData.inputs.length);
             const outputTerminatorPositions = getTerminatorPositions(imageMetaData.outputs.length);
@@ -65,7 +64,7 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
                 const x2 = topLeftX + (ix * scale);
                 const y2 = topLeftY + (iy * scale);
 
-                renderCurve(ctx, [[x1, y1], [x2, y2]]);
+                renderLineEntry(ctx, [[x1, y1], [x2, y2]]);
             });
 
             imageMetaData.outputs.forEach(([ix, iy], i) => {
@@ -74,7 +73,7 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
                 const x2 = boxTopLeftX + imageWidth;
                 const y2 = topLeftY + (outputTerminatorPositions[i] * image.height);
 
-                renderCurve(ctx, [[x1, y1], [x2, y2]]);
+                renderLineEntry(ctx, [[x1, y1], [x2, y2]]);
             });
         };
     };
