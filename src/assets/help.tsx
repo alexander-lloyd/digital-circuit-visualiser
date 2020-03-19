@@ -42,6 +42,11 @@ export function HelpContentComponent(): JSX.Element {
                 An example of a compose is:
             </p>
             <pre><code>AND . OR</code></pre>
+            <p>Note that the outputs on the left must match the inputs on the right!</p>
+            <p>
+                An example of a feedback loop:
+            </p>
+            <pre><code>feedback AND</code></pre>
             <p>
                 An example of a join:
             </p>
