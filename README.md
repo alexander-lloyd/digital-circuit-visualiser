@@ -19,8 +19,6 @@
   * [Installation](#installation)
 * [Usage](#usage)
 * [Tests](#tests)
-* [Roadmap](#roadmap)
-* [License](#license)
 * [Contact](#contact)
 
 ## About The Project
@@ -29,6 +27,7 @@
 * [TypeScript](https://typescriptlang.org/)
 * [React](https://reactjs.org/)
 * [Webpack](https://webpack.js.org/)
+* [SASS](https://sass-lang.com/)
 
 ## Getting Started
 
@@ -40,9 +39,9 @@ $ git clone git@github.com:alexander-lloyd/fyp.git
 
 ### Prerequisites
 
-* nodejs: Follow the instructions on the (NodeJS website)[https://nodejs.org/en/]
+* nodejs: Follow the instructions on the [NodeJS website](https://nodejs.org/)
 
-* yarn
+* yarn package manager
 ```sh
 npm install -g yarn
 ```
@@ -63,11 +62,15 @@ $ yarn start
 
 To run with the webpack development server run `yarn start` and view in the browser at http://localhost:8000. Running in this environment provides hot reloading support; just edit and save the file and the browser will automatically refresh.
 
-Note that any hot reload on a route will fall back to the root (`/`), so `ReasonReact.Router.dangerouslyGetInitialUrl` will likely be needed alongside the `ReasonReact.Router.watchUrl` logic to handle routing correctly on hot reload refreshes or simply opening the app at a URL that is not the root.
+To use a port other than 8000 set the `PORT` environment variable (`PORT=8080 yarn start`).
 
-To use a port other than 8000 set the `PORT` environment variable (`PORT=8080 npm run server`).
+## Building
 
-After you see the webpack compilation succeed (the `npm run webpack` step), open up `build/index.html` (**no server needed!**). Then modify whichever `.re` file in `src` and refresh the page to see the changes.
+```sh
+$ yarn build
+```
+
+After you see the webpack compilation succeed (the `yarn build` step), open up `build/index.html` (**no server needed!**).
 
 ## Tests
 
@@ -86,14 +89,6 @@ npm run webpack:production
 ```
 
 This will replace the development artifact `build/index.js` for an optimized version as well as copy `src/index.html` into `build/`. You can then deploy the contents of the `build` directory (`index.html` and `index.js`).
-
-## Roadmap
-
-To be decided.
-
-## License
-
-Unsure what License this will be relased under.
 
 ## Contact
 
