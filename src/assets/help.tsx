@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {images} from './images';
+
 export const HELP_TITLE = 'Help';
 
 /**
@@ -18,17 +20,19 @@ export function HelpContentComponent(): JSX.Element {
             </p>
             <pre><code>AND</code></pre>
             <p>
-                An AND Gate should appear. Other functions
-                available include OR, JOIN and SPLIT.
+                An AND Gate should appear. The currently supported list
+                of fates are:
             </p>
-            <p>
-                A JOIN can be used to join the output of two
-                functions into a single output.
-            </p>
-            <p>
-                A SPLIT does the opposite. A single output can be
-                split into two outputs.
-            </p>
+            <ul>
+                {
+                    Object.entries(images).sort(([name], [name2]) => name.localeCompare(name2)).
+                        map(([name, metadata]) => (
+                            <li key={name}>
+                                {`${name}: ${metadata.description}`}
+                            </li>
+                        ))
+                }
+            </ul>
             <p>
                 Functions can be joined together using the tensor and
                 compose methods. An example of a tensor is:
@@ -38,6 +42,11 @@ export function HelpContentComponent(): JSX.Element {
                 An example of a compose is:
             </p>
             <pre><code>AND . OR</code></pre>
+            <p>Note that the outputs on the left must match the inputs on the right!</p>
+            <p>
+                An example of a feedback loop:
+            </p>
+            <pre><code>feedback AND</code></pre>
             <p>
                 An example of a join:
             </p>
@@ -49,7 +58,7 @@ export function HelpContentComponent(): JSX.Element {
             <p>
                 You can also use let statements (similar to OCaml).
             </p>
-            <pre><code>let variable = AND in variable</code></pre>
+            <pre><code>let variable = AND in expression</code></pre>
             <p>
                 These can also be nested:
             </p>
@@ -73,6 +82,34 @@ export function HelpContentComponent(): JSX.Element {
                 Examples can be found under the Examples Section.
                 To select an example, click the dropdown and select
                 an example.
+            </p>
+            <h2>About this Project</h2>
+            <p>
+                This project was created by
+                {' '}
+                <a href="https://github.com/alexander-lloyd/"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    Alexander Lloyd
+                </a>
+                {' '}
+                as part of my final year studying Computer Science
+                {' '}
+                under the supervision of
+                {' '}
+                <a href="https://www.cs.bham.ac.uk/~drg/"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    Dan Ghica
+                </a>
+                {' '}
+                at the
+                {' '}
+                <a href="https://www.birmingham.ac.uk/"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    University of Birmingham
+                </a>
             </p>
         </div>
     );
