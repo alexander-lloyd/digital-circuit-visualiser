@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {images} from './images';
+
 export const HELP_TITLE = 'Help';
 
 /**
@@ -18,17 +20,19 @@ export function HelpContentComponent(): JSX.Element {
             </p>
             <pre><code>AND</code></pre>
             <p>
-                An AND Gate should appear. Other functions
-                available include OR, JOIN and SPLIT.
+                An AND Gate should appear. The currently supported list
+                of fates are:
             </p>
-            <p>
-                A JOIN can be used to join the output of two
-                functions into a single output.
-            </p>
-            <p>
-                A SPLIT does the opposite. A single output can be
-                split into two outputs.
-            </p>
+            <ul>
+                {
+                    Object.entries(images).sort(([name], [name2]) => name.localeCompare(name2)).
+                        map(([name, metadata]) => (
+                            <li key={name}>
+                                {`${name}: ${metadata.description}`}
+                            </li>
+                        ))
+                }
+            </ul>
             <p>
                 Functions can be joined together using the tensor and
                 compose methods. An example of a tensor is:
