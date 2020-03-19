@@ -83,6 +83,34 @@ export function HelpContentComponent(): JSX.Element {
                 To select an example, click the dropdown and select
                 an example.
             </p>
+            <h2>About this Project</h2>
+            <p>
+                This project was created by
+                {' '}
+                <a href="https://github.com/alexander-lloyd/"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    Alexander Lloyd
+                </a>
+                {' '}
+                as part of my final year studying Computer Science
+                {' '}
+                under the supervision of
+                {' '}
+                <a href="https://www.cs.bham.ac.uk/~drg/"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    Dan Ghica
+                </a>
+                {' '}
+                at the
+                {' '}
+                <a href="https://www.birmingham.ac.uk/"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    University of Birmingham
+                </a>
+            </p>
         </div>
     );
 }
