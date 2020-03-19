@@ -53,7 +53,7 @@ export function HelpContentComponent(): JSX.Element {
             <p>
                 You can also use let statements (similar to OCaml).
             </p>
-            <pre><code>let variable = AND in variable</code></pre>
+            <pre><code>let variable = AND in expression</code></pre>
             <p>
                 These can also be nested:
             </p>
