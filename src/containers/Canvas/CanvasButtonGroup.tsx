@@ -25,6 +25,7 @@ interface CanvasButtonGroupProps {
 export default function CanvasButtonGroup(props: CanvasButtonGroupProps): JSX.Element {
     const {
         isDownloadLoading,
+        onDownload,
         onResetPerspective,
         onResetScale
     } = props;
@@ -48,7 +49,8 @@ export default function CanvasButtonGroup(props: CanvasButtonGroupProps): JSX.El
                 <span>Reset Perspective</span>
             </button>
             <button className={`button is-outlined is-primary ${isDownloadLoading ? 'is-loading' : ''}`}
-                    onClick={(): void => props.onDownload()}
+                    data-testid="download-button"
+                    onClick={onDownload}
                     type="button">
                 <span className="icon">
                     <FontAwesomeIcon icon={faDownload} />
