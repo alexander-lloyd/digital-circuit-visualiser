@@ -9,6 +9,8 @@ import NOR_GATE from './images/NOR-Gate.svg';
 import NAND_GATE from './images/NAND-Gate.svg';
 import XOR_GATE from './images/XOR-Gate.svg';
 import XNOR_GATE from './images/XNOR-Gate.svg';
+import ID from './images/ID.svg';
+import CROSS from './images/CROSS.svg';
 
 type Point = [number, number];
 
@@ -107,6 +109,24 @@ const images: ImageMap = {
         outputs: [[100, 25]],
         width: 100,
         height: 50
+    },
+    ID: {
+        name: 'ID',
+        description: 'A straight wire.',
+        image: ID,
+        inputs: [[0, 50]],
+        outputs: [[100, 50]],
+        width: 100,
+        height: 100
+    },
+    CROSS: {
+        name: 'CROSS',
+        description: 'A wire crossing.',
+        image: CROSS,
+        inputs: [[0, 0], [0, 100]],
+        outputs: [[100, 0], [100, 100]],
+        width: 100,
+        height: 100
     }
 };
 
