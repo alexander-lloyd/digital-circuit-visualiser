@@ -14,6 +14,7 @@ import {
     translateRenderResult
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
+import {Render2} from '../../lib/render/render2';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -55,17 +56,19 @@ function drawDiagram(
     offsetPosition: [number, number],
     featureFlags: { [featureId: string]: boolean}
 ): void {
-    const astRenderer = new ASTRenderer();
-    const entityTree = astRenderer.visit(ast, {
-        depthX: 1,
-        depthY: 1
-    });
+    // const astRenderer = new ASTRenderer();
+    // const entityTree = astRenderer.visit(ast, {
+    //     depthX: 1,
+    //     depthY: 1
+    // });
 
-    const entityRenderer = new EntityRendererVisitor();
-    const entityRendererConfig = {
-        featureFlags
-    };
-    let result = entityRenderer.visit(entityTree, entityRendererConfig);
+    // const entityRenderer = new EntityRendererVisitor();
+    // const entityRendererConfig = {
+    //     featureFlags
+    // };
+    // let result = entityRenderer.visit(entityTree, entityRendererConfig);
+    const renderer2 = new Render2();
+    let result = renderer2.visit(ast, null);
 
     const scalingValue = Math.min(canvasHeight, canvasWidth);
     result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);

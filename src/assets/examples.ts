@@ -47,6 +47,6 @@ export const EXAMPLES: Examples = {
     FULL_ADDER: {
         name: 'Full Adder',
         description: 'Full Adder',
-        source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (AND * XOR) in\n  (ID . adder) . (adder * ID) . (ID * OR)'
+        source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (AND * XOR) in\n  (ID * adder) . (adder * ID) . (ID * OR)'
     }
 };
