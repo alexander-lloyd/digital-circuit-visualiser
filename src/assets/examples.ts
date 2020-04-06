@@ -38,5 +38,15 @@ export const EXAMPLES: Examples = {
         name: 'Complex Example',
         description: 'Complex Example',
         source: '(AND * ((AND * AND . NOT) . JOIN)) . JOIN'
+    },
+    HALF_ADDER: {
+        name: 'Half Adder',
+        description: 'Half Adder',
+        source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (AND * XOR) in adder'
+    },
+    FULL_ADDER: {
+        name: 'Full Adder',
+        description: 'Full Adder',
+        source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (AND * XOR) in\n  (ID . adder) . (adder * ID) . (ID * OR)'
     }
 };
