@@ -49,6 +49,7 @@ module.exports = {
     // Use @typescript-eslint version instead.
     "indent": "off",
     "init-declarations": "off",
+    "jest/no-test-callback": "off",
     "jsdoc/no-bad-blocks": "error",
     "jsdoc/no-types": 0,
     "jsdoc/require-jsdoc": ["error", {
