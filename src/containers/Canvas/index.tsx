@@ -7,11 +7,9 @@ import * as actions from '../App/actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
-    ASTRenderer,
-    EntityRendererVisitor,
+    Render,
     renderResult,
-    scaleRenderResult,
-    translateRenderResult
+    scaleRenderResult
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
 
@@ -25,7 +23,7 @@ import {AST} from '../../lib/parser/index';
  *
  * @param canvas Html Canvas Element.
  */
-function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
+export function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
     // Make it fit the parent.
     canvas.style.height = '100%';
     canvas.style.width = '100%';
@@ -46,7 +44,7 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param offsetPosition Canvas Offset.
  * @param featureFlags Feature Flags. E.g. Should the squares around functions be rendered?
  */
-function drawDiagram(
+export function drawDiagram(
     ast: AST,
     ctx: CanvasRenderingContext2D,
     canvasWidth: number,
@@ -55,22 +53,15 @@ function drawDiagram(
     offsetPosition: [number, number],
     featureFlags: { [featureId: string]: boolean}
 ): void {
-    const astRenderer = new ASTRenderer();
-    const entityTree = astRenderer.visit(ast, {
-        depthX: 1,
-        depthY: 1
+    const renderer2 = new Render();
+    let result = renderer2.visit(ast, {
+        featureFlags
     });
 
-    const entityRenderer = new EntityRendererVisitor();
-    const entityRendererConfig = {
-        featureFlags
-    };
-    let result = entityRenderer.visit(entityTree, entityRendererConfig);
+    const scaleX = canvasWidth;
+    const scaleY = canvasHeight;
 
-    const scalingValue = Math.min(canvasHeight, canvasWidth);
-    result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
-    const START_POSITION = 30;
-    result = translateRenderResult(result, START_POSITION, START_POSITION);
+    result = scaleRenderResult(result, scaleX, scaleY);
 
     // Clear canvas
     ctx.fillStyle = 'white';
@@ -91,7 +82,7 @@ function drawDiagram(
  * @param canvas Canvas Element.
  * @param downloadLink Anchor Tag used to download canvas.
  */
-function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchorElement): void {
+export function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchorElement): void {
     const image = canvas.toDataURL('image/png').
         replace('image/png', 'image/octet-stream');
     downloadLink.setAttribute('download', 'canvas.png');
@@ -130,7 +121,7 @@ interface CanvasProps extends CanvasState, CanvasDispatchProps {}
  * @param props Component Propeties.
  * @returns React Component.
  */
-function Canvas(props: CanvasProps): JSX.Element {
+export function Canvas(props: CanvasProps): JSX.Element {
     const {
         ast,
         scale,
@@ -264,7 +255,7 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @param state Canvas State.
  * @returns Component Props.
  */
-function mapStateToProps(state: GlobalState): CanvasState {
+export function mapStateToProps(state: GlobalState): CanvasState {
     const {ast, scale, download: {loading}, featureFlags} = state;
     return {
         ast,

@@ -11,7 +11,7 @@ export type LineEntry = [Point, Point];
 export type BoxEntry = [Point, Point, boolean];
 // Label function, center point, number of inputs, number of outputs
 export type LabelEntry = [LabelFunction, Point, number, number];
-
+// Start Point, End Point, Start Control Point, End Control Point.
 export type Bezier = [Point, Point, Point, Point];
 
 export type Wire = Bezier;
@@ -29,4 +29,7 @@ export type RenderResults = {
     size: [number, number];
 
     beziers: Bezier[];
+
+    inputs: Point[];
+    outputs: Point[];
 };

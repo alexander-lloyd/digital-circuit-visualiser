@@ -1,13 +1,16 @@
-/* eslint no-magic-numbers: ["warn", {"ignore": [0.1, 0.5, 0.9, 1, 2]}] */
+/* eslint no-magic-numbers: ["warn", {ignore: [0, 0.1, 0.5, 0.9, 1, 2]}] */
+import {ASTVisitor} from '../parser';
+import * as AST from '../parser/ast';
+import {images, ImageMetaData} from '../../assets/images';
+import {RENDER_UNIT_SQUARE} from '../../assets/features';
+
 import {
-    EntityVisitor,
-    FunctionEntity,
-    GroupedEntity
-} from './entities';
-import {
+    Bezier,
+    LabelFunction,
     LineEntry,
+    Point,
     RenderResults,
-    Bezier
+    Wire
 } from './types';
 import {
     renderBoxEntry,
@@ -16,119 +19,188 @@ import {
     renderCurve,
     renderBezier
 } from './draw';
-import {RENDER_UNIT_SQUARE} from '../../assets/features';
+import {buildTextImageFunction, buildTextLabelFunction} from './label';
+import {scaleRenderResult, translateRenderResult} from './transform';
 
+
+export type RendererContext = {
+    featureFlags: { [flag: string]: boolean};
+};
 
 /**
- * Canvas Context.
+ * Build error message.
+ *
+ * @param operator Operator not implemented.
+ * @returns Error message.
  */
-export interface CanvasContext {
-    canvasWidth: number;
-    canvasHeight: number;
+export function buildNotImplementedError(operator: string): string {
+    return `Operator '${operator}' is not implemented`;
 }
 
 /**
- * EntityRendererVisitor Context
+ * Not Implemented Error.
  */
-export interface EntityRendererVisitorContext {
-    featureFlags: {[featureId: string]: boolean};
-}
+export class NotImplementedError extends Error {}
+
 
 /**
- * Renderer the entities to the Canvas.
+ * New Renderer.
  */
-export class EntityRendererVisitor extends EntityVisitor<EntityRendererVisitorContext, RenderResults> {
+export class Render extends ASTVisitor<RendererContext, RenderResults> {
     /**
-     * Renderer a Function to the Canvas.
+     * Visit an Constant.
      *
-     * @param entity Function Entity.
-     * @param context Visitor Context.
-     * @returns All the individual canvas elements to draw.
+     * @param ast Identifier AST Node.
+     * @param context Render Context.
+     * @returns Render results.
      */
-    visitFunction(entity: FunctionEntity, context: EntityRendererVisitorContext): RenderResults {
-        const {x, y, width, height, label, wires, inputs, outputs} = entity;
-        const {featureFlags} = context;
+    public visitConstant(ast: AST.ConstantAST, context: RendererContext): RenderResults {
+        const {name} = ast;
+        const imageMetaData: ImageMetaData | undefined = images[name];
+        let inputs: Point[];
+        let outputs: Point[];
+        let label: LabelFunction;
+        if (imageMetaData === undefined) {
+            inputs = [];
+            outputs = [];
+            label = buildTextLabelFunction(name);
+        } else {
+            inputs = getTerminatorPositions(imageMetaData.inputs.length).
+                map((y: number) => [0.1, y]);
+            outputs = getTerminatorPositions(imageMetaData.outputs.length).
+                map((y: number) => [0.9, y]);
+            label = buildTextImageFunction(imageMetaData);
+        }
 
-        const drawBox = featureFlags[RENDER_UNIT_SQUARE] || false;
-        const halfWidth = width / 2;
-        const halfHeight = height / 2;
+        const shouldRenderSquare = context.featureFlags[RENDER_UNIT_SQUARE] || false;
 
-        const functionRenderResult: RenderResults = {
-            beziers: [...wires],
+        return {
             lines: [],
-            boxes: [[[x, y], [x + width, y + height], drawBox]],
-            labels: [[label, [x + halfWidth, y + halfHeight], inputs.length, outputs.length]],
+            boxes: [[[0, 0], [1, 1], shouldRenderSquare]],
+            labels: [[label, [0.5, 0.5], inputs.length, outputs.length]],
             curves: [],
-            size: [width, height]
+            size: [1, 1],
+            beziers: [],
+            inputs,
+            outputs
         };
-
-        return functionRenderResult;
     }
 
     /**
-     * Renderer a Group of Entities.
+     * Visit an Binary Operator.
      *
-     * @param entity Grouped Entity.
-     * @param context Visitor Context.
-     * @returns All the individual canvas elements to draw.
+     * @param ast Identifier AST Node.
+     * @param context Render Context.
+     * @returns Render results.
      */
-    visitGrouped(entity: GroupedEntity, context: EntityRendererVisitorContext): RenderResults {
-        const {children, operator} = entity;
-        const [left, right] = children;
+    public visitBinaryOperator(ast: AST.BinaryOpAST, context: RendererContext): RenderResults {
+        const {operator, left, right} = ast;
 
-        const {
-            beziers: lbeziers,
-            lines: llines,
-            boxes: lboxes,
-            labels: llabel,
-            curves: lcurves,
-            size: [lwidth, lheight]
-        } = left.visit(this, context);
-        const {
-            beziers: rbeziers,
-            lines: rlines,
-            boxes: rboxes,
-            labels: rlabels,
-            curves: rcurves,
-            size: [rwidth, rheight]
-        } = right.visit(this, context);
+        let leftRR = left.visit(this, context);
+        let rightRR = right.visit(this, context);
+        let wires: Wire[] = [];
+        let inputs: Point[];
+        let outputs: Point[];
 
-        let [width, height] = [lwidth, lheight];
-        const gcurves: LineEntry[] = [];
+        if (operator === 'compose') {
+            leftRR = scaleRenderResult(leftRR, 0.5, 1);
+            rightRR = scaleRenderResult(rightRR, 0.5, 1);
+            rightRR = translateRenderResult(rightRR, 0.5, 0);
 
-
-        if (operator === 'tensor') {
-            height += rheight;
-        } else if (operator === 'compose') {
-            width += rwidth;
-            // Get lefts outputs.
-            const leftOutputs = left.outputs;
-            const rightInputs = right.inputs;
-            if (leftOutputs.length !== rightInputs.length) {
-                throw new Error('Input count does not match output count');
+            if (rightRR.inputs.length < leftRR.outputs.length) {
+                throw new Error('Output count does not match input count');
             }
 
-            gcurves.push(...leftOutputs.map(([leftX, leftY], i): LineEntry => {
-                const [rightX, rightY] = rightInputs[i];
-                const x1 = left.x + leftX;
-                const y1 = left.y + leftY;
-                const x2 = right.x + (rightX * 0.1);
-                const y2 = right.y + rightY;
-                return [
-                    [x1, y1],
-                    [x2, y2]
-                ];
-            }));
+            wires = rightRR.inputs.map(([ox, oy]: Point, i: number) => {
+                const [ix, iy] = leftRR.outputs[i];
+                return [[ox, oy], [ix, iy], [ox - 0.1, oy], [ix + 0.1, iy]];
+            });
+            ({inputs} = leftRR);
+            ({outputs} = rightRR);
+        } else if (operator === 'tensor') {
+            leftRR = scaleRenderResult(leftRR, 1, 0.5);
+            rightRR = scaleRenderResult(rightRR, 1, 0.5);
+            rightRR = translateRenderResult(rightRR, 0, 0.5);
+            inputs = [...leftRR.inputs, ...rightRR.inputs];
+            outputs = [...leftRR.outputs, ...rightRR.outputs];
+        } else {
+            throw new NotImplementedError(buildNotImplementedError(operator));
         }
 
         return {
-            beziers: [...lbeziers, ...rbeziers],
-            lines: [...llines, ...rlines],
-            boxes: [...lboxes, ...rboxes],
-            labels: [...llabel, ...rlabels],
-            curves: [...gcurves, ...lcurves, ...rcurves],
-            size: [width, height]
+            beziers: [...wires, ...leftRR.beziers, ...rightRR.beziers],
+            lines: [...leftRR.lines, ...rightRR.lines],
+            boxes: [...leftRR.boxes, ...rightRR.boxes],
+            labels: [...leftRR.labels, ...rightRR.labels],
+            curves: [...leftRR.curves, ...rightRR.curves],
+            size: [1, 1],
+            inputs,
+            outputs
         };
+    }
+
+    /**
+     * Process a Unary Operator.
+     *
+     * @param ast Unary Operator AST.
+     * @param context Render Context.
+     * @returns Render Result.
+     */
+    public visitUnaryOperator(ast: AST.UnaryOpAST, context: RendererContext): RenderResults {
+        const {operator} = ast;
+        const childrr = ast.child.visit(this, context);
+
+        // Feedback Constants.
+        const wireTopY = 0.1;
+        const bezierControl = 0.2;
+        const bezierTopXOffset = 0.2;
+
+        if (operator === 'feedback') {
+            if (childrr.inputs.length > 0 && childrr.outputs.length > 0) {
+                const [[ix, iy]] = childrr.inputs;
+                const [[ox, oy]] = childrr.outputs;
+
+                const wires: Wire[] = [
+                    [[ix, iy], [ix + bezierTopXOffset, wireTopY], [ix - bezierControl, iy], [ix, wireTopY]],
+                    [
+                        [ix + bezierTopXOffset, wireTopY],
+                        [ox - bezierTopXOffset, wireTopY],
+                        [ix + bezierTopXOffset, wireTopY],
+                        [ox - bezierTopXOffset, wireTopY]
+                    ],
+                    [
+                        [ox - bezierTopXOffset, wireTopY],
+                        [ox, oy],
+                        [ox - bezierTopXOffset + bezierControl, wireTopY],
+                        [ox + bezierControl, oy]
+                    ]
+                ];
+
+                childrr.beziers.push(...wires);
+            }
+        } else {
+            throw new NotImplementedError(buildNotImplementedError(operator));
+        }
+
+        return childrr;
+    }
+
+    /**
+     * Visit an LetAST.
+     *
+     * @throws Method should never get called.
+     */
+    public visitLet(): RenderResults {
+        throw new Error('Method not implemented.');
+    }
+
+    /**
+     * Visit an Identifier.
+     *
+     * @throws Method should never get called.
+     */
+    public visitIdentifier(): RenderResults {
+        throw new Error('Method not implemented.');
     }
 }
 

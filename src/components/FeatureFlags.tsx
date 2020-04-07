@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import FeatureFlag from './FeatureFlag';
 
-import {FEATURES, FEATURES_KEYS} from '../assets/features';
+import {FEATURES_KEYS, Features} from '../assets/features';
 import * as actions from '../containers/App/actions';
 import {GlobalState, DispatchFunction} from '../containers/App/types';
 
@@ -26,7 +26,9 @@ interface FeatureFlagsActions {
 /**
  * Feature Flag Props.
  */
-interface FeatureFlagProps extends FeatureFlagsState, FeatureFlagsActions {}
+interface FeatureFlagProps extends FeatureFlagsState, FeatureFlagsActions {
+    features: Features;
+}
 
 /**
  * Feature Flags Component.
@@ -34,11 +36,11 @@ interface FeatureFlagProps extends FeatureFlagsState, FeatureFlagsActions {}
  * @param props FeatureFlagProps.
  * @returns Feature Flags Component.
  */
-export function FeatureFlags({setFlag, unsetFlag, featureFlags}: FeatureFlagProps): JSX.Element {
+export function FeatureFlags({setFlag, unsetFlag, featureFlags, features}: FeatureFlagProps): JSX.Element {
     return (
         <div className="container">
             {
-                FEATURES.
+                features.
                     map(([featureId, feature]) => (
                         <FeatureFlag checked={featureFlags[featureId] || false}
                                      feature={feature}
@@ -57,7 +59,7 @@ export function FeatureFlags({setFlag, unsetFlag, featureFlags}: FeatureFlagProp
  * @param state Global State.
  * @returns Component Props.
  */
-function mapStateToProps(state: GlobalState): FeatureFlagsState {
+export function mapStateToProps(state: GlobalState): FeatureFlagsState {
     const {featureFlags} = state;
     return {
         featureFlags
@@ -70,7 +72,7 @@ function mapStateToProps(state: GlobalState): FeatureFlagsState {
  * @param dispatch Action dispatcher.
  * @returns Props.
  */
-function mapDispatchToProps(dispatch: DispatchFunction): FeatureFlagsActions {
+export function mapDispatchToProps(dispatch: DispatchFunction): FeatureFlagsActions {
     return {
         setFlag: (feature: FEATURES_KEYS): (() => void) => (): void => dispatch(actions.setFeatureFlag(feature, true)),
         unsetFlag: (feature: FEATURES_KEYS): (() => void) => (): void => dispatch(actions.setFeatureFlag(feature, false))

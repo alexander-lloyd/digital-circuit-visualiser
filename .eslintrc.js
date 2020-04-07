@@ -49,6 +49,7 @@ module.exports = {
     // Use @typescript-eslint version instead.
     "indent": "off",
     "init-declarations": "off",
+    "jest/no-test-callback": "off",
     "jsdoc/no-bad-blocks": "error",
     "jsdoc/no-types": 0,
     "jsdoc/require-jsdoc": ["error", {
@@ -145,6 +146,8 @@ module.exports = {
         "@typescript-eslint/no-empty-function": "off",
         "react/jsx-closing-tag-location": "off",
         "jsdoc/require-jsdoc": "off",
+        "max-lines-per-function": ["error", 2000],
+        "max-lines": ["error", 2000],
         "no-magic-numbers": "off"
       }
     }

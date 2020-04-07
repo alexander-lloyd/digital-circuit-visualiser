@@ -6,18 +6,12 @@ import {
     translateRenderResult
 } from './transform';
 import {
-    EntityRendererVisitor,
-    EntityRendererVisitorContext,
-    renderResult
+    renderResult,
+    Render
 } from './render';
-import {
-    ASTRenderer
-} from './visitor';
 
 export {
-    ASTRenderer,
-    EntityRendererVisitor,
-    EntityRendererVisitorContext,
+    Render,
     RenderResults,
     renderResult,
     scaleRenderResult,

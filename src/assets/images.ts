@@ -9,6 +9,9 @@ import NOR_GATE from './images/NOR-Gate.svg';
 import NAND_GATE from './images/NAND-Gate.svg';
 import XOR_GATE from './images/XOR-Gate.svg';
 import XNOR_GATE from './images/XNOR-Gate.svg';
+import ID from './images/ID.svg';
+import CROSS from './images/CROSS.svg';
+import STUB from './images/STUB.svg';
 
 type Point = [number, number];
 
@@ -95,7 +98,7 @@ const images: ImageMap = {
         description: '2 Input XOR Gate. Outputs true if only 1 of the inputs is true. Outputs false if none or all of the inputs are true',
         image: XOR_GATE,
         inputs: [[10, 15], [10, 35]],
-        outputs: [[100, 25]],
+        outputs: [[95, 25]],
         width: 100,
         height: 50
     },
@@ -104,9 +107,36 @@ const images: ImageMap = {
         description: '2 Input XNOR Gate. Outputs true if either all of none of the outputs are true.',
         image: XNOR_GATE,
         inputs: [[10, 15], [10, 35]],
-        outputs: [[100, 25]],
+        outputs: [[95, 25]],
         width: 100,
         height: 50
+    },
+    ID: {
+        name: 'ID',
+        description: 'A straight wire.',
+        image: ID,
+        inputs: [[0, 50]],
+        outputs: [[100, 50]],
+        width: 100,
+        height: 100
+    },
+    CROSS: {
+        name: 'CROSS',
+        description: 'A wire crossing.',
+        image: CROSS,
+        inputs: [[0, 0], [0, 100]],
+        outputs: [[100, 0], [100, 100]],
+        width: 100,
+        height: 100
+    },
+    STUB: {
+        name: 'STUB',
+        description: 'Stub an input.',
+        image: STUB,
+        inputs: [],
+        outputs: [[100, 50]],
+        width: 100,
+        height: 100
     }
 };
 

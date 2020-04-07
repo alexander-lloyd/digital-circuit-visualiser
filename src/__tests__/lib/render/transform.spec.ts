@@ -63,7 +63,9 @@ describe('scale render result', () => {
             labels: [],
             lines: [],
             curves: [],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [],
+            outputs: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
@@ -72,7 +74,9 @@ describe('scale render result', () => {
             labels: [],
             lines: [],
             curves: [],
-            size: [2, 2]
+            size: [2, 2],
+            inputs: [],
+            outputs: []
         });
     });
 
@@ -85,7 +89,9 @@ describe('scale render result', () => {
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             curves: [],
-            size: [5, 5]
+            size: [5, 5],
+            inputs: [],
+            outputs: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
@@ -94,7 +100,9 @@ describe('scale render result', () => {
             labels: expect.anything(),
             lines: [],
             curves: [],
-            size: [10, 10]
+            size: [10, 10],
+            inputs: [],
+            outputs: []
         });
     });
 
@@ -107,7 +115,9 @@ describe('scale render result', () => {
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             curves: [],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [],
+            outputs: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 2)).toStrictEqual({
@@ -116,7 +126,9 @@ describe('scale render result', () => {
             labels: expect.anything(),
             lines: [],
             curves: [],
-            size: [2, 2]
+            size: [2, 2],
+            inputs: [],
+            outputs: []
         });
     });
 
@@ -129,7 +141,9 @@ describe('scale render result', () => {
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             curves: [],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [],
+            outputs: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
@@ -138,7 +152,9 @@ describe('scale render result', () => {
             labels: [[mockLabel, [0, 0], 0, 0]],
             lines: [],
             curves: [],
-            size: [2, 5]
+            size: [2, 5],
+            inputs: [],
+            outputs: []
         });
     });
 
@@ -151,7 +167,9 @@ describe('scale render result', () => {
             labels: [[mockLabel, [5, 5], 0, 0]],
             lines: [],
             curves: [],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [],
+            outputs: []
         };
 
         expect(scaleRenderResult(renderResult, 2, 5)).toStrictEqual({
@@ -160,7 +178,9 @@ describe('scale render result', () => {
             labels: [[mockLabel, [10, 25], 0, 0]],
             lines: [],
             curves: [],
-            size: [2, 5]
+            size: [2, 5],
+            inputs: [],
+            outputs: []
         });
     });
 
@@ -172,7 +192,9 @@ describe('scale render result', () => {
             labels: [],
             lines: [[[1, 2], [3, 4]]],
             curves: [[[1, 2], [3, 4]]],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [],
+            outputs: []
         };
 
         expect(scaleRenderResult(renderResult, 1, 2)).toStrictEqual({
@@ -181,7 +203,34 @@ describe('scale render result', () => {
             labels: [],
             lines: [[[1, 4], [3, 8]]],
             curves: [[[1, 4], [3, 8]]],
-            size: [1, 2]
+            size: [1, 2],
+            inputs: [],
+            outputs: []
+        });
+    });
+
+    it('should scale inputs and outputs', () => {
+        expect.assertions(1);
+        const renderResult: RenderResults = {
+            beziers: [],
+            boxes: [],
+            labels: [],
+            lines: [],
+            curves: [],
+            size: [1, 1],
+            inputs: [[1, 2]],
+            outputs: [[3, 4]]
+        };
+
+        expect(scaleRenderResult(renderResult, 1, 2)).toStrictEqual({
+            beziers: [],
+            boxes: [],
+            labels: [],
+            lines: [],
+            curves: [],
+            size: [1, 2],
+            inputs: [[1, 4]],
+            outputs: [[3, 8]]
         });
     });
 });
@@ -195,7 +244,9 @@ describe('transform render result', () => {
             labels: [],
             lines: [[[1, 2], [3, 4]]],
             curves: [[[1, 2], [3, 4]]],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [[1, 1]],
+            outputs: [[2, 2]]
         };
 
         expect(translateRenderResult(renderResult, 1, 2)).toStrictEqual({
@@ -204,7 +255,9 @@ describe('transform render result', () => {
             labels: [],
             lines: [[[2, 4], [4, 6]]],
             curves: [[[2, 4], [4, 6]]],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [[2, 3]],
+            outputs: [[3, 4]]
         });
     });
 
@@ -217,7 +270,9 @@ describe('transform render result', () => {
             labels: [[labelMock, [0.5, 0.5], 0, 0]],
             lines: [],
             curves: [],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [],
+            outputs: []
         };
 
         expect(translateRenderResult(renderResult, 2, 2)).toStrictEqual({
@@ -226,7 +281,9 @@ describe('transform render result', () => {
             labels: [[labelMock, [2.5, 2.5], 0, 0]],
             lines: [],
             curves: [],
-            size: [1, 1]
+            size: [1, 1],
+            inputs: [],
+            outputs: []
         });
     });
 });

@@ -9,6 +9,7 @@ import * as actions from '../containers/App/actions';
 import {GlobalState, DispatchFunction} from '../containers/App/types';
 
 import {EXAMPLES} from '../assets/examples';
+import {FEATURES} from '../assets/features';
 
 const exampleCode = 'let x = AND tensor OR;';
 
@@ -38,7 +39,7 @@ interface ComponentProps extends DispatchProps, StateProps {}
  * @param props Component Properties.
  * @returns Menu Component.
  */
-function Sidebar(props: ComponentProps): JSX.Element {
+export function Sidebar(props: ComponentProps): JSX.Element {
     const {
         errorReason,
         setSourceCode,
@@ -60,6 +61,7 @@ function Sidebar(props: ComponentProps): JSX.Element {
         <aside className="menu sidebar is-mobile is-fullheight box has-background-white-ter">
             <p className="menu-label is-size-5">Code</p>
             <textarea className="textarea"
+                      data-testid="source-area"
                       onChange={onKeyPressed}
                       placeholder={exampleCode}
                       rows={10}
@@ -69,7 +71,7 @@ function Sidebar(props: ComponentProps): JSX.Element {
                 { errorReason }
             </div>
             <p className="menu-label is-size-5">Flags</p>
-            <FeatureFlags />
+            <FeatureFlags features={FEATURES} />
             <p className="menu-label is-size-5">Examples</p>
             <ExamplesList examples={EXAMPLES} />
         </aside>
@@ -82,7 +84,7 @@ function Sidebar(props: ComponentProps): JSX.Element {
  * @param state Global State.
  * @returns Component Props.
  */
-function mapStateToProps(state: GlobalState): StateProps {
+export function mapStateToProps(state: GlobalState): StateProps {
     const {errorString, code} = state;
     return {
         errorReason: errorString,
@@ -96,7 +98,7 @@ function mapStateToProps(state: GlobalState): StateProps {
  * @param dispatch Action dispatcher.
  * @returns Props.
  */
-function mapDispatchToProps(dispatch: DispatchFunction): DispatchProps {
+export function mapDispatchToProps(dispatch: DispatchFunction): DispatchProps {
     return {
         setSourceCode: actions.setSourceCode(dispatch)
     };

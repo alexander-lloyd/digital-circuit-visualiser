@@ -5,10 +5,13 @@
         stroke: #000;
         stroke-width: 7.5px;
       }
+      .cls-2 {
+        stroke: #000;
+        stroke-width: 4px;
+      }
     </style>
   </defs>
-  <path class="cls-1" d="M48,22h1V78H48V22Z"/>
-  <path class="cls-1" d="M49,22v1H12V22H49Z"/>
-  <path class="cls-1" d="M48,77v1H11V77H48Z"/>
-  <path class="cls-1" d="M86,49v1H49V49H86Z"/>
+  <path class="cls-1" d="M10,50h100" />
+  <path class="cls-2" d="M2,40l20,20" />
+  <path class="cls-2" d="M2,60l20,-20" />
 </svg>

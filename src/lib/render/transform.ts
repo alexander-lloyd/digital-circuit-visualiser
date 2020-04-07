@@ -15,7 +15,7 @@ import {
  * @param scaleY Y Scaling.
  * @returns Scaled point.
  */
-function scalePoint([x, y]: Point, scaleX: number, scaleY: number): Point {
+export function scalePoint([x, y]: Point, scaleX: number, scaleY: number): Point {
     return [x * scaleX, y * scaleY];
 }
 
@@ -27,7 +27,7 @@ function scalePoint([x, y]: Point, scaleX: number, scaleY: number): Point {
  * @param translateY Y Translation.
  * @returns Translated point.
  */
-function translatePoint([x, y]: Point, translateX: number, translateY: number): Point {
+export function translatePoint([x, y]: Point, translateX: number, translateY: number): Point {
     return [x + translateX, y + translateY];
 }
 
@@ -90,14 +90,14 @@ export function translateBezierCurve(b: Bezier, translateX: number, translateY: 
  * @returns new Render Result.
  */
 export function scaleRenderResult(renderResults: RenderResults, scaleX: number, scaleY: number): RenderResults {
-    const {beziers, lines, boxes, labels, curves, size: [width, height]} = renderResults;
+    const {size: [width, height]} = renderResults;
     // Lines
-    const newLines = lines.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
-    const newCurves = curves.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
-    const newBeziers = beziers.map((b: Bezier) => scaleBezierCurve(b, scaleX, scaleY));
+    const lines = renderResults.lines.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
+    const curves = renderResults.curves.map((l: LineEntry) => scaleLineEntry(l, scaleX, scaleY));
+    const beziers = renderResults.beziers.map((b: Bezier) => scaleBezierCurve(b, scaleX, scaleY));
 
-    const items: [BoxEntry, LabelEntry][] = boxes.map(([[x, y], [x2, y2], drawBox], i) => {
-        const [labelFunc, , inputs, outputs] = labels[i];
+    const items: [BoxEntry, LabelEntry][] = renderResults.boxes.map(([[x, y], [x2, y2], drawBox], i) => {
+        const [labelFunc, , inputs, outputs] = renderResults.labels[i];
         const newX = x * scaleX;
         const newX2 = x2 * scaleX;
         const newY = y * scaleY;
@@ -109,16 +109,20 @@ export function scaleRenderResult(renderResults: RenderResults, scaleX: number, 
         ];
     });
 
-    const newBoxes = items.map(([b]) => b);
+    const boxes = items.map(([b]) => b);
     const newLabels = items.map(([, l]) => l);
+    const inputs = renderResults.inputs.map((p: Point) => scalePoint(p, scaleX, scaleY));
+    const outputs = renderResults.outputs.map((p: Point) => scalePoint(p, scaleX, scaleY));
 
     return {
-        beziers: newBeziers,
-        lines: newLines,
-        boxes: newBoxes,
+        beziers,
+        lines,
+        boxes,
         labels: newLabels,
-        curves: newCurves,
-        size: [width * scaleX, height * scaleY]
+        curves,
+        size: [width * scaleX, height * scaleY],
+        inputs,
+        outputs
     };
 }
 
@@ -135,14 +139,14 @@ export function translateRenderResult(
     translateX: number,
     translateY: number
 ): RenderResults {
-    const {beziers, lines, boxes, labels, curves, size} = renderResults;
+    const {size} = renderResults;
     // Lines
-    const newLines = lines.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
-    const newCurves = curves.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
-    const newBeziers = beziers.map((b: Bezier) => translateBezierCurve(b, translateX, translateY));
+    const lines = renderResults.lines.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
+    const curves = renderResults.curves.map((l: LineEntry) => translateLineEntry(l, translateX, translateY));
+    const beziers = renderResults.beziers.map((b: Bezier) => translateBezierCurve(b, translateX, translateY));
 
     // Boxes
-    const newBoxes = boxes.map(([[x, y], [x2, y2], drawBox]): BoxEntry => {
+    const boxes = renderResults.boxes.map(([[x, y], [x2, y2], drawBox]): BoxEntry => {
         const newX1 = x + translateX;
         const newX2 = x2 + translateX;
         const newY1 = y + translateY;
@@ -150,19 +154,24 @@ export function translateRenderResult(
         return [[newX1, newY1], [newX2, newY2], drawBox];
     });
 
-    const newLabels = labels.map(([label, [x, y], inputs, outputs]): LabelEntry => [
+    const labels = renderResults.labels.map(([label, [x, y], inputs, outputs]): LabelEntry => [
         label,
         [x + translateX, y + translateY],
         inputs,
         outputs
     ]);
 
+    const inputs = renderResults.inputs.map((p: Point) => translatePoint(p, translateX, translateY));
+    const outputs = renderResults.outputs.map((p: Point) => translatePoint(p, translateX, translateY));
+
     return {
-        beziers: newBeziers,
-        lines: newLines,
-        boxes: newBoxes,
-        labels: newLabels,
-        curves: newCurves,
-        size
+        beziers,
+        lines,
+        boxes,
+        labels,
+        curves,
+        size,
+        inputs,
+        outputs
     };
 }
