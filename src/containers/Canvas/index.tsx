@@ -58,8 +58,8 @@ function drawDiagram(
         featureFlags
     });
 
-    const scaleX = canvasWidth * 0.9;
-    const scaleY = canvasHeight * 0.9;
+    const scaleX = canvasWidth;
+    const scaleY = canvasHeight;
 
     result = scaleRenderResult(result, scaleX, scaleY);
 
