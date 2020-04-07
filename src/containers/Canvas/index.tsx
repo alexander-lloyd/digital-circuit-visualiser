@@ -8,9 +8,7 @@ import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
     renderResult,
-    scaleRenderResult,
-    translateRenderResult,
-    RenderResults
+    scaleRenderResult
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
 import {Render2} from '../../lib/render/render2';
@@ -60,9 +58,10 @@ function drawDiagram(
         featureFlags
     });
 
-    result = scaleRenderResult(result, canvasWidth - 10, canvasHeight - 10);
-    const START_POSITION = 5;
-    result = translateRenderResult(result, START_POSITION, START_POSITION);
+    const scaleX = canvasWidth * 0.9;
+    const scaleY = canvasHeight * 0.9;
+
+    result = scaleRenderResult(result, scaleX, scaleY);
 
     // Clear canvas
     ctx.fillStyle = 'white';
