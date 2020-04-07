@@ -1,16 +1,69 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {render} from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
-import {App} from '../../../containers/App/App';
+import {App, mapStateToProps, mapDispatchToProps} from '../../../containers/App/App';
+import {GlobalState} from '../../../containers/App/types';
 
-describe('app Component', () => {
-    it('should render without errors', () => {
+jest.mock('../../../components/Header', (): {} => ({
+    __esModule: true,
+    default: jest.fn().mockReturnValue(<p />)
+}));
+
+jest.mock('../../../components/Sidebar', (): {} => ({
+    __esModule: true,
+    default: jest.fn().mockReturnValue(<p />)
+}));
+
+jest.mock('../../../containers/Canvas', (): {} => ({
+    __esModule: true,
+    default: jest.fn().mockReturnValue(<p />)
+}));
+
+describe('app component', () => {
+    it('should render the compoenent', () => {
+        expect.assertions(2);
+        const closeModalAction = jest.fn();
+        const setInitialSourceCodeMock = jest.fn();
+
+        const component = (<App closeModal={closeModalAction}
+                                setInitialSourceCode={setInitialSourceCodeMock}
+                                showModal={false} />);
+        const renderResult = render(component);
+        expect(renderResult).not.toBeNull();
+
+        expect(setInitialSourceCodeMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should show modal component', () => {
+        expect.assertions(2);
+        const closeModalAction = jest.fn();
+        const setInitialSourceCodeMock = jest.fn();
+
+        const component = (<App closeModal={closeModalAction}
+                                setInitialSourceCode={setInitialSourceCodeMock}
+                                showModal />);
+        const renderResult = render(component);
+        expect(renderResult).not.toBeNull();
+
+        expect(setInitialSourceCodeMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return mapStateToProps', () => {
         expect.assertions(1);
-        /* eslint-disable-next-line jsdoc/require-jsdoc, @typescript-eslint/no-empty-function */
-        const closeModalAction = (): void => {};
-        const wrapper = shallow(<App closeModal={closeModalAction}
-                                     showModal={false} />);
+        const state = {showModal: true} as GlobalState;
+        expect(mapStateToProps(state)).toStrictEqual(state);
+    });
 
-        expect(wrapper).toMatchInlineSnapshot('ShallowWrapper {}');
+    it('should return mapDispatchToProps', () => {
+        expect.assertions(2);
+        const dispatchMock = jest.fn();
+        const {closeModal, setInitialSourceCode} = mapDispatchToProps(dispatchMock);
+
+        closeModal();
+        expect(dispatchMock).toHaveBeenCalledTimes(1);
+
+        setInitialSourceCode();
+        expect(dispatchMock).toHaveBeenCalledTimes(3);
     });
 });
