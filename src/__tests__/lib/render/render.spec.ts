@@ -1,4 +1,141 @@
-import {RenderResults, renderResult} from '../../../lib/render';
+import {RenderResults, renderResult, Render} from '../../../lib/render';
+import {ConstantAST, FileRange, BinaryOpAST, BinaryOpeators} from '../../../lib/parser';
+import {buildNotImplementedError} from '../../../lib/render/render';
+
+describe('render', () => {
+    it('should render an ConstantAST', () => {
+        expect.assertions(1);
+        const location = {} as FileRange;
+        const ast = new ConstantAST('AND', location);
+        const renderer = new Render();
+        const config = {
+            featureFlags: {}
+        };
+        expect(renderer.visit(ast, config)).toMatchInlineSnapshot(`
+            Object {
+              "beziers": Array [],
+              "boxes": Array [
+                Array [
+                  Array [
+                    0,
+                    0,
+                  ],
+                  Array [
+                    1,
+                    1,
+                  ],
+                  false,
+                ],
+              ],
+              "curves": Array [],
+              "inputs": Array [
+                Array [
+                  0.1,
+                  0.3333333333333333,
+                ],
+                Array [
+                  0.1,
+                  0.6666666666666666,
+                ],
+              ],
+              "labels": Array [
+                Array [
+                  [Function],
+                  Array [
+                    0.5,
+                    0.5,
+                  ],
+                  2,
+                  1,
+                ],
+              ],
+              "lines": Array [],
+              "outputs": Array [
+                Array [
+                  0.9,
+                  0.5,
+                ],
+              ],
+              "size": Array [
+                1,
+                1,
+              ],
+            }
+        `);
+    });
+
+    it('should render an image its an undefined constant', () => {
+        expect.assertions(1);
+        const location = {} as FileRange;
+        const ast = new ConstantAST('NON-EXISTENT', location);
+        const renderer = new Render();
+        const config = {
+            featureFlags: {}
+        };
+        expect(renderer.visit(ast, config)).toMatchInlineSnapshot(`
+Object {
+  "beziers": Array [],
+  "boxes": Array [
+    Array [
+      Array [
+        0,
+        0,
+      ],
+      Array [
+        1,
+        1,
+      ],
+      false,
+    ],
+  ],
+  "curves": Array [],
+  "inputs": Array [],
+  "labels": Array [
+    Array [
+      [Function],
+      Array [
+        0.5,
+        0.5,
+      ],
+      0,
+      0,
+    ],
+  ],
+  "lines": Array [],
+  "outputs": Array [],
+  "size": Array [
+    1,
+    1,
+  ],
+}
+`);
+    });
+
+    it('should throw not implemented error on non-existent operator', () => {
+        expect.assertions(1);
+        const operator = 'non-existent-operator';
+        const location = {} as FileRange;
+        const ast = new BinaryOpAST(
+            operator as BinaryOpeators,
+            new ConstantAST('AND', location),
+            new ConstantAST('AND', location),
+            location
+        );
+        const renderer = new Render();
+        const config = {
+            featureFlags: {}
+        };
+        expect(() => renderer.visit(ast, config)).toThrow(buildNotImplementedError(operator));
+    });
+
+    it.each([
+        ['visitLet'],
+        ['visitIdentifier']
+    ])('.%s should throw Error', (method) => {
+        const renderer = new Render();
+        expect(() => (renderer as any)[method](null, null)).toThrow(Error);
+    });
+});
 
 describe('renderResult', () => {
     it('should render a render empty RenderResults', () => {
