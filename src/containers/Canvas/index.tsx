@@ -60,9 +60,8 @@ function drawDiagram(
         featureFlags
     });
 
-    const scalingValue = Math.min(canvasHeight, canvasWidth);
-    result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);
-    const START_POSITION = 30;
+    result = scaleRenderResult(result, canvasWidth - 10, canvasHeight - 10);
+    const START_POSITION = 5;
     result = translateRenderResult(result, START_POSITION, START_POSITION);
 
     // Clear canvas

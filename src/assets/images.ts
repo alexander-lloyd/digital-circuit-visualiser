@@ -97,7 +97,7 @@ const images: ImageMap = {
         description: '2 Input XOR Gate. Outputs true if only 1 of the inputs is true. Outputs false if none or all of the inputs are true',
         image: XOR_GATE,
         inputs: [[10, 15], [10, 35]],
-        outputs: [[100, 25]],
+        outputs: [[95, 25]],
         width: 100,
         height: 50
     },
