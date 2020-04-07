@@ -48,5 +48,15 @@ export const EXAMPLES: Examples = {
         name: 'Full Adder',
         description: 'Full Adder',
         source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (AND * XOR) in\n  (ID * adder) . (adder * ID) . (ID * OR)'
+    },
+    SR_NAND_LATCH: {
+        name: 'SR NAND Latch',
+        description: 'Set Reset Latch build using NAND Gates',
+        source: 'let latch = ((ID * SPLIT) * (SPLIT * ID)) . (NAND * CROSS * NAND) . (JOIN * JOIN)\n in latch'
+    },
+    SR_NOR_LATCH: {
+        name: 'SR NOR Latch',
+        description: 'Set Reset Latch build using NAND Gates',
+        source: 'let latch = ((ID * SPLIT) * (SPLIT * ID)) . (NOR * CROSS* NOR) . (JOIN * JOIN)\n in latch'
     }
 };

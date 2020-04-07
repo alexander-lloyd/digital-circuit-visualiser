@@ -4,7 +4,7 @@ import * as AST from '../parser/ast';
 import {images, ImageMetaData} from '../../assets/images';
 import {buildTextImageFunction, buildTextLabelFunction} from './label';
 import {scaleRenderResult, translateRenderResult, scalePoint, translatePoint} from './transform';
-import {RenderResults, Point, LabelFunction, LineEntry, Bezier} from './types';
+import {RenderResults, Point, LabelFunction, Wire} from './types';
 import {getTerminatorPositions} from './draw';
 
 export type Renderer2Context = {
@@ -99,7 +99,7 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
 
         let leftRR = left.visit(this, null);
         let rightRR = right.visit(this, null);
-        let beziers: Bezier[] = [];
+        let wires: Wire[] = [];
         let inputs: Point[];
         let outputs: Point[];
 
@@ -108,9 +108,9 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
             rightRR = scaleRender2Result(rightRR, 0.5, 1);
             rightRR = translateRender2Result(rightRR, 0.5, 0);
 
-            beziers = rightRR.inputs.map(([ox, oy]: Point, i: number) => {
+            wires = rightRR.inputs.map(([ox, oy]: Point, i: number) => {
                 const [ix, iy] = leftRR.outputs[i];
-                return [[ox, oy], [ix, iy], [ox-0.1, oy], [ix+0.1, iy]];
+                return [[ox, oy], [ix, iy], [ox - 0.1, oy], [ix + 0.1, iy]];
             });
             ({inputs} = leftRR);
             ({outputs} = rightRR);
@@ -127,7 +127,7 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
         console.log(`On Operator ${operator} got ${inputs.length} inputs and ${outputs.length} outputs`);
 
         return {
-            beziers: [...beziers, ...leftRR.beziers, ...rightRR.beziers],
+            beziers: [...wires, ...leftRR.beziers, ...rightRR.beziers],
             lines: [...leftRR.lines, ...rightRR.lines],
             boxes: [...leftRR.boxes, ...rightRR.boxes],
             labels: [...leftRR.labels, ...rightRR.labels],
