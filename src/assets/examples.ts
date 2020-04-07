@@ -66,6 +66,6 @@ export const EXAMPLES: Examples = {
     SR_AND_OR_LATCH: {
         name: 'SR AND-OR Latch',
         description: 'Set Reset Latch built using AND and OR gates',
-        source: 'let latch = (TEST * ID * ID) . (feedback ((OR * NOT) . AND) . ID) in latch'
+        source: 'let latch = (STUB * ID * ID) . (feedback ((OR * NOT) . AND) . ID) in latch'
     }
 };

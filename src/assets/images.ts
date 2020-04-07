@@ -11,6 +11,7 @@ import XOR_GATE from './images/XOR-Gate.svg';
 import XNOR_GATE from './images/XNOR-Gate.svg';
 import ID from './images/ID.svg';
 import CROSS from './images/CROSS.svg';
+import STUB from './images/STUB.svg';
 
 type Point = [number, number];
 
@@ -128,10 +129,10 @@ const images: ImageMap = {
         width: 100,
         height: 100
     },
-    TEST: {
-        name: 'ID',
-        description: 'A point.',
-        image: ID,
+    STUB: {
+        name: 'STUB',
+        description: 'Stub an input.',
+        image: STUB,
         inputs: [],
         outputs: [[100, 50]],
         width: 100,
