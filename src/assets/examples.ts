@@ -55,12 +55,17 @@ export const EXAMPLES: Examples = {
     },
     SR_NAND_LATCH: {
         name: 'SR NAND Latch',
-        description: 'Set Reset Latch build using NAND Gates',
+        description: 'Set Reset Latch build using NAND gates',
         source: 'let latch = ((ID * SPLIT) * (SPLIT * ID)) . (NAND * CROSS * NAND) . (JOIN * JOIN)\n in latch'
     },
     SR_NOR_LATCH: {
         name: 'SR NOR Latch',
-        description: 'Set Reset Latch build using NAND Gates',
+        description: 'Set Reset Latch built using NAND gates',
         source: 'let latch = ((ID * SPLIT) * (SPLIT * ID)) . (NOR * CROSS* NOR) . (JOIN * JOIN)\n in latch'
+    },
+    SR_AND_OR_LATCH: {
+        name: 'SR AND-OR Latch',
+        description: 'Set Reset Latch built using AND and OR gates',
+        source: 'let latch = (TEST * ID * ID) . (feedback ((OR * NOT) . AND) . ID) in latch'
     }
 };
