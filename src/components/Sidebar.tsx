@@ -9,6 +9,7 @@ import * as actions from '../containers/App/actions';
 import {GlobalState, DispatchFunction} from '../containers/App/types';
 
 import {EXAMPLES} from '../assets/examples';
+import {FEATURES} from '../assets/features';
 
 const exampleCode = 'let x = AND tensor OR;';
 
@@ -69,7 +70,7 @@ function Sidebar(props: ComponentProps): JSX.Element {
                 { errorReason }
             </div>
             <p className="menu-label is-size-5">Flags</p>
-            <FeatureFlags />
+            <FeatureFlags features={FEATURES} />
             <p className="menu-label is-size-5">Examples</p>
             <ExamplesList examples={EXAMPLES} />
         </aside>
