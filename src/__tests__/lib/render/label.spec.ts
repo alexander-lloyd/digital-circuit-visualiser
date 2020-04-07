@@ -75,10 +75,12 @@ Array [
 
 describe('image label', () => {
     it('should create a image label', () => {
-        expect.assertions(1);
+        expect.assertions(3);
 
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+        const drawImageSpy = jest.spyOn(ctx, 'drawImage').mockImplementation();
 
         // Mock the Image class.
         // eslint-disable-next-line no-multi-assign, jest/prefer-spy-on
@@ -88,6 +90,7 @@ describe('image label', () => {
 
         const metadata: ImageMetaData = {
             name: 'Mock Gate',
+            description: '',
             height: 100,
             width: 100,
             image: './does-not-exist.svg',
@@ -96,12 +99,258 @@ describe('image label', () => {
         };
         const label = buildTextImageFunction(metadata);
 
-        label(10, 10, 200, 200, ctx);
+        const imageLoadFn = (label(10, 10, 200, 200, ctx) as unknown) as Function;
 
         expect(imageMock).toHaveBeenCalledTimes(1);
-        const [mockImage] = imageMock.mock.instances as HTMLImageElement[];
 
-        const onload = mockImage.onload as () => void;
-        // TODO: onload();
+        imageLoadFn();
+        expect(ctx.__getEvents()).toMatchInlineSnapshot('Array []');
+        expect(drawImageSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should create a image label with inputs and outputs', () => {
+        expect.assertions(3);
+
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+        const drawImageSpy = jest.spyOn(ctx, 'drawImage').mockImplementation();
+
+        // Mock the Image class.
+        // eslint-disable-next-line no-multi-assign, jest/prefer-spy-on
+        const imageMock = jest.fn();
+        window.Image = imageMock;
+        imageMock.mockImplementation();
+
+        const metadata: ImageMetaData = {
+            name: 'Mock Gate',
+            description: '',
+            height: 100,
+            width: 100,
+            image: './does-not-exist.svg',
+            inputs: [
+                [0, 0],
+                [0, 100]
+            ],
+            outputs: [[100, 50]]
+        };
+        const label = buildTextImageFunction(metadata);
+
+        const imageLoadFn = (label(10, 10, 200, 200, ctx) as unknown) as Function;
+
+        expect(imageMock).toHaveBeenCalledTimes(1);
+
+        imageLoadFn();
+        expect(ctx.__getEvents()).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "props": Object {},
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "beginPath",
+  },
+  Object {
+    "props": Object {
+      "x": -30,
+      "y": 3.333333333333332,
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "moveTo",
+  },
+  Object {
+    "props": Object {
+      "path": Array [
+        Object {
+          "props": Object {},
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "beginPath",
+        },
+        Object {
+          "props": Object {
+            "x": -30,
+            "y": 3.333333333333332,
+          },
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "moveTo",
+        },
+      ],
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "stroke",
+  },
+  Object {
+    "props": Object {},
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "beginPath",
+  },
+  Object {
+    "props": Object {
+      "x": -30,
+      "y": 16.666666666666664,
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "moveTo",
+  },
+  Object {
+    "props": Object {
+      "path": Array [
+        Object {
+          "props": Object {},
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "beginPath",
+        },
+        Object {
+          "props": Object {
+            "x": -30,
+            "y": 16.666666666666664,
+          },
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "moveTo",
+        },
+      ],
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "stroke",
+  },
+  Object {
+    "props": Object {},
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "beginPath",
+  },
+  Object {
+    "props": Object {
+      "x": 50,
+      "y": 10,
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "lineTo",
+  },
+  Object {
+    "props": Object {
+      "path": Array [
+        Object {
+          "props": Object {},
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "beginPath",
+        },
+        Object {
+          "props": Object {
+            "x": 50,
+            "y": 10,
+          },
+          "transform": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+          ],
+          "type": "lineTo",
+        },
+      ],
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "stroke",
+  },
+]
+`);
+        expect(drawImageSpy).toHaveBeenCalledTimes(1);
     });
 });

@@ -40,10 +40,12 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
     const image = new Image();
     image.src = imageSrc;
 
-    return (x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D): void => {
-        image.onload = (): void => {
+    return (x: number, y: number, width: number, height: number, ctx: CanvasRenderingContext2D): unknown => {
+        /**
+         * Image Callback
+         */
+        const callback = (): void => {
             const oldHeight = image.height;
-            const oldWidth = image.width;
             const ratio = image.width / image.height;
             image.height = 40;
             image.width = ratio * image.height;
@@ -76,5 +78,9 @@ export function buildTextImageFunction(imageMetaData: ImageMetaData): LabelFunct
                 renderLineEntry(ctx, [[x1, y1], [x2, y2]]);
             });
         };
+        image.onload = callback;
+
+        // Used for testing. So we can test the code inside of the callback.
+        return callback;
     };
 }
