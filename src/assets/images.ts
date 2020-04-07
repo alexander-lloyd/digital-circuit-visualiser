@@ -106,7 +106,7 @@ const images: ImageMap = {
         description: '2 Input XNOR Gate. Outputs true if either all of none of the outputs are true.',
         image: XNOR_GATE,
         inputs: [[10, 15], [10, 35]],
-        outputs: [[100, 25]],
+        outputs: [[95, 25]],
         width: 100,
         height: 50
     },
@@ -125,6 +125,15 @@ const images: ImageMap = {
         image: CROSS,
         inputs: [[0, 0], [0, 100]],
         outputs: [[100, 0], [100, 100]],
+        width: 100,
+        height: 100
+    },
+    TEST: {
+        name: 'ID',
+        description: 'A point.',
+        image: ID,
+        inputs: [],
+        outputs: [[100, 50]],
         width: 100,
         height: 100
     }
