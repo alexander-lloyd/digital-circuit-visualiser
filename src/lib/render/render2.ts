@@ -4,7 +4,7 @@ import * as AST from '../parser/ast';
 import {images, ImageMetaData} from '../../assets/images';
 import {buildTextImageFunction, buildTextLabelFunction} from './label';
 import {scaleRenderResult, translateRenderResult, scalePoint, translatePoint} from './transform';
-import {RenderResults, Point, LabelFunction, LineEntry} from './types';
+import {RenderResults, Point, LabelFunction, LineEntry, Bezier} from './types';
 import {getTerminatorPositions} from './draw';
 
 export type Renderer2Context = {
@@ -99,7 +99,7 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
 
         let leftRR = left.visit(this, null);
         let rightRR = right.visit(this, null);
-        let wires: LineEntry[];
+        let beziers: Bezier[] = [];
         let inputs: Point[];
         let outputs: Point[];
 
@@ -108,9 +108,9 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
             rightRR = scaleRender2Result(rightRR, 0.5, 1);
             rightRR = translateRender2Result(rightRR, 0.5, 0);
 
-            wires = rightRR.inputs.map(([ox, oy]: Point, i: number) => {
+            beziers = rightRR.inputs.map(([ox, oy]: Point, i: number) => {
                 const [ix, iy] = leftRR.outputs[i];
-                return [[ox, oy], [ix, iy]];
+                return [[ox, oy], [ix, iy], [ox-0.1, oy], [ix+0.1, iy]];
             });
             ({inputs} = leftRR);
             ({outputs} = rightRR);
@@ -118,7 +118,6 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
             leftRR = scaleRender2Result(leftRR, 1, 0.5);
             rightRR = scaleRender2Result(rightRR, 1, 0.5);
             rightRR = translateRender2Result(rightRR, 0, 0.5);
-            wires = [];
             inputs = [...leftRR.inputs, ...rightRR.inputs];
             outputs = [...leftRR.outputs, ...rightRR.outputs];
         } else {
@@ -128,8 +127,8 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
         console.log(`On Operator ${operator} got ${inputs.length} inputs and ${outputs.length} outputs`);
 
         return {
-            beziers: [...leftRR.beziers, ...rightRR.beziers],
-            lines: [...wires, ...leftRR.lines, ...rightRR.lines],
+            beziers: [...beziers, ...leftRR.beziers, ...rightRR.beziers],
+            lines: [...leftRR.lines, ...rightRR.lines],
             boxes: [...leftRR.boxes, ...rightRR.boxes],
             labels: [...leftRR.labels, ...rightRR.labels],
             curves: [...leftRR.curves, ...rightRR.curves],
