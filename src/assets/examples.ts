@@ -42,12 +42,21 @@ export const EXAMPLES: Examples = {
     HALF_ADDER: {
         name: 'Half Adder',
         description: 'Half Adder',
-        source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (AND * XOR) in adder'
+        source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (XOR * AND) in adder'
     },
     FULL_ADDER: {
         name: 'Full Adder',
         description: 'Full Adder',
-        source: 'let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (AND * XOR) in\n  (ID * adder) . (adder * ID) . (ID * OR)'
+        source: `let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (XOR * AND) in
+  let fulladder = (ID * adder) . (adder * ID) . (ID * OR)
+    in fulladder`
+    },
+    TWO_BIT_ADDER: {
+        name: '2 Bit Adder',
+        description: 'Add two bit integers together',
+        source: `let adder = (SPLIT * SPLIT) . (ID * CROSS * ID) . (XOR * AND) in
+  let fulladder = (ID * adder) . (adder * ID) . (ID * OR)
+    in (adder* ID * ID) . (ID * fulladder)`
     },
     SR_NAND_LATCH: {
         name: 'SR NAND Latch',
