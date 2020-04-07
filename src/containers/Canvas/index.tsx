@@ -11,7 +11,8 @@ import {
     EntityRendererVisitor,
     renderResult,
     scaleRenderResult,
-    translateRenderResult
+    translateRenderResult,
+    RenderResults
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
 import {Render2} from '../../lib/render/render2';
@@ -68,7 +69,7 @@ function drawDiagram(
     // };
     // let result = entityRenderer.visit(entityTree, entityRendererConfig);
     const renderer2 = new Render2();
-    let result = renderer2.visit(ast, null);
+    let result = renderer2.visit(ast, null) as RenderResults;
 
     const scalingValue = Math.min(canvasHeight, canvasWidth);
     result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);

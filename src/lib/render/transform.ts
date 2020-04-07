@@ -15,7 +15,7 @@ import {
  * @param scaleY Y Scaling.
  * @returns Scaled point.
  */
-function scalePoint([x, y]: Point, scaleX: number, scaleY: number): Point {
+export function scalePoint([x, y]: Point, scaleX: number, scaleY: number): Point {
     return [x * scaleX, y * scaleY];
 }
 
@@ -27,7 +27,7 @@ function scalePoint([x, y]: Point, scaleX: number, scaleY: number): Point {
  * @param translateY Y Translation.
  * @returns Translated point.
  */
-function translatePoint([x, y]: Point, translateX: number, translateY: number): Point {
+export function translatePoint([x, y]: Point, translateX: number, translateY: number): Point {
     return [x + translateX, y + translateY];
 }
 

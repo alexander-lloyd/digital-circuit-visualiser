@@ -110,7 +110,6 @@ describe('render graph', () => {
         it('should return render result for grouped entity', () => {
             expect.assertions(1);
 
-            expect.assertions(1);
             const label = buildTextLabelFunction('ABC');
             const wires: Wire[] = [];
             const lentity = new FunctionEntity(-0.5, 0, 0.5, 1, label, wires, [], []);
