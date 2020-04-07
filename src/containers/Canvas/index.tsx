@@ -7,8 +7,6 @@ import * as actions from '../App/actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
-    ASTRenderer,
-    EntityRendererVisitor,
     renderResult,
     scaleRenderResult,
     translateRenderResult,
