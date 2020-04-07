@@ -106,8 +106,6 @@ export class Render2 extends ASTVisitor<RendererContext, RenderResults> {
             throw buildNotImplementedError(operator);
         }
 
-        console.log(`On Operator ${operator} got ${inputs.length} inputs and ${outputs.length} outputs`);
-
         return {
             beziers: [...wires, ...leftRR.beziers, ...rightRR.beziers],
             lines: [...leftRR.lines, ...rightRR.lines],
