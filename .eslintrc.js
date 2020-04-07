@@ -145,6 +145,8 @@ module.exports = {
         "@typescript-eslint/no-empty-function": "off",
         "react/jsx-closing-tag-location": "off",
         "jsdoc/require-jsdoc": "off",
+        "max-lines-per-function": ["error", 2000],
+        "max-lines": ["error", 2000],
         "no-magic-numbers": "off"
       }
     }
