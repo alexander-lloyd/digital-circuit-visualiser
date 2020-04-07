@@ -120,7 +120,7 @@ export class Render extends ASTVisitor<RendererContext, RenderResults> {
             inputs = [...leftRR.inputs, ...rightRR.inputs];
             outputs = [...leftRR.outputs, ...rightRR.outputs];
         } else {
-            throw buildNotImplementedError(operator);
+            throw new NotImplementedError(buildNotImplementedError(operator));
         }
 
         return {
@@ -139,9 +139,46 @@ export class Render extends ASTVisitor<RendererContext, RenderResults> {
      * Process a Unary Operator.
      *
      * @param ast Unary Operator AST.
+     * @param context Render Context.
+     * @returns Render Result.
      */
-    public visitUnaryOperator(ast: AST.UnaryOpAST): RenderResults {
-        throw new Error('Method not implemented.');
+    public visitUnaryOperator(ast: AST.UnaryOpAST, context: RendererContext): RenderResults {
+        const {operator} = ast;
+        const childrr = ast.child.visit(this, context);
+
+        // Feedback Constants.
+        const wireTopY = 0.1;
+        const bezierControl = 0.2;
+        const bezierTopXOffset = 0.2;
+
+        if (operator === 'feedback') {
+            if (childrr.inputs.length > 0 && childrr.outputs.length > 0) {
+                const [[ix, iy]] = childrr.inputs;
+                const [[ox, oy]] = childrr.outputs;
+
+                const wires: Wire[] = [
+                    [[ix, iy], [ix + bezierTopXOffset, wireTopY], [ix - bezierControl, iy], [ix, wireTopY]],
+                    [
+                        [ix + bezierTopXOffset, wireTopY],
+                        [ox - bezierTopXOffset, wireTopY],
+                        [ix + bezierTopXOffset, wireTopY],
+                        [ox - bezierTopXOffset, wireTopY]
+                    ],
+                    [
+                        [ox - bezierTopXOffset, wireTopY],
+                        [ox, oy],
+                        [ox - bezierTopXOffset + bezierControl, wireTopY],
+                        [ox + bezierControl, oy]
+                    ]
+                ];
+
+                childrr.beziers.push(...wires);
+            }
+        } else {
+            throw new NotImplementedError(buildNotImplementedError(operator));
+        }
+
+        return childrr;
     }
 
     /**
