@@ -107,6 +107,10 @@ export class Render extends ASTVisitor<RendererContext, RenderResults> {
             rightRR = scaleRenderResult(rightRR, 0.5, 1);
             rightRR = translateRenderResult(rightRR, 0.5, 0);
 
+            if (rightRR.inputs.length < leftRR.outputs.length) {
+                throw new Error('Output count does not match input count');
+            }
+
             wires = rightRR.inputs.map(([ox, oy]: Point, i: number) => {
                 const [ix, iy] = leftRR.outputs[i];
                 return [[ox, oy], [ix, iy], [ox - 0.1, oy], [ix + 0.1, iy]];

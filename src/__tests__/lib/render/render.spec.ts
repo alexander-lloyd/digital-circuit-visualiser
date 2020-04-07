@@ -1,6 +1,7 @@
 import {RenderResults, renderResult, Render} from '../../../lib/render';
-import {ConstantAST, FileRange, BinaryOpAST, BinaryOpeators} from '../../../lib/parser';
+import {ConstantAST, FileRange, BinaryOpAST, BinaryOpeators, UnaryOpAST, UnaryOperators} from '../../../lib/parser';
 import {buildNotImplementedError} from '../../../lib/render/render';
+import FeatureFlag from 'components/FeatureFlag';
 
 describe('render', () => {
     it('should render an ConstantAST', () => {
@@ -1201,5 +1202,54 @@ Array [
   },
 ]
 `);
+    });
+
+    it('should throw error if inputs do not equal outputs', () => {
+      expect.assertions(1);
+      const location = {} as FileRange;
+      const ast = new BinaryOpAST(
+        'compose',
+        new ConstantAST('SPLIT', location),
+        new ConstantAST('ID', location),
+        location
+      );
+
+      const renderer = new Render();
+      const context = {
+        featureFlags: {}
+      };
+      expect(() => renderer.visit(ast, context)).toThrowError();
+    });
+
+    it('should not draw feedback on unknown inputs and outputs', () => {
+        expect.assertions(1);
+        const location = {} as FileRange;
+        const ast = new UnaryOpAST(
+            'feedback',
+            new ConstantAST('UNKNOWN', location),
+            location
+        );
+        const renderer = new Render();
+        const context = {
+            featureFlags: {}
+        };
+        const rr = renderer.visit(ast, context);
+        expect(rr.beziers).toStrictEqual([]);
+    });
+
+    it('should throw error on unknown operator', () => {
+        expect.assertions(1);
+        const operator = 'unknown unary op' as unknown as UnaryOperators;
+        const location = {} as FileRange;
+        const ast = new UnaryOpAST(
+            operator,
+            new ConstantAST('UNKNOWN', location),
+            location
+        );
+        const renderer = new Render();
+        const context = {
+            featureFlags: {}
+        };
+        expect(() => renderer.visit(ast, context)).toThrow(buildNotImplementedError(operator));
     });
 });
