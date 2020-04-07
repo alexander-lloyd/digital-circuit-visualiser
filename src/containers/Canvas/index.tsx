@@ -23,7 +23,7 @@ import {AST} from '../../lib/parser/index';
  *
  * @param canvas Html Canvas Element.
  */
-function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
+export function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
     // Make it fit the parent.
     canvas.style.height = '100%';
     canvas.style.width = '100%';
@@ -44,7 +44,7 @@ function fitCanvasToContainer(canvas: HTMLCanvasElement): void {
  * @param offsetPosition Canvas Offset.
  * @param featureFlags Feature Flags. E.g. Should the squares around functions be rendered?
  */
-function drawDiagram(
+export function drawDiagram(
     ast: AST,
     ctx: CanvasRenderingContext2D,
     canvasWidth: number,
@@ -82,7 +82,7 @@ function drawDiagram(
  * @param canvas Canvas Element.
  * @param downloadLink Anchor Tag used to download canvas.
  */
-function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchorElement): void {
+export function downloadCanvasImage(canvas: HTMLCanvasElement, downloadLink: HTMLAnchorElement): void {
     const image = canvas.toDataURL('image/png').
         replace('image/png', 'image/octet-stream');
     downloadLink.setAttribute('download', 'canvas.png');
@@ -121,7 +121,7 @@ interface CanvasProps extends CanvasState, CanvasDispatchProps {}
  * @param props Component Propeties.
  * @returns React Component.
  */
-function Canvas(props: CanvasProps): JSX.Element {
+export function Canvas(props: CanvasProps): JSX.Element {
     const {
         ast,
         scale,
@@ -255,7 +255,7 @@ function Canvas(props: CanvasProps): JSX.Element {
  * @param state Canvas State.
  * @returns Component Props.
  */
-function mapStateToProps(state: GlobalState): CanvasState {
+export function mapStateToProps(state: GlobalState): CanvasState {
     const {ast, scale, download: {loading}, featureFlags} = state;
     return {
         ast,
