@@ -56,7 +56,9 @@ function drawDiagram(
     featureFlags: { [featureId: string]: boolean}
 ): void {
     const renderer2 = new Render2();
-    let result = renderer2.visit(ast, null) as RenderResults;
+    let result = renderer2.visit(ast, {
+        featureFlags
+    });
 
     const scalingValue = Math.min(canvasHeight, canvasWidth);
     result = scaleRenderResult(result, scalingValue / 2, scalingValue / 2);

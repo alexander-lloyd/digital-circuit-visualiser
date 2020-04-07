@@ -8,6 +8,10 @@ import {RenderResults, Point, LabelFunction, Wire} from './types';
 import {getTerminatorPositions} from './draw';
 import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
+export type RendererContext = {
+    featureFlags: { [flag: string]: boolean};
+};
+
 /**
  * Build error message.
  *
@@ -27,14 +31,14 @@ export class NotImplementedError extends Error {}
 /**
  * New Renderer.
  */
-export class Render2 extends ASTVisitor<null, RenderResults> {
+export class Render2 extends ASTVisitor<RendererContext, RenderResults> {
     /**
      * Visit an Constant.
      *
      * @param ast Identifier AST Node.
      * @returns Render results.
      */
-    public visitConstant(ast: AST.ConstantAST): RenderResults {
+    public visitConstant(ast: AST.ConstantAST, context: RendererContext): RenderResults {
         const {name} = ast;
         const imageMetaData: ImageMetaData | undefined = images[name];
         let inputs: Point[];
@@ -52,9 +56,11 @@ export class Render2 extends ASTVisitor<null, RenderResults> {
             label = buildTextImageFunction(imageMetaData);
         }
 
+        const shouldRenderSquare = context.featureFlags[RENDER_UNIT_SQUARE] || false;
+
         return {
             lines: [],
-            boxes: [[[0, 0], [1, 1], true]],
+            boxes: [[[0, 0], [1, 1], shouldRenderSquare]],
             labels: [[label, [0.5, 0.5], inputs.length, outputs.length]],
             curves: [],
             size: [1, 1],
@@ -70,11 +76,11 @@ export class Render2 extends ASTVisitor<null, RenderResults> {
      * @param ast Identifier AST Node.
      * @returns Render results.
      */
-    public visitBinaryOperator(ast: AST.BinaryOpAST): RenderResults {
+    public visitBinaryOperator(ast: AST.BinaryOpAST, context: RendererContext): RenderResults {
         const {operator, left, right} = ast;
 
-        let leftRR = left.visit(this, null);
-        let rightRR = right.visit(this, null);
+        let leftRR = left.visit(this, context);
+        let rightRR = right.visit(this, context);
         let wires: Wire[] = [];
         let inputs: Point[];
         let outputs: Point[];
@@ -97,7 +103,7 @@ export class Render2 extends ASTVisitor<null, RenderResults> {
             inputs = [...leftRR.inputs, ...rightRR.inputs];
             outputs = [...leftRR.outputs, ...rightRR.outputs];
         } else {
-            throw new Error(`Unknown operator ${operator}`);
+            throw buildNotImplementedError(operator);
         }
 
         console.log(`On Operator ${operator} got ${inputs.length} inputs and ${outputs.length} outputs`);
