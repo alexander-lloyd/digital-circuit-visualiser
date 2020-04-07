@@ -100,6 +100,8 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
         let leftRR = left.visit(this, null);
         let rightRR = right.visit(this, null);
         let wires: LineEntry[];
+        let inputs: Point[];
+        let outputs: Point[];
 
         if (operator === 'compose') {
             leftRR = scaleRender2Result(leftRR, 0.5, 1);
@@ -110,14 +112,20 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
                 const [ix, iy] = leftRR.outputs[i];
                 return [[ox, oy], [ix, iy]];
             });
+            ({inputs} = leftRR);
+            ({outputs} = rightRR);
         } else if (operator === 'tensor') {
             leftRR = scaleRender2Result(leftRR, 1, 0.5);
             rightRR = scaleRender2Result(rightRR, 1, 0.5);
             rightRR = translateRender2Result(rightRR, 0, 0.5);
             wires = [];
+            inputs = [...leftRR.inputs, ...rightRR.inputs];
+            outputs = [...leftRR.outputs, ...rightRR.outputs];
         } else {
             throw new Error(`Unknown operator ${operator}`);
         }
+
+        console.log(`On Operator ${operator} got ${inputs.length} inputs and ${outputs.length} outputs`);
 
         return {
             beziers: [...leftRR.beziers, ...rightRR.beziers],
@@ -126,8 +134,8 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
             labels: [...leftRR.labels, ...rightRR.labels],
             curves: [...leftRR.curves, ...rightRR.curves],
             size: [1, 1],
-            inputs: [],
-            outputs: []
+            inputs,
+            outputs
         };
     }
 
