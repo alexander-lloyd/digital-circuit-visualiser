@@ -71,7 +71,7 @@ export function App({showModal, closeModal, setInitialSourceCode}: AppProps): JS
  *
  * @returns Component Props.
  */
-function mapStateToProps({showModal}: GlobalState): AppState {
+export function mapStateToProps({showModal}: GlobalState): AppState {
     return {
         showModal
     };
@@ -83,7 +83,7 @@ function mapStateToProps({showModal}: GlobalState): AppState {
  * @param dispatch Action dispatcher.
  * @returns Props.
  */
-function mapDispatchToProps(dispatch: DispatchFunction): AppDispatchProps {
+export function mapDispatchToProps(dispatch: DispatchFunction): AppDispatchProps {
     const {modalHideAction, setSourceCode} = actions;
     return {
         closeModal: (): void => dispatch(modalHideAction()),

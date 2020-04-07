@@ -35,6 +35,7 @@ export default function FeatureFlag({checked, feature, onChecked, onUnchecked}: 
     return (
         <label className="checkbox">
             <input checked={checked}
+                   data-testid="feature-checkbox"
                    onChange={onChange}
                    type="checkbox" />
             {feature}
