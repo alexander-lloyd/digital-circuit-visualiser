@@ -7,11 +7,11 @@ import * as actions from '../App/actions';
 import CanvasButtonGroup from './CanvasButtonGroup';
 import {GlobalState} from '../App/types';
 import {
+    Render,
     renderResult,
     scaleRenderResult
 } from '../../lib/render/index';
 import {AST} from '../../lib/parser/index';
-import {Render2} from '../../lib/render/render2';
 
 /**
  * As a workaround for not being able to set height and width to 100%.
@@ -53,7 +53,7 @@ function drawDiagram(
     offsetPosition: [number, number],
     featureFlags: { [featureId: string]: boolean}
 ): void {
-    const renderer2 = new Render2();
+    const renderer2 = new Render();
     let result = renderer2.visit(ast, {
         featureFlags
     });

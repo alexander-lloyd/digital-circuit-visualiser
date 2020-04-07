@@ -6,10 +6,12 @@ import {
     translateRenderResult
 } from './transform';
 import {
-    renderResult
+    renderResult,
+    Render
 } from './render';
 
 export {
+    Render,
     RenderResults,
     renderResult,
     scaleRenderResult,
