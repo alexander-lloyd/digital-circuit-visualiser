@@ -29,4 +29,7 @@ export type RenderResults = {
     size: [number, number];
 
     beziers: Bezier[];
+
+    inputs: Point[];
+    outputs: Point[];
 };

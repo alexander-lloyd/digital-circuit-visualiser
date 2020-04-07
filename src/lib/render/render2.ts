@@ -3,62 +3,38 @@ import {ASTVisitor} from '../parser';
 import * as AST from '../parser/ast';
 import {images, ImageMetaData} from '../../assets/images';
 import {buildTextImageFunction, buildTextLabelFunction} from './label';
-import {scaleRenderResult, translateRenderResult, scalePoint, translatePoint} from './transform';
+import {scaleRenderResult, translateRenderResult} from './transform';
 import {RenderResults, Point, LabelFunction, Wire} from './types';
 import {getTerminatorPositions} from './draw';
-
-export type Renderer2Context = {
-    inputs: Point[];
-    outputs: Point[];
-};
-
-type Renderer2Result = RenderResults & Renderer2Context;
+import {RENDER_UNIT_SQUARE} from '../../assets/features';
 
 /**
- * Scale an internal render2result.
+ * Build error message.
  *
- * @param result internal render result with inputs and outputs.
- * @param scaleX X scaling.
- * @param scaleY Y scaling.
- * @returns New render2 result.
+ * @param operator Operator not implemented.
+ * @returns Error message.
  */
-function scaleRender2Result(result: Renderer2Result, scaleX: number, scaleY: number): Renderer2Result {
-    const renderResult = scaleRenderResult(result, scaleX, scaleY) as Renderer2Result;
-
-    renderResult.inputs = result.inputs.map((p: Point) => scalePoint(p, scaleX, scaleY));
-    renderResult.outputs = result.outputs.map((p: Point) => scalePoint(p, scaleX, scaleY));
-
-    return renderResult;
+export function buildNotImplementedError(operator: string): string {
+    return `Operator '${operator}' is not implemented`;
 }
 
 /**
- * Translate an internal render2result.
- *
- * @param result internal render result with inputs and outputs.
- * @param translateX X translation.
- * @param translateY Y translation.
- * @returns New render2 result.
+ * Not Implemented Error.
  */
-function translateRender2Result(result: Renderer2Result, translateX: number, translateY: number): Renderer2Result {
-    const renderResult = translateRenderResult(result, translateX, translateY) as Renderer2Result;
+export class NotImplementedError extends Error {}
 
-    renderResult.inputs = result.inputs.map((p: Point) => translatePoint(p, translateX, translateY));
-    renderResult.outputs = result.outputs.map((p: Point) => translatePoint(p, translateX, translateY));
-
-    return renderResult;
-}
 
 /**
  * New Renderer.
  */
-export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> {
+export class Render2 extends ASTVisitor<null, RenderResults> {
     /**
      * Visit an Constant.
      *
      * @param ast Identifier AST Node.
      * @returns Render results.
      */
-    public visitConstant(ast: AST.ConstantAST): Renderer2Result {
+    public visitConstant(ast: AST.ConstantAST): RenderResults {
         const {name} = ast;
         const imageMetaData: ImageMetaData | undefined = images[name];
         let inputs: Point[];
@@ -94,7 +70,7 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
      * @param ast Identifier AST Node.
      * @returns Render results.
      */
-    public visitBinaryOperator(ast: AST.BinaryOpAST): Renderer2Result {
+    public visitBinaryOperator(ast: AST.BinaryOpAST): RenderResults {
         const {operator, left, right} = ast;
 
         let leftRR = left.visit(this, null);
@@ -104,9 +80,9 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
         let outputs: Point[];
 
         if (operator === 'compose') {
-            leftRR = scaleRender2Result(leftRR, 0.5, 1);
-            rightRR = scaleRender2Result(rightRR, 0.5, 1);
-            rightRR = translateRender2Result(rightRR, 0.5, 0);
+            leftRR = scaleRenderResult(leftRR, 0.5, 1);
+            rightRR = scaleRenderResult(rightRR, 0.5, 1);
+            rightRR = translateRenderResult(rightRR, 0.5, 0);
 
             wires = rightRR.inputs.map(([ox, oy]: Point, i: number) => {
                 const [ix, iy] = leftRR.outputs[i];
@@ -115,9 +91,9 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
             ({inputs} = leftRR);
             ({outputs} = rightRR);
         } else if (operator === 'tensor') {
-            leftRR = scaleRender2Result(leftRR, 1, 0.5);
-            rightRR = scaleRender2Result(rightRR, 1, 0.5);
-            rightRR = translateRender2Result(rightRR, 0, 0.5);
+            leftRR = scaleRenderResult(leftRR, 1, 0.5);
+            rightRR = scaleRenderResult(rightRR, 1, 0.5);
+            rightRR = translateRenderResult(rightRR, 0, 0.5);
             inputs = [...leftRR.inputs, ...rightRR.inputs];
             outputs = [...leftRR.outputs, ...rightRR.outputs];
         } else {
@@ -143,7 +119,7 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
      *
      * @param ast Unary Operator AST.
      */
-    public visitUnaryOperator(ast: AST.UnaryOpAST): RenderResults & Renderer2Context {
+    public visitUnaryOperator(ast: AST.UnaryOpAST): RenderResults {
         throw new Error('Method not implemented.');
     }
 
@@ -152,7 +128,7 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
      *
      * @throws Method should never get called.
      */
-    public visitLet(): RenderResults & Renderer2Context {
+    public visitLet(): RenderResults {
         throw new Error('Method not implemented.');
     }
 
@@ -161,7 +137,7 @@ export class Render2 extends ASTVisitor<null, RenderResults & Renderer2Context> 
      *
      * @throws Method should never get called.
      */
-    public visitIdentifier(): RenderResults & Renderer2Context {
+    public visitIdentifier(): RenderResults {
         throw new Error('Method not implemented.');
     }
 }
