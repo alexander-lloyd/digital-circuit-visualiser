@@ -1,0 +1,89 @@
+# Digital Circuit Visualiser
+
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+* [Usage](#usage)
+* [Tests](#tests)
+* [Contact](#contact)
+
+### About the Project
+
+This project is a circuit visualiser that uses a structural based
+approach (similar to monoidal categories) to represent circuit.
+The advantages of this are that structure in the algebraic form
+is preserved into the visualisation. New optimisation
+techniques are possible with monoidal categories.
+
+This project includes a custom programming language similar to the
+algebraic representation of monoidal categories and then visualises
+them.
+
+#### Technologies
+
+* [TypeScript](https://typescriptlang.org/)
+* [React](https://reactjs.org/)
+* [Webpack](https://webpack.js.org/)
+* [SASS](https://sass-lang.com/)
+
+### Prerequisites
+
+* nodejs: Follow the instructions on the [NodeJS website](https://nodejs.org/)
+* yarn package manager (`npm install -g yarn`). [Yarn Website](https://yarnpkg.com/)
+
+
+### Installation
+
+To get started, clone the repository and then install dependencies.
+
+```sh
+$ git clone git@github.com:alexander-lloyd/digital-circuit-visualiser.git
+$ yarn install
+```
+
+## Usage
+
+```sh
+$ yarn start
+```
+
+To run with the Webpack development server run `yarn start` and view
+in the browser at http://localhost:8000. Running in this environment
+provides hot reloading support; edit and save the file, and the
+browser will automatically refresh.
+
+To use a port other than 8000 set the `PORT` environment variable 
+(`PORT=8080 yarn start`).
+
+## Building
+
+To build and bundle the application run:
+
+```sh
+$ yarn build
+```
+
+After you see the Webpack compilation succeed (the `yarn build`
+step), open up `build/index.html` in your browser.
+
+## Tests
+
+Run all of the unit tests with:
+
+```sh
+$ yarn test
+```
+
+## Build for Production
+
+```sh
+$ yarn clean
+$ yarn build:production
+```
+
+This step will replace the development artifact `build/index.js` for an optimised version as well as copy `src/index.html` into `build/`. 
+You can then deploy the contents of the `build` directory.
