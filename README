@@ -23,6 +23,9 @@ This project includes a custom programming language similar to the
 algebraic representation of monoidal categories and then visualises
 them.
 
+The best way to try out the application is at: 
+https://alexander-lloyd.github.io/digital-circuit-visualiser/
+
 #### Technologies
 
 * [TypeScript](https://typescriptlang.org/)
