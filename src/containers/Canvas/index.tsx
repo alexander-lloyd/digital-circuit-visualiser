@@ -67,7 +67,7 @@ export function drawDiagram(
     ctx.fillStyle = 'white';
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     // Reset the position and scaling.
-    ctx.setTransform();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.save();
     const [dragPositionX, dragPositionY] = offsetPosition;
     ctx.scale(scale, scale);
