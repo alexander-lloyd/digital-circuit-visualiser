@@ -9,16 +9,6 @@ export type Examples = {
 };
 
 export const EXAMPLES: Examples = {
-    AND: {
-        name: 'AND Gate',
-        description: 'Example with an AND Gate',
-        source: 'AND'
-    },
-    OR: {
-        name: 'OR Gate',
-        description: 'Example with an OR Gate',
-        source: 'OR'
-    },
     JOIN_GATES: {
         name: 'Join Two Gates',
         description: 'Join two outputs.',
@@ -67,5 +57,17 @@ export const EXAMPLES: Examples = {
         name: 'SR AND-OR Latch',
         description: 'Set Reset Latch built using AND and OR gates',
         source: 'let latch = (STUB * ID * ID) . (feedback ((OR * NOT) . AND) . ID) in latch'
+    },
+    D_LATCH: {
+        name: 'D Latch',
+        description: 'D latch. AN extension of the SR latch removing the possibility of invalid input states',
+        source: `(((SPLIT * ID) . (ID * CROSS)).
+(ID * SPLIT * ID). (NOT * ID * STUB * STUB* ID * ID )) .
+(AND * SPLIT * SPLIT * AND) . (NOR* CROSS * NOR) . (JOIN * JOIN)`
+    },
+    '2_1_MULTIPLEXER': {
+        name: '2:1 Multiplexer',
+        description: '',
+        source: '((ID * SPLIT * ID) . (ID * NOT * AND)) . (AND * SPLIT). (OR * ID)'
     }
 };
