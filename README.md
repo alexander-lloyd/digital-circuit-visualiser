@@ -10,7 +10,9 @@
 ![Build](https://github.com/alexander-lloyd/digital-circuit-visualiser/workflows/Build/badge.svg)
 [![codecov](https://codecov.io/gh/alexander-lloyd/digital-circuit-visualiser/branch/master/graph/badge.svg?token=7liikH1rI6)](https://codecov.io/gh/alexander-lloyd/digital-circuit-visualiser)
 
-![](assets/demo.gif)
+<p align="center">
+  <img src="assets/demo.gif" alt="demonstration of the project">
+</p>
 
 ## Table of Contents
 
