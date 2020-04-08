@@ -7,8 +7,7 @@
     <a href="https://alexander-lloyd.github.io/digital-circuit-visualiser"><strong>View the WebApp »</strong></a>
 </p>
 
-![Build](https://github.com/alexander-lloyd/
-/workflows/Build/badge.svg)
+![Build](https://github.com/alexander-lloyd/digital-circuit-visualiser/workflows/Build/badge.svg)
 [![codecov](https://codecov.io/gh/alexander-lloyd/digital-circuit-visualiser/branch/master/graph/badge.svg?token=7liikH1rI6)](https://codecov.io/gh/alexander-lloyd/digital-circuit-visualiser)
 
 ## Table of Contents
