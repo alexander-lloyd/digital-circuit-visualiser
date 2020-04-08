@@ -4,11 +4,12 @@
   <p align="center">
     Final Year Project 
     <br />
-    <a href="https://alexander-lloyd.github.io/fyp"><strong>View the WebApp »</strong></a>
+    <a href="https://alexander-lloyd.github.io/digital-circuit-visualiser"><strong>View the WebApp »</strong></a>
 </p>
 
-![Build](https://github.com/alexander-lloyd/fyp/workflows/Build/badge.svg)
-[![codecov](https://codecov.io/gh/alexander-lloyd/fyp/branch/master/graph/badge.svg?token=7liikH1rI6)](https://codecov.io/gh/alexander-lloyd/fyp)
+![Build](https://github.com/alexander-lloyd/
+/workflows/Build/badge.svg)
+[![codecov](https://codecov.io/gh/alexander-lloyd/digital-circuit-visualiser/branch/master/graph/badge.svg?token=7liikH1rI6)](https://codecov.io/gh/alexander-lloyd/digital-circuit-visualiser)
 
 ## Table of Contents
 
@@ -34,7 +35,7 @@
 To get started, clone the repository.
 
 ```sh
-$ git clone git@github.com:alexander-lloyd/fyp.git
+$ git clone git@github.com:alexander-lloyd/digital-circuit-visualiser.git
 ```
 
 ### Prerequisites
@@ -92,7 +93,7 @@ This will replace the development artifact `build/index.js` for an optimized ver
 
 ## Contact
 
-- Project Link: [https://github.com/alexander-lloyd/fyp](https://github.com/alexander-lloyd/fyp)
+- Project Link: [https://github.com/alexander-lloyd/digital-circuit-visualiser](https://github.com/alexander-lloyd/digital-circuit-visualiser)
 - LinkedIn: [![LinkedIn][linkedin-shield]][linkedin-url]
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
