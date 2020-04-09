@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 333 190" width="333" height="190">
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: none;stroke: #000000;stroke-linecap:round;stroke-width: 8.313 } 
+		.shp1 { fill: #ffffff;stroke: #000000;stroke-linejoin:round;stroke-width: 8.313 } 
+		.shp2 { fill: #ffffff;stroke: #000000;stroke-linecap:round;stroke-linejoin:round;stroke-width: 8.313 } 
+	</style>
+	<path id="path1316" fill-rule="evenodd" class="shp0" d="M-3.33 95.43L122.1 95.43" />
+	<path id="path1316" fill-rule="evenodd" class="shp0" d="M214.87 95.43L340.3 95.43" />
+	<path id="rect2193" fill-rule="evenodd" class="shp1" d="M81.03 7.72L206.77 95.43L81.03 183.15L81.03 7.72Z" />
+	<path id="path2247" fill-rule="evenodd" class="shp2" d="M252.68 95.43C252.68 101.35 250.33 107.02 246.13 111.21C241.94 115.39 236.25 117.74 230.31 117.74C224.38 117.74 218.69 115.39 214.5 111.21C210.3 107.02 207.94 101.35 207.94 95.43C207.94 89.52 210.3 83.85 214.5 79.66C218.69 75.48 224.38 73.13 230.31 73.13C236.25 73.13 241.94 75.48 246.13 79.66C250.33 83.85 252.68 89.52 252.68 95.43L252.68 95.43Z" />
+</svg>
